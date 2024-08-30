@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.TestExtension
+import dev.fizcode.convention.configureGradleManagedDevices
 import dev.fizcode.convention.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -15,6 +16,7 @@ class AndroidTestConventionPlugin : Plugin<Project> {
             extensions.configure<TestExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 34
+                configureGradleManagedDevices(this)
             }
         }
     }

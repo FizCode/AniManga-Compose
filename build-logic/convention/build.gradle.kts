@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     `kotlin-dsl`
@@ -11,15 +11,16 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
     }
 }
 
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.android.tools.common)
+    compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
 }
 
@@ -32,14 +33,6 @@ tasks {
 
 gradlePlugin {
     plugins {
-        register("androidApplicationCompose") {
-            id = "animanga.android.application.compose"
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
-        }
-        register("androidLibraryCompose") {
-            id = "animanga.android.library.compose"
-            implementationClass = "AndroidLibraryComposeConventionPlugin"
-        }
         register("androidApplication") {
             id = "animanga.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
@@ -48,6 +41,18 @@ gradlePlugin {
             id = "animanga.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
+        register("androidFeature") {
+            id = "animanga.android.feature"
+            implementationClass = "AndroidFeatureConventionPlugin"
+        }
+        register("androidApplicationCompose") {
+            id = "animanga.android.application.compose"
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
+        register("androidLibraryCompose") {
+            id = "animanga.android.library.compose"
+            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        }
         register("androidTest") {
             id = "animanga.android.test"
             implementationClass = "AndroidTestConventionPlugin"
@@ -55,6 +60,10 @@ gradlePlugin {
         register("androidFlavors") {
             id = "animanga.android.application.flavors"
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
+        }
+        register("jvmLibrary") {
+            id = "animanga.jvm.library"
+            implementationClass = "JvmLibraryConventionPlugin"
         }
     }
 }

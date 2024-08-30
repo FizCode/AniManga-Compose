@@ -1,5 +1,8 @@
 import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import dev.fizcode.convention.configureGradleManagedDevices
 import dev.fizcode.convention.configureKotlinAndroid
+import dev.fizcode.convention.configurePrintApksTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -17,8 +20,11 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 defaultConfig.targetSdk = 34
                 @Suppress("UnstableApiUsage")
                 testOptions.animationsDisabled = true
+                configureGradleManagedDevices(this)
+            }
+            extensions.configure<ApplicationAndroidComponentsExtension> {
+                configurePrintApksTask(this)
             }
         }
     }
-
 }
