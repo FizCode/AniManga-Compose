@@ -20,5 +20,10 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AniManga - Anime and Manga Info"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+rootProject.name = "AniManga"
 include(":app")
+include(":feature:onboarding")
+
+include(":core:designsystem")

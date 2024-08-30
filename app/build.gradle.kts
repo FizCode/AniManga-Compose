@@ -10,14 +10,11 @@ plugins {
 
 android {
     namespace = "dev.fizcode.animanga"
-    compileSdk = 34
 
     defaultConfig {
         applicationId = "dev.fizcode.animanga"
-        minSdk = 24
-        targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.1.0" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -48,8 +45,10 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
+    implementation(projects.feature.onboarding)
+
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.ui)
-    implementation(libs.androidx.material3)
 }
