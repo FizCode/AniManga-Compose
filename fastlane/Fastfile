@@ -21,25 +21,11 @@ platform :android do
     gradle(task: "test")
   end
 
-  desc "Development Debug"
-  lane :devDebug do
-    gradle(task: "clean assembleDevDebug")
-  end
 
   desc "Development Release"
-    lane :devRelease do
-      gradle(task: "clean assembleDevRelease")
-    end
-
-desc "Production Debug"
-  lane :prodDebug do
-    gradle(task: "clean assembleProdDebug")
+  lane :devRelease do
+    gradle(task: "clean assembleDevRelease")
   end
-
-  desc "Production Release"
-    lane :prodRelease do
-      gradle(task: "clean assembleProdRelease")
-    end
 
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
