@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.animanga.android.application.compose)
     alias(libs.plugins.animanga.android.application.flavors)
     alias(libs.plugins.android.application)
+    alias(libs.plugins.animanga.hilt)
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 
@@ -46,9 +47,16 @@ android {
 dependencies {
 
     implementation(projects.feature.onboarding)
+    implementation(projects.feature.dashboard.dashboard)
+
+    implementation(projects.core.designsystem)
+    implementation(projects.core.datasource)
+    implementation(projects.core.network)
+    implementation(projects.core.navigation)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.ui)
+    implementation(libs.androidx.navigation.compose)
+
 }
