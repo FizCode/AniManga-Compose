@@ -2,9 +2,9 @@ name: Fastlane CI
 
 on:
   push:
-    branches: [ "release/**/master" ]
+    branches: [ "release/*/master" ]
   pull_request:
-    branches: [ "release/**/master" ]
+    branches: [ "release/*/master" ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 jobs:
@@ -22,8 +22,16 @@ jobs:
         run: chmod +x gradlew
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0'
+          ruby-version: '3.1'
           bundler-cache: true
+      - name: Create local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          echo "X_MAL_CLIENT_ID=${{ secrets.X_MAL_CLIENT_ID }}" >> local.properties
+      - name: Verify local.properties
+        run: |
+          echo "Contents of local.properties:"
+          cat local.properties
       - uses: maierj/fastlane-action@v3.1.0
         with:
           lane: 'devRelease'

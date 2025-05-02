@@ -1,5 +1,7 @@
 package dev.fizcode.onboarding.presentation.util
 
+import dev.fizcode.onboarding.R
+
 internal object Constant {
 
     const val PAGER_IMAGE = "PAGER_IMAGE"
@@ -8,6 +10,10 @@ internal object Constant {
     const val SKIP = "Skip"
 
     object OnBoardingContents {
+
+        val img_page_1 = R.drawable.img_nerd_amico_1
+        val img_page_2 = R.drawable.img_myanimelist_logo_1
+        val img_page_3 = R.drawable.img_super_thank_you_amico_1
 
         const val TITLE_PAGE_1 = "This app is for study"
         const val TITLE_PAGE_2 = "All Datas is MAL’s"

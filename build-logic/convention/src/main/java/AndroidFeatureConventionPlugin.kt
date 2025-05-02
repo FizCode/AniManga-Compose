@@ -3,6 +3,7 @@ import dev.fizcode.convention.configureGradleManagedDevices
 import dev.fizcode.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
@@ -11,6 +12,8 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
         with(target) {
             pluginManager.apply {
                 apply("animanga.android.library")
+                apply("animanga.hilt")
+                apply("org.jetbrains.kotlin.plugin.serialization")
             }
 
             extensions.configure<LibraryExtension> {
@@ -19,11 +22,13 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("implementation", libs.findLibrary("androidx.lifecycle.runtime.compose").get())
-                add("implementation", libs.findLibrary("androidx.lifecycle.viewModel.compose").get())
-                add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
+                "implementation"(libs.findLibrary("androidx.lifecycle.runtime.compose").get())
+                "implementation"(libs.findLibrary("androidx.lifecycle.viewModel.compose").get())
+                "implementation"(libs.findLibrary("androidx.navigation.compose").get())
+                "implementation"(libs.findLibrary("androidx.tracing.ktx").get())
+                "implementation"(libs.findLibrary("kotlinx.serialization.json").get())
 
-                add("androidTestImplementation", libs.findLibrary("androidx.lifecycle.runtime.testing").get())
+                "androidTestImplementation"(libs.findLibrary("androidx.lifecycle.runtime.testing").get())
             }
         }
     }

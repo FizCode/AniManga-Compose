@@ -22,6 +22,7 @@ dependencies {
     compileOnly(libs.android.tools.common)
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.ksp.gradlePlugin)
 }
 
 tasks {
@@ -34,35 +35,39 @@ tasks {
 gradlePlugin {
     plugins {
         register("androidApplication") {
-            id = "animanga.android.application"
+            id = libs.plugins.animanga.android.application.asProvider().get().pluginId
             implementationClass = "AndroidApplicationConventionPlugin"
         }
         register("androidLibrary") {
-            id = "animanga.android.library"
+            id = libs.plugins.animanga.android.library.asProvider().get().pluginId
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("androidFeature") {
-            id = "animanga.android.feature"
+            id = libs.plugins.animanga.android.feature.get().pluginId
             implementationClass = "AndroidFeatureConventionPlugin"
         }
         register("androidApplicationCompose") {
-            id = "animanga.android.application.compose"
+            id = libs.plugins.animanga.android.application.compose.get().pluginId
             implementationClass = "AndroidApplicationComposeConventionPlugin"
         }
         register("androidLibraryCompose") {
-            id = "animanga.android.library.compose"
+            id = libs.plugins.animanga.android.library.compose.get().pluginId
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
         register("androidTest") {
-            id = "animanga.android.test"
+            id = libs.plugins.animanga.android.test.get().pluginId
             implementationClass = "AndroidTestConventionPlugin"
         }
         register("androidFlavors") {
-            id = "animanga.android.application.flavors"
+            id = libs.plugins.animanga.android.application.flavors.get().pluginId
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
+        register("hilt") {
+            id = libs.plugins.animanga.hilt.get().pluginId
+            implementationClass = "HiltConventionPlugin"
+        }
         register("jvmLibrary") {
-            id = "animanga.jvm.library"
+            id = libs.plugins.animanga.jvm.library.get().pluginId
             implementationClass = "JvmLibraryConventionPlugin"
         }
     }

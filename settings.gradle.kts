@@ -24,6 +24,13 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "AniManga"
 include(":app")
+include(":feature:dashboard:anime")
+include(":feature:dashboard:dashboard")
 include(":feature:onboarding")
 
+include(":core:common")
+include(":core:datasource")
+include(":core:datastore")
 include(":core:designsystem")
+include(":core:network")
+include(":core:navigation")

@@ -23,14 +23,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Runs all the tests
 
-### android devDebug
-
-```sh
-[bundle exec] fastlane android devDebug
-```
-
-Development Debug
-
 ### android devRelease
 
 ```sh
@@ -38,22 +30,6 @@ Development Debug
 ```
 
 Development Release
-
-### android prodDebug
-
-```sh
-[bundle exec] fastlane android prodDebug
-```
-
-Production Debug
-
-### android prodRelease
-
-```sh
-[bundle exec] fastlane android prodRelease
-```
-
-Production Release
 
 ### android beta
 
