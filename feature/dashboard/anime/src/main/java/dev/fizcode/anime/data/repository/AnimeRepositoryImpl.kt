@@ -10,6 +10,7 @@ import dev.fizcode.anime.domain.repository.AnimeRepository
 import dev.fizcode.common.base.responsehandler.UiState
 import dev.fizcode.common.base.responsehandler.processResponse
 import dev.fizcode.datasource.remote.service.DashboardAnimeService
+import java.time.Year
 import javax.inject.Inject
 
 internal class AnimeRepositoryImpl @Inject constructor(
@@ -19,18 +20,49 @@ internal class AnimeRepositoryImpl @Inject constructor(
     private val topRankingDomainMapper: TopRankingDomainMapper
 ) : AnimeRepository {
 
-    override suspend fun fetchSeasonAnime(): UiState<SeasonalAnimeDomainModel> =
-        processResponse {
-            seasonalDomainMapper.mapToSeasonAnime(animeService.fetchSeasonAnime())
-        }
+    override suspend fun fetchSeasonAnime(
+        year: Int,
+        season: String,
+        sortBy: String,
+        limit: Int,
+        fields: String
+    ): UiState<SeasonalAnimeDomainModel> = processResponse {
+        seasonalDomainMapper.mapToSeasonAnime(
+            animeService.fetchSeasonAnime(
+                year = year,
+                season = season,
+                sortBy = sortBy,
+                limit = limit,
+                fields = fields
+            )
+        )
+    }
 
-    override suspend fun fetchTopAiringAnime(): UiState<TopAiringDomainModel> =
-        processResponse {
-            topAiringDomainMapper.mapToTopAiringAnime(animeService.fetchTopAiringAnime())
-        }
+    override suspend fun fetchTopAiringAnime(
+        rankingType: String,
+        limit: Int,
+        fields: String
+    ): UiState<TopAiringDomainModel> = processResponse {
+        topAiringDomainMapper.mapToTopAiringAnime(
+            animeService.fetchTopAiringAnime(
+                rankingType = rankingType,
+                limit = limit,
+                fields = fields
+            )
+        )
+    }
 
-    override suspend fun fetchTopRankingAnime(): UiState<TopRankingDomainModel> =
-        processResponse {
-            topRankingDomainMapper.mapToTopRankingAnime(animeService.fetchTopRankingAnime())
-        }
+    override suspend fun fetchTopRankingAnime(
+        rankingType: String,
+        limit: Int,
+        fields: String
+    ): UiState<TopRankingDomainModel> = processResponse {
+        topRankingDomainMapper.mapToTopRankingAnime(
+            animeService.fetchTopRankingAnime(
+                rankingType = rankingType,
+                limit = limit,
+                fields = fields
+            )
+        )
+    }
 }

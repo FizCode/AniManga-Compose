@@ -26,6 +26,7 @@ rootProject.name = "AniManga"
 include(":app")
 include(":feature:dashboard:anime")
 include(":feature:dashboard:dashboard")
+include(":feature:mediadetails")
 include(":feature:onboarding")
 
 include(":core:common")

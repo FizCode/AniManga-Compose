@@ -35,16 +35,25 @@ private fun releaseInfo(
     broadcastTime: String,
     status: String,
     numEpisodes: Int
-): String = when (status) {
-    Constant.STATUS_FINISHED_AIRING -> {
-        "${if (numEpisodes != 0) "$numEpisodes ${Constant.EPISODES} | " else ""}${Constant.FINISHED_AIRING}"
-    }
+): String {
 
-    Constant.STATUS_CURRENTLY_AIRING -> {
+    val formatedNumEps = "${
+        if (numEpisodes != 0) "$numEpisodes ${Constant.EPISODES} | " else ""
+    }${Constant.FINISHED_AIRING}"
+
+    val formatedBroadcastDay = if (broadcastDay.isNotEmpty()) {
         "${capitalizeFirstChar(broadcastDay)}, $broadcastTime (${Constant.JST})"
+    } else {
+        Constant.UNKNOWN_BROADCAST_TIME
     }
 
-    Constant.STATUS_NOT_YET_AIRED -> Constant.NOT_YET_AIRED
+    return when (status) {
+        Constant.STATUS_FINISHED_AIRING -> formatedNumEps
 
-    else -> Constant.UNKNOWN_AIRING_STATUS
+        Constant.STATUS_CURRENTLY_AIRING -> formatedBroadcastDay
+
+        Constant.STATUS_NOT_YET_AIRED -> Constant.NOT_YET_AIRED
+
+        else -> Constant.UNKNOWN_AIRING_STATUS
+    }
 }

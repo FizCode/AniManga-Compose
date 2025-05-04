@@ -7,10 +7,24 @@ import dev.fizcode.common.base.responsehandler.UiState
 
 internal interface AnimeRepository {
 
-    suspend fun fetchSeasonAnime(): UiState<SeasonalAnimeDomainModel>
+    suspend fun fetchSeasonAnime(
+        year: Int,
+        season: String,
+        sortBy: String,
+        limit: Int,
+        fields: String
+    ): UiState<SeasonalAnimeDomainModel>
 
-    suspend fun fetchTopAiringAnime(): UiState<TopAiringDomainModel>
+    suspend fun fetchTopAiringAnime(
+        rankingType: String,
+        limit: Int,
+        fields: String
+    ): UiState<TopAiringDomainModel>
 
-    suspend fun fetchTopRankingAnime(): UiState<TopRankingDomainModel>
+    suspend fun fetchTopRankingAnime(
+        rankingType: String,
+        limit: Int,
+        fields: String
+    ): UiState<TopRankingDomainModel>
 
 }

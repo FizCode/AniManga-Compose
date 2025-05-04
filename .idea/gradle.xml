@@ -36,6 +36,7 @@
             <option value="$PROJECT_DIR$/feature/dashboard" />
             <option value="$PROJECT_DIR$/feature/dashboard/anime" />
             <option value="$PROJECT_DIR$/feature/dashboard/dashboard" />
+            <option value="$PROJECT_DIR$/feature/mediadetails" />
             <option value="$PROJECT_DIR$/feature/onboarding" />
           </set>
         </option>

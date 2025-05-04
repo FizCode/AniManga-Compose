@@ -10,7 +10,6 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.hilt.navigation.compose)
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
     implementation(projects.core.datasource)
