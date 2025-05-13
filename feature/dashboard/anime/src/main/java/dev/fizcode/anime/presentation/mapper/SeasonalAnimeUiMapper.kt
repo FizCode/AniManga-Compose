@@ -14,6 +14,7 @@ internal class SeasonalAnimeUiMapper {
     private fun Node.toUiData(): SeasonalUiModel =
         SeasonalUiModel(
             id = id,
+            mediaType = mediaType,
             title = title,
             posterPath = mainPicture.large,
             releaseInfo = releaseInfo(

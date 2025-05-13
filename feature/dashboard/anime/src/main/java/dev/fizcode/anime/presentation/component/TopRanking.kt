@@ -3,8 +3,6 @@ package dev.fizcode.anime.presentation.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,7 +18,7 @@ internal fun TopRanking(
     headerTitle: String,
     cardItem: UiState<List<TopRankingUiModel>>,
     onHeaderClick: () -> Unit,
-    onCardClick: (Int) -> Unit
+    onCardClick: (mediaType: String, mediaId: Int) -> Unit
 ) {
     AnimeContent(
         headerTitle = headerTitle,
@@ -40,7 +38,7 @@ internal fun TopRanking(
                             subTitle = item.subTitle,
                             studio = item.studio,
                             genre = item.genre,
-                            onCardClick = { onCardClick(item.id) }
+                            onCardClick = { onCardClick(item.mediaType, item.id) }
                         )
                     }
                 }
@@ -68,6 +66,6 @@ private fun TopRankingPreview() {
             dummyTopRankingUiModel,
         )),
         onHeaderClick = {},
-        onCardClick = {}
+        onCardClick = { _, _ -> }
     )
 }

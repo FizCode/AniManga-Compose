@@ -14,7 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.fizcode.designsystem.icon.MaterialIcon.ROUNDED_STAR_RATE
+import dev.fizcode.designsystem.icon.CustomIcon.ROUND_STAR_RATE
 import dev.fizcode.designsystem.theme.YellowGold
 import dev.fizcode.designsystem.util.DesignSystemConstant.Component
 
@@ -37,7 +37,7 @@ internal fun RatingChip(
         Icon(
             modifier = Modifier.size(16.dp),
             tint = YellowGold,
-            imageVector = ROUNDED_STAR_RATE,
+            imageVector = ROUND_STAR_RATE,
             contentDescription = Component.CHIP_ICON
         )
     }

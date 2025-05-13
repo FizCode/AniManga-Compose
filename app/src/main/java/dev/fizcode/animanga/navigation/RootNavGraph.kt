@@ -5,13 +5,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import dev.fizcode.dashboard.navigation.dashboardNavGraph
 import dev.fizcode.dashboard.navigation.navigateToDashboardScreen
-import dev.fizcode.navigation.route.InitialRoute
+import dev.fizcode.mediadetails.navigation.mediaDetailsNavGraph
+import dev.fizcode.mediadetails.navigation.navigateToMediaDetailsScreen
+import dev.fizcode.navigation.route.RootRoute
 import dev.fizcode.onboarding.navigation.onBoardingNavGraph
 
 @Composable
 fun RootNavGraph(
     navHostController: NavHostController,
-    startDestination: InitialRoute
+    startDestination: RootRoute
 ) {
     NavHost(
         navController = navHostController,
@@ -23,6 +25,9 @@ fun RootNavGraph(
                 navHostController.navigateToDashboardScreen()
             }
         )
-        dashboardNavGraph()
+        dashboardNavGraph(
+            onCardClick = navHostController::navigateToMediaDetailsScreen
+        )
+        mediaDetailsNavGraph()
     }
 }

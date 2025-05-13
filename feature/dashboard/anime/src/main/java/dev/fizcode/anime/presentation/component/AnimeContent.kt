@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.anime.util.Constant
 import dev.fizcode.designsystem.component.card.MovieCardSmall
-import dev.fizcode.designsystem.icon.MaterialIcon
+import dev.fizcode.designsystem.icon.CustomIcon
 
 @Composable
 internal fun AnimeContent(
@@ -43,7 +43,7 @@ internal fun AnimeContent(
             IconButton(onClick = { onHeaderClick() }) {
                 Icon(
                     tint = MaterialTheme.colorScheme.secondary,
-                    imageVector = MaterialIcon.OUTLINED_ARROW_RIGHT,
+                    imageVector = CustomIcon.OUTL_ARROW_RIGHT,
                     contentDescription = Constant.HEADER_ICON
                 )
             }

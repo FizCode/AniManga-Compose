@@ -32,6 +32,7 @@ import dev.fizcode.common.base.responsehandler.UiState
 @Composable
 internal fun AnimeScreen(
     innerPadding: PaddingValues,
+    onCardClick: (mediaType: String, mediaId: Int) -> Unit,
     animeViewModel: AnimeViewModel = hiltViewModel()
 ) {
 
@@ -43,7 +44,8 @@ internal fun AnimeScreen(
         innerPadding = innerPadding,
         currentSeason = currentSeason,
         topAiring = topAiring,
-        topRanking = topRanking
+        topRanking = topRanking,
+        onCardClick = onCardClick
     )
 
 }
@@ -53,7 +55,8 @@ private fun AnimeScreenContent(
     innerPadding: PaddingValues = PaddingValues.Absolute(),
     currentSeason: UiState<List<SeasonalUiModel>>,
     topAiring: UiState<List<TopAiringUiModel>>,
-    topRanking: UiState<List<TopRankingUiModel>>
+    topRanking: UiState<List<TopRankingUiModel>>,
+    onCardClick: (mediaType: String, mediaId: Int) -> Unit
 ) {
     Column(Modifier
         .fillMaxWidth()
@@ -70,21 +73,21 @@ private fun AnimeScreenContent(
             headerTitle = Constant.CURRENT_SEASON,
             cardItem = currentSeason,
             onHeaderClick = {},
-            onCardClick = {}
+            onCardClick = onCardClick
         )
         Spacer(modifier = Modifier.height(8.dp))
         TopAiring(
             headerTitle = Constant.TOP_AIRING,
             cardItem = topAiring,
             onHeaderClick = {},
-            onCardClick = {}
+            onCardClick = onCardClick
         )
         Spacer(modifier = Modifier.height(8.dp))
         TopRanking(
             headerTitle = Constant.TOP_RANKING,
             cardItem = topRanking,
             onHeaderClick = {},
-            onCardClick = {}
+            onCardClick = onCardClick
         )
     }
 }
@@ -115,6 +118,7 @@ private fun AnimeScreenPreview() {
             dummyTopRankingUiModel,
             dummyTopRankingUiModel,
             dummyTopRankingUiModel
-        ))
+        )),
+        onCardClick = { _, _ -> }
     )
 }

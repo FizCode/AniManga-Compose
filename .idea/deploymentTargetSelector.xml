@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-03-03T04:59:34.125928700Z">
+        <DropdownSelection timestamp="2025-05-12T12:49:48.016529Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\hantu\.android\avd\Resizable_Experimental_API_35.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/fizcode/.android/avd/Medium_Phone.avd" />
             </handle>
           </Target>
         </DropdownSelection>

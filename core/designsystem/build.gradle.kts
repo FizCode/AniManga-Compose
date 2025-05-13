@@ -22,5 +22,5 @@ dependencies {
     api(libs.androidx.compose.material.icons.extended)
     api(libs.androidx.ui.text.google.fonts)
 
-    implementation(libs.coil.compose)
+    api(libs.coil.compose)
 }

@@ -2,11 +2,9 @@ package dev.fizcode.anime.presentation.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
@@ -21,7 +19,7 @@ internal fun TopAiring(
     headerTitle: String,
     cardItem: UiState<List<TopAiringUiModel>>,
     onHeaderClick: () -> Unit,
-    onCardClick: (Int) -> Unit
+    onCardClick: (mediaType: String, mediaId: Int) -> Unit
 ) {
     AnimeContent(
         headerTitle = headerTitle,
@@ -38,7 +36,7 @@ internal fun TopAiring(
                             posterPath = item.posterPath,
                             rating = item.rating,
                             title = item.title,
-                            onCardClick = { onCardClick(item.id) }
+                            onCardClick = { onCardClick(item.mediaType, item.id) }
                         )
                     }
                 }
@@ -67,6 +65,6 @@ private fun TopAiringPreview() {
             dummyTopAiringUiModel
         )),
         onHeaderClick = {},
-        onCardClick = {}
+        onCardClick = { _, _ -> }
     )
 }

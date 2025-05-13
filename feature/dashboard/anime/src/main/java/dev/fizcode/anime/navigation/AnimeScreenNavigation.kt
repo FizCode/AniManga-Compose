@@ -11,19 +11,24 @@ import dev.fizcode.navigation.route.DashboardRoute
 import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.animeNavGraph(
-    innerPadding: PaddingValues
-) {
+    innerPadding: PaddingValues,
+    onCardClick: (mediaType: String, mediaId: Int) -> Unit
+    ) {
     navigation<AnimeBaseRoute>(startDestination = AnimeRoute) {
         composable<AnimeRoute> {
-            AnimeScreen(innerPadding = innerPadding)
+            AnimeScreen(
+                innerPadding = innerPadding,
+                onCardClick = onCardClick
+            )
         }
     }
 }
 
-fun NavController.navigateToAnimeScreen(navOptions: NavOptions) = navigate(route = AnimeRoute, navOptions)
+fun NavController.navigateToAnimeScreen(navOptions: NavOptions) =
+    navigate(route = AnimeRoute, navOptions)
 
 @Serializable
-data object AnimeRoute: DashboardRoute
+data object AnimeRoute : DashboardRoute
 
 @Serializable
-data object AnimeBaseRoute: DashboardRoute
+data object AnimeBaseRoute : DashboardRoute

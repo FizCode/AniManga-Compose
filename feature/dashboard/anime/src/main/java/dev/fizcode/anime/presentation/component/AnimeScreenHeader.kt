@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.anime.util.Constant.AnimeSearchHeader
-import dev.fizcode.designsystem.icon.MaterialIcon
+import dev.fizcode.designsystem.icon.CustomIcon
 
 @Composable
 internal fun AnimeScreenHeader(
@@ -45,7 +45,7 @@ internal fun AnimeScreenHeader(
                 ),
             leadingIcon = {
                 Icon(
-                    imageVector = MaterialIcon.FILLED_SEARCH,
+                    imageVector = CustomIcon.FILL_SEARCH,
                     contentDescription = AnimeSearchHeader.SEARCH_ICON
                 )
             },
@@ -54,7 +54,7 @@ internal fun AnimeScreenHeader(
         )
         IconButton(onClick = onClickSettings) {
             Icon(
-                imageVector = MaterialIcon.OUTLINED_SETTINGS,
+                imageVector = CustomIcon.OUTL_SETTINGS,
                 tint = MaterialTheme.colorScheme.primary,
                 contentDescription = AnimeSearchHeader.SETTINGS_ICON
             )

@@ -12,6 +12,7 @@ internal class FetchTopRankingAnimeUseCase(
 ) {
     suspend operator fun invoke(limit: Int): UiState<TopRankingDomainModel> {
         val fields = fieldsPicker(
+            AnimeFieldsConstant.MEDIA_TYPE,
             AnimeFieldsConstant.MEAN,
             AnimeFieldsConstant.BROADCAST,
             AnimeFieldsConstant.STATUS,

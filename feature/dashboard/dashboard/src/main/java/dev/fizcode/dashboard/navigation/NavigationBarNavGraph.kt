@@ -17,7 +17,8 @@ import kotlinx.serialization.Serializable
 @Composable
 fun NavigationBarNavGraph(
     navHostController: NavHostController,
-    innerPadding: PaddingValues
+    innerPadding: PaddingValues,
+    onCardClick: (mediaType: String, mediaId: Int) -> Unit
 ) {
     NavHost(
         navController = navHostController,
@@ -25,7 +26,10 @@ fun NavigationBarNavGraph(
         popEnterTransition = { navHostEnterTransition() },
         popExitTransition = { navHostExitTransition() }
     ) {
-        animeNavGraph(innerPadding)
+        animeNavGraph(
+            innerPadding = innerPadding,
+            onCardClick = onCardClick
+        )
         seasonalNavGraph(innerPadding)
         composable<MangaRoute> {
             Text(text = "Manga")
@@ -38,13 +42,13 @@ fun NavigationBarNavGraph(
 
 // TODO: Delete All serializable after there is a screen on each feature
 @Serializable
-data object SeasonalRoute: DashboardRoute
+data object SeasonalRoute : DashboardRoute
 
 @Serializable
-data object MangaRoute: DashboardRoute
+data object MangaRoute : DashboardRoute
 
 @Serializable
-data object BookmarkRoute: DashboardRoute
+data object BookmarkRoute : DashboardRoute
 
 fun NavGraphBuilder.seasonalNavGraph(innerPadding: PaddingValues) {
     composable<SeasonalRoute> {

@@ -2,6 +2,7 @@ package dev.fizcode.anime.presentation.model
 
 internal val dummySeasonalUiModel = SeasonalUiModel(
     id= 0,
+    mediaType = "tv",
     title = "BLEACH: Sennen Kessen-hen",
     posterPath = "",
     releaseInfo = "Eps. 10 of 12 in 6d 2h",

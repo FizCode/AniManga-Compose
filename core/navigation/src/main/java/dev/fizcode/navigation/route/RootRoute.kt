@@ -1,3 +1,3 @@
 package dev.fizcode.navigation.route
 
-interface InitialRoute
+interface RootRoute

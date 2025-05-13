@@ -10,6 +10,9 @@ android {
 
 dependencies {
 
+    implementation(projects.feature.mediadetailheader)
+    implementation(projects.feature.mediadetailinfo)
+
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
     implementation(projects.core.datasource)

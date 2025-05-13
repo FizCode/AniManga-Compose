@@ -1,4 +1,5 @@
 package dev.fizcode.mediadetails.domain.repository
 
-interface MediaDetailsRepository {
+internal interface DetailHeaderRepository {
+
 }

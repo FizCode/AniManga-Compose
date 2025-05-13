@@ -12,7 +12,10 @@ internal class FetchTopAiringAnimeUseCase(
 ) {
 
     suspend operator fun invoke(limit: Int): UiState<TopAiringDomainModel> {
-        val fields = fieldsPicker(AnimeFieldsConstant.MEAN)
+        val fields = fieldsPicker(
+            AnimeFieldsConstant.MEDIA_TYPE,
+            AnimeFieldsConstant.MEAN
+        )
 
         return animeRepository.fetchTopAiringAnime(
             rankingType = RankingTypeConstant.AIRING,

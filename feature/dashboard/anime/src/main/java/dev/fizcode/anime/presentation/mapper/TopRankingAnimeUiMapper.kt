@@ -14,6 +14,7 @@ internal class TopRankingAnimeUiMapper {
     private fun TopRankingDomainModel.Node.toUiData() =
         TopRankingUiModel(
             id = id,
+            mediaType = mediaType,
             posterPath = mainPicture.large,
             rating = mean.toString(),
             title = title,
