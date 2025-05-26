@@ -15,18 +15,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import dev.fizcode.mediadetailinfo.model.AnimeCast
+import dev.fizcode.mediadetailinfo.model.AnimeDetails
+import dev.fizcode.mediadetailinfo.model.AnimeDetailsInfoUiModel
+import dev.fizcode.mediadetailinfo.model.AnimeInfo
+import dev.fizcode.mediadetailinfo.model.AnimeThemes
+import dev.fizcode.mediadetailinfo.model.TabContents
+import dev.fizcode.mediadetailinfo.presentation.component.CastTabComponent
 import dev.fizcode.mediadetailinfo.presentation.component.DetailsTabComponent
 import dev.fizcode.mediadetailinfo.presentation.component.InformationTabComponent
 import dev.fizcode.mediadetailinfo.presentation.component.SongsTabComponent
-import dev.fizcode.mediadetailinfo.presentation.component.StaffTabComponent
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailInfoComponent() {
-    val titles = listOf("Details", "Info", "VA & Staff", "Songs")
-    val pagerState = rememberPagerState(pageCount = {titles.size})
+fun DetailInfoComponent(
+    info: AnimeDetailsInfoUiModel,
+    onClickShare: () -> Unit
+) {
+    val tabItems = TabContents.entries
+    val pagerState = rememberPagerState(pageCount = { tabItems.size })
     val coroutineScope = rememberCoroutineScope()
+
     Column(modifier = Modifier.fillMaxSize()) {
         PrimaryTabRow(
             selectedTabIndex = pagerState.currentPage,
@@ -34,18 +44,17 @@ fun DetailInfoComponent() {
             // Remove the divider line
             divider = {}
         ) {
-            titles.forEachIndexed { index, title ->
+            tabItems.forEachIndexed { index, title ->
                 Tab(
                     selected = pagerState.currentPage == index,
                     onClick = {
-                        // Scroll to selected page
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(index)
                         }
                     },
                     text = {
                         Text(
-                            text = title,
+                            text = title.tabs,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -58,10 +67,14 @@ fun DetailInfoComponent() {
             state = pagerState
         ) { position ->
             when (position) {
-                0 -> DetailsTabComponent()
-                1 -> InformationTabComponent()
-                2 -> StaffTabComponent()
-                3 -> SongsTabComponent()
+                0 -> DetailsTabComponent(
+                    animeDetails = info.animeDetails,
+                    onClickShare = onClickShare
+                )
+
+                1 -> InformationTabComponent(animeInfo = info.animeInfo)
+                2 -> CastTabComponent(cast = info.animeCast)
+                3 -> SongsTabComponent(songThemes = info.animeThemes)
             }
         }
     }
@@ -70,5 +83,13 @@ fun DetailInfoComponent() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun DetailInfoComponentPreview() {
-    DetailInfoComponent()
+    DetailInfoComponent(
+        info = AnimeDetailsInfoUiModel(
+            AnimeDetails(),
+            AnimeInfo(),
+            AnimeCast(),
+            AnimeThemes()
+        ),
+        onClickShare = {}
+    )
 }

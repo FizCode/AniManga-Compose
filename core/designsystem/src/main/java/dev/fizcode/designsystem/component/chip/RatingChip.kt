@@ -2,8 +2,10 @@ package dev.fizcode.designsystem.component.chip
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -16,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.icon.CustomIcon.ROUND_STAR_RATE
 import dev.fizcode.designsystem.theme.YellowGold
-import dev.fizcode.designsystem.util.DesignSystemConstant.Component
+import dev.fizcode.designsystem.util.Constant.Component
 
 @Composable
 internal fun RatingChip(
@@ -27,8 +29,9 @@ internal fun RatingChip(
             .padding(4.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(Color.White)
-            .padding(start = 8.dp, end = 4.dp, top = 2.dp, bottom = 2.dp),
+            .padding(top = 2.dp, bottom = 2.dp),
     ) {
+        Spacer(Modifier.width(8.dp))
         Text(
             color = Color.Black,
             style = MaterialTheme.typography.labelMedium,
@@ -40,6 +43,7 @@ internal fun RatingChip(
             imageVector = ROUND_STAR_RATE,
             contentDescription = Component.CHIP_ICON
         )
+        Spacer(Modifier.width(4.dp))
     }
 }
 

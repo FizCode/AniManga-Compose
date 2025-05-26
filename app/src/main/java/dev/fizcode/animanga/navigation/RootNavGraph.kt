@@ -1,8 +1,12 @@
 package dev.fizcode.animanga.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import dev.fizcode.animanga.util.Constant
 import dev.fizcode.dashboard.navigation.dashboardNavGraph
 import dev.fizcode.dashboard.navigation.navigateToDashboardScreen
 import dev.fizcode.mediadetails.navigation.mediaDetailsNavGraph
@@ -15,9 +19,31 @@ fun RootNavGraph(
     navHostController: NavHostController,
     startDestination: RootRoute
 ) {
+    val enterTransition = slideInHorizontally(
+        initialOffsetX = { it },
+        animationSpec = tween(Constant.ANIMATION_DURATION)
+    )
+    val exitTransition = slideOutHorizontally(
+        targetOffsetX = { -it },
+        animationSpec = tween(Constant.ANIMATION_DURATION)
+    )
+    val popEnterTransition = slideInHorizontally(
+        initialOffsetX = { -it },
+        animationSpec = tween(Constant.ANIMATION_DURATION)
+    )
+    val popExitTransition = slideOutHorizontally(
+        targetOffsetX = { it },
+        animationSpec = tween(Constant.ANIMATION_DURATION)
+    )
+
     NavHost(
         navController = navHostController,
-        startDestination = startDestination
+        startDestination = startDestination,
+        enterTransition = { enterTransition },
+        exitTransition = { exitTransition },
+        popEnterTransition = { popEnterTransition },
+        popExitTransition = { popExitTransition }
+
     ) {
         onBoardingNavGraph(
             onClickSkip = {
@@ -28,6 +54,8 @@ fun RootNavGraph(
         dashboardNavGraph(
             onCardClick = navHostController::navigateToMediaDetailsScreen
         )
-        mediaDetailsNavGraph()
+        mediaDetailsNavGraph(
+            onBackPressed = navHostController::popBackStack
+        )
     }
 }

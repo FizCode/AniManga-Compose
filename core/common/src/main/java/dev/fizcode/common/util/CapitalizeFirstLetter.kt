@@ -3,23 +3,19 @@ package dev.fizcode.common.util
 import dev.fizcode.common.util.Constant.SPACE
 
 /**
- * Capitalizes the first letter of each word in a given phrase.
+ * Capitalizes the first character of each word in the string.
  *
- * This function splits the input `phrase` by spaces, and then capitalizes
- * the first letter of each word while keeping the rest of the word in lowercase.
- * It then joins the words back into a single string with spaces separating them.
- *
- * Useful for formatting phrases, titles, or names that require proper capitalization.
- *
- * @param phrase The input string to be formatted. Each word's first letter will be capitalized.
- * @return A new string where the first letter of each word is capitalized.
+ * This function splits the original string by spaces and applies [String.replaceFirstChar]
+ * with [Char.titlecase] to each word, then joins them back into a single string.
  *
  * Example:
  * ```
- * capitalizeFirstChar("sunday") // returns: "Sunday"
- * capitalizeFirstChar("TO BE ANNOUNCED") // returns: "To Be Announced"
- * capitalizeFirstChar("sTARTING SOON") // returns: "Starting Soon"
+ * "sunday, 1".toCapitalFirstChar() // returns "Sunday, 1"
+ * "TO BE ANNOUNCED".toCapitalFirstChar() // returns "To Be Announced"
+ * "sTARTING SoON".toCapitalFirstChar() // returns "Starting Soon"
  * ```
+ *
+ * @return A new string where each word starts with an uppercase letter.
  */
-fun capitalizeFirstChar(phrase: String): String =
-    phrase.split(SPACE).joinToString(SPACE) { it.replaceFirstChar { char -> char.titlecase() } }
+fun String.toCapitalFirstChar(): String =
+    this.split(SPACE).joinToString(SPACE) { it.replaceFirstChar { char -> char.titlecase() } }

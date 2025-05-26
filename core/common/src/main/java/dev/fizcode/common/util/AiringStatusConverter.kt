@@ -14,7 +14,7 @@ package dev.fizcode.common.util
  *
  * Example:
  * ```
- * airingStatus("currently_airing") // returns "Airing"
+ * airingStatus("currently_airing") // returns "Currently Airing"
  * airingStatus("finished_airing")  // returns "Finished"
  * airingStatus("abc")              // returns "Unknown Airing Status"
  * ```

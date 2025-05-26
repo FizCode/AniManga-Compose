@@ -26,7 +26,7 @@ internal class SeasonalDomainMapper {
 
     private fun CurrentSeasonAnimeResponse.Node?.toDomainNodeModel() = this?.run {
         return Node(
-            id = id.hashCode(),
+            id = id ?: 0,
             title = title.orEmpty(),
             mainPicture = mainPicture.toDomainMainPictureModel(),
             mean = mean ?: 0.0,
@@ -58,14 +58,14 @@ internal class SeasonalDomainMapper {
 
     private fun List<CurrentSeasonAnimeResponse.Studio>?.toDomainStudioModel() = this.orEmpty().map {
         Studio(
-            id = it.id.hashCode(),
+            id = it.id ?: 0,
             name = it.name.orEmpty()
         )
     }
 
     private fun List<CurrentSeasonAnimeResponse.Genre>?.toDomainGenreModel() = this.orEmpty().map {
         Genre(
-            id = it.id.hashCode(),
+            id = it.id ?: 0,
             name = it.name.orEmpty()
         )
     }

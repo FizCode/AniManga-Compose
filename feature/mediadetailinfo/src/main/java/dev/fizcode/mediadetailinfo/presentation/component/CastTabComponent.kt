@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,162 +26,76 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.designsystem.util.base.shimmerBrush
-import dev.fizcode.mediadetailinfo.model.CharacterVAUiModel
-import dev.fizcode.mediadetailinfo.model.StaffsUiModel
+import dev.fizcode.mediadetailinfo.model.AnimeCast
+import dev.fizcode.mediadetailinfo.model.AnimeCharacters
+import dev.fizcode.mediadetailinfo.model.AnimeStaff
+import dev.fizcode.mediadetailinfo.util.Constant
 
 @Composable
-internal fun StaffTabComponent() {
-
-    val characterVADummy = listOf(
-        CharacterVAUiModel(
-            characterImage = "",
-            characterName = "John Doe",
-            characterRole = "Main",
-            voiceActorImage = "",
-            voiceActorName = "John Done",
-            voiceLanguage = "Japanese"
-        ),
-        CharacterVAUiModel(
-            characterImage = "",
-            characterName = "John Doe",
-            characterRole = "Main",
-            voiceActorImage = "",
-            voiceActorName = "John Done",
-            voiceLanguage = "Japanese"
-        ),
-        CharacterVAUiModel(
-            characterImage = "",
-            characterName = "John Doe",
-            characterRole = "Main",
-            voiceActorImage = "",
-            voiceActorName = "John Done",
-            voiceLanguage = "Japanese"
-        ),
-        CharacterVAUiModel(
-            characterImage = "",
-            characterName = "John Doe",
-            characterRole = "Main",
-            voiceActorImage = "",
-            voiceActorName = "John Done",
-            voiceLanguage = "Japanese"
-        ),
-        CharacterVAUiModel(
-            characterImage = "",
-            characterName = "John Doe",
-            characterRole = "Main",
-            voiceActorImage = "",
-            voiceActorName = "John Done",
-            voiceLanguage = "Japanese"
-        )
-    )
-
-    val staffsDummy = listOf(
-        StaffsUiModel(
-            image = "",
-            name = "John Doe",
-            role = "Director"
-        ),
-        StaffsUiModel(
-            image = "",
-            name = "John Doe",
-            role = "Director"
-        ),
-        StaffsUiModel(
-            image = "",
-            name = "John Doe",
-            role = "Director"
-        )
-    )
-
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+internal fun CastTabComponent(
+    cast: AnimeCast
+) = Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    SectionContainer(
+        title = Constant.CHARACTERS_AND_VA,
+        onMoreClick = { /* TODO */ }
     ) {
-        CharacterVASection(
-            characterData = characterVADummy
-        )
-        StaffsSection(staffData = staffsDummy)
-    }
-}
-
-@Composable
-private fun CharacterVASection(
-    characterData: List<CharacterVAUiModel>
-) = Column(
-    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
-) {
-    Row(
-        modifier = Modifier.padding(vertical = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Text(
-            modifier = Modifier
-                .weight(1F)
-                .padding(start = 24.dp),
-            color = MaterialTheme.colorScheme.onBackground,
-            style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center,
-            text = "Characters & Voice Actors"
-        )
-        Icon(
-            modifier = Modifier.clickable(onClick = {}),
-            tint = MaterialTheme.colorScheme.onBackground,
-            imageVector = CustomIcon.OUTL_ARROW_RIGHT,
-            contentDescription = "More"
-
-        )
-    }
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        characterData.forEach { data ->
+        cast.characters.forEach { data ->
             CharacterVA(characterData = data)
         }
     }
-}
 
-@Composable
-private fun StaffsSection(
-    staffData: List<StaffsUiModel>
-) = Column(
-    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
-) {
-    Row(
-        modifier = Modifier.padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+    SectionContainer(
+        title = Constant.STAFF,
+        onMoreClick = { /* TODO */ }
     ) {
-        Text(
-            modifier = Modifier
-                .weight(1F)
-                .padding(start = 24.dp),
-            color = MaterialTheme.colorScheme.onBackground,
-            style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center,
-            text = "Staff"
-        )
-        Icon(
-            modifier = Modifier.clickable(onClick = {}),
-            tint = MaterialTheme.colorScheme.onBackground,
-            imageVector = CustomIcon.OUTL_ARROW_RIGHT,
-            contentDescription = "More"
-
-        )
-    }
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        staffData.forEach { data ->
+        cast.animeStaffs.forEach { data ->
             Staffs(staffData = data)
         }
     }
 }
 
 @Composable
+private fun SectionContainer(
+    title: String,
+    onMoreClick: (() -> Unit),
+    content: @Composable ColumnScope.() -> Unit
+) = Column(
+    modifier = Modifier
+        .padding(horizontal = 16.dp, vertical = 8.dp)
+) {
+    Row(
+        modifier = Modifier
+            .height(40.dp)
+            .fillMaxWidth()
+            .clickable { onMoreClick() },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Spacer(Modifier.width(24.dp))
+        Text(
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = TextAlign.Center,
+            text = title
+        )
+        Icon(
+            tint = MaterialTheme.colorScheme.onBackground,
+            imageVector = CustomIcon.OUTL_ARROW_RIGHT,
+            contentDescription = Constant.MORE_ICON
+        )
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        content = content
+    )
+}
+
+@Composable
 private fun CharacterVA(
-    characterData: CharacterVAUiModel
+    characterData: AnimeCharacters
 ) = Row(
     horizontalArrangement = Arrangement.spacedBy(8.dp)
 ) {
@@ -190,7 +106,7 @@ private fun CharacterVA(
             .width(50.dp)
             .height(72.dp),
         contentScale = ContentScale.Crop,
-        contentDescription = "",
+        contentDescription = Constant.CHARACTER_IMAGE,
         model = characterData.characterImage
     )
     Column(
@@ -201,7 +117,7 @@ private fun CharacterVA(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Start,
-            text = characterData.characterName
+            text = characterData.character
         )
         Text(
             modifier = Modifier.fillMaxWidth(),
@@ -215,7 +131,7 @@ private fun CharacterVA(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.outline,
             textAlign = TextAlign.End,
-            text = characterData.voiceLanguage
+            text = characterData.characterRole
         )
         Text(
             modifier = Modifier.fillMaxWidth(),
@@ -232,14 +148,14 @@ private fun CharacterVA(
             .width(50.dp)
             .height(72.dp),
         contentScale = ContentScale.Crop,
-        contentDescription = "",
+        contentDescription = Constant.VA_IMAGE,
         model = characterData.voiceActorImage
     )
 }
 
 @Composable
 private fun Staffs(
-    staffData: StaffsUiModel
+    staffData: AnimeStaff
 ) = Row(
     horizontalArrangement = Arrangement.spacedBy(8.dp)
 ) {
@@ -250,7 +166,7 @@ private fun Staffs(
             .width(50.dp)
             .height(72.dp),
         contentScale = ContentScale.Crop,
-        contentDescription = "",
+        contentDescription = Constant.STAFF_IMAGE,
         model = staffData.image
     )
     Column(
@@ -275,6 +191,76 @@ private fun Staffs(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun StaffTabPreview() {
-    StaffTabComponent()
+private fun CastTabPreview() {
+
+    val characterVADummy = listOf(
+        AnimeCharacters(
+            characterImage = "",
+            character = "John Doe",
+            characterRole = "Main",
+            voiceActorImage = "",
+            voiceActorName = "John Done",
+            voiceActorLang = "Japanese"
+        ),
+        AnimeCharacters(
+            characterImage = "",
+            character = "John Doe",
+            characterRole = "Main",
+            voiceActorImage = "",
+            voiceActorName = "John Done",
+            voiceActorLang = "Japanese"
+        ),
+        AnimeCharacters(
+            characterImage = "",
+            character = "John Doe",
+            characterRole = "Main",
+            voiceActorImage = "",
+            voiceActorName = "John Done",
+            voiceActorLang = "Japanese"
+        ),
+        AnimeCharacters(
+            characterImage = "",
+            character = "John Doe",
+            characterRole = "Main",
+            voiceActorImage = "",
+            voiceActorName = "John Done",
+            voiceActorLang = "Japanese"
+        ),
+        AnimeCharacters(
+            characterImage = "",
+            character = "John Doe",
+            characterRole = "Main",
+            voiceActorImage = "",
+            voiceActorName = "John Done",
+            voiceActorLang = "Japanese"
+        ),
+    )
+
+    val staffsDummy = listOf(
+        AnimeStaff(
+            staffId = 0,
+            image = "",
+            name = "John Doe",
+            role = "Director"
+        ),
+        AnimeStaff(
+            staffId = 0,
+            image = "",
+            name = "John Doe",
+            role = "Director"
+        ),
+        AnimeStaff(
+            staffId = 0,
+            image = "",
+            name = "John Doe",
+            role = "Director"
+        )
+    )
+
+    CastTabComponent(
+        AnimeCast(
+            characters = characterVADummy.take(1),
+            animeStaffs = staffsDummy
+        )
+    )
 }

@@ -18,7 +18,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
-import dev.fizcode.designsystem.util.DesignSystemConstant.Component
+import dev.fizcode.designsystem.util.Constant.Component
 
 @Composable
 fun HyperlinkText(

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,35 +25,52 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.icon.CustomIcon
+import dev.fizcode.mediadetailinfo.model.AnimeDetails
+import dev.fizcode.mediadetailinfo.util.Constant
 
 @Composable
-internal fun DetailsTabComponent() {
+internal fun DetailsTabComponent(
+    animeDetails: AnimeDetails,
+    onClickShare: () -> Unit
+) {
     Column(
         modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        ExpandableTitles()
-        SharableDescription(
-            title = "Synopsis",
-            description = "Tired of ceaseless war destroying humans, spirits, and demons alike, the Demon King of Tyranny, Anos Voldigoad, reincarnates to restore peace. Two thousand years have passed...but who could have known that his descendants' complacency would cause magic to regress so much? After receiving an invitation to the illustrious Demon King Academy, a school tasked with locating the reincarnated founding ancestor, Anos resolves to enroll, only to discover that his magic is off the charts—literally! With power too great to be measured, the former Demon King is branded a misfit. How will he convince demonkind that the school's founder stands before them? Thus begins a misfit's climb to the top of the demon hierarchy!\n(Source: J-Novel Club)",
-            onClickShare = {}
+        ExpandableTitles(
+            synonym = animeDetails.synonym,
+            japanese = animeDetails.japanese,
+            english = animeDetails.english
         )
-        SharableDescription(
-            title = "Background",
-            description = "Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e Kayou has been published digitally in English as The Misfit of Demon King Academy by J-Novel Club since June 27, 2022, and in print by Yen Press under the J-Novel Club imprint since August 1, 2023.",
-            onClickShare = {}
-        )
+        if (animeDetails.synopsis.isNotEmpty()) {
+            SharableDescription(
+                title = Constant.SYNOPSIS,
+                description = animeDetails.synopsis,
+                onClickShare = onClickShare
+            )
+        }
+        if (animeDetails.background.isNotEmpty()) {
+            SharableDescription(
+                title = Constant.BACKGROUND,
+                description = animeDetails.background,
+                onClickShare = onClickShare
+            )
+        }
     }
 }
 
 @Composable
-private fun ExpandableTitles() {
+private fun ExpandableTitles(
+    synonym: String,
+    japanese: String,
+    english: String
+) {
     var isExpanded by remember { mutableStateOf(false) }
 
     val items = listOf(
-        "Synonym" to "Maou Gakuin no Futekigousha 2nd Season, The Misfit of Demon King Academy 2nd Season",
-        "Japanese" to "魔王学院の不適合者 II ～史上最強の魔王の始祖、転生して子孫たちの学校へ通う～ 第2クール",
-        "English" to "The Misfit of Demon King Academy II Part 2"
+        Constant.SYNONYM to synonym,
+        Constant.JAPANESE to japanese,
+        Constant.ENGLISH to english
     )
 
     Column(
@@ -75,16 +93,17 @@ private fun ExpandableTitles() {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            Spacer(Modifier.size(24.dp))
             Text(
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.primary,
-                text = if (isExpanded) "Less Title" else "More Title"
+                text = if (isExpanded) Constant.LESS_TITLE else Constant.MORE_TITLE
             )
             Icon(
                 modifier = Modifier.size(24.dp),
                 tint = MaterialTheme.colorScheme.primary,
                 imageVector = if (isExpanded) CustomIcon.ROUND_ARROW_DROP_DOWN else CustomIcon.ROUND_ARROW_DROP_UP,
-                contentDescription = "Expand Icon"
+                contentDescription = Constant.EXPAND_ICON
             )
         }
     }
@@ -97,14 +116,13 @@ private fun SharableDescription(
     onClickShare: () -> Unit
 ) = Column {
     Row(
-        modifier = Modifier.padding(vertical = 8.dp),
+        modifier = Modifier.height(40.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
+        Spacer(Modifier.width(24.dp))
         Text(
-            modifier = Modifier
-                .weight(1F)
-                .padding(start = 24.dp),
+            modifier = Modifier.weight(1F),
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
@@ -114,11 +132,12 @@ private fun SharableDescription(
             modifier = Modifier.clickable(onClick = onClickShare),
             tint = MaterialTheme.colorScheme.primary,
             imageVector = CustomIcon.FILL_SHARE,
-            contentDescription = "Share"
+            contentDescription = Constant.SHARE_ICON
 
         )
     }
     Text(
+        modifier = Modifier.fillMaxWidth(),
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.outline,
         textAlign = TextAlign.Center,
@@ -150,5 +169,5 @@ private fun ExpandableItem(title: String, description: String) = Column(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun DetailsTabComponentPreview() {
-    DetailsTabComponent()
+    DetailsTabComponent(animeDetails = AnimeDetails(), onClickShare = {})
 }

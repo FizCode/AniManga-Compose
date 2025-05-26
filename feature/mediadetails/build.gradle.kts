@@ -18,5 +18,6 @@ dependencies {
     implementation(projects.core.datasource)
     implementation(projects.core.datastore)
     implementation(projects.core.navigation)
+    implementation(projects.core.network)
 
 }

@@ -4,12 +4,13 @@ import dev.fizcode.datasource.remote.response.CurrentSeasonAnimeResponse
 import dev.fizcode.datasource.remote.response.TopAiringAnimeResponse
 import dev.fizcode.datasource.remote.response.TopRankingResponse
 import dev.fizcode.datasource.remote.utils.Constant
+import dev.fizcode.network.di.MalClient
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 
-class DashboardAnimeService(private val client: HttpClient) {
+class DashboardAnimeService(@MalClient private val client: HttpClient) {
 
     suspend fun fetchSeasonAnime(
         year: Int,

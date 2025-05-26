@@ -2,8 +2,9 @@ package dev.fizcode.anime.presentation.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,11 +27,11 @@ internal fun AnimeScreenHeader(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 4.dp),
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        Spacer(Modifier.width(16.dp))
         OutlinedTextField(
             modifier = Modifier
                 .weight(1f),
@@ -59,6 +60,7 @@ internal fun AnimeScreenHeader(
                 contentDescription = AnimeSearchHeader.SETTINGS_ICON
             )
         }
+        Spacer(Modifier.width(4.dp))
     }
 }
 

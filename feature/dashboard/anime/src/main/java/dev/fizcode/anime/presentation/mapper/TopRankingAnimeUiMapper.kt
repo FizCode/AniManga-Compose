@@ -18,14 +18,24 @@ internal class TopRankingAnimeUiMapper {
             posterPath = mainPicture.large,
             rating = mean.toString(),
             title = title,
-            subTitle = "${animeMediaType(mediaType)} | ${
-                if (numEpisodes != 0) {
-                    "$numEpisodes ${Constant.EPISODES} |"
-                } else {
-                    ""
-                }
-            } ${airingStatus(status = status)}",
-            studio = studios.joinToString(",") { it.name },
+            subTitle = subTitle(mediaType, numEpisodes, status),
+            studio = studios.joinToString(", ") { it.name },
             genre = genres.map { it.name }
         )
+
+    private fun subTitle(
+        mediaType: String,
+        numEpisodes: Int,
+        status: String
+    ): String {
+        val animeMediaType = animeMediaType(mediaType = mediaType)
+        val airingStatus = airingStatus(status = status)
+        val episode = when (numEpisodes) {
+            0 -> ""
+            1 -> "$numEpisodes ${Constant.EPISODE} |"
+            else -> "$numEpisodes ${Constant.EPISODES} |"
+        }
+
+        return "$animeMediaType | $episode $airingStatus"
+    }
 }

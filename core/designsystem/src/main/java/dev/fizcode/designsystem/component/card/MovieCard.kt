@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import dev.fizcode.designsystem.component.chip.RatingChip
 import dev.fizcode.designsystem.component.lazylist.LazyRowGenreChip
-import dev.fizcode.designsystem.util.DesignSystemConstant.Component
+import dev.fizcode.designsystem.util.Constant.Component
 import dev.fizcode.designsystem.util.base.shimmerBrush
 
 /**

@@ -14,21 +14,35 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.fizcode.common.base.responsehandler.UiState
 import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.mediadetailheader.presentation.DetailHeaderComponent
 import dev.fizcode.mediadetailinfo.presentation.DetailInfoComponent
+import dev.fizcode.mediadetails.util.Constant
 
 @Composable
 internal fun MediaDetailsScreen(
     mediaId: Int,
-    mediaType: String
+    mediaType: String, // to determine what's details ui should be ex: Anime, Manga, VA, etc.
+    onBackPressed: () -> Unit,
+    mediaDetailsViewModel: MediaDetailsViewModel = hiltViewModel()
 ) {
+
+    LaunchedEffect(Unit) {
+        mediaDetailsViewModel.fetchMediaId(mediaId = mediaId)
+    }
+
+    val animeDetails by mediaDetailsViewModel.animeDetails.collectAsStateWithLifecycle()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -36,9 +50,18 @@ internal fun MediaDetailsScreen(
             .background(color = MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        DetailHeaderComponent()
-        DetailInfoComponent()
-        Text("mediaId: $mediaId\nmediaType: $mediaType")
+
+        when (val state = animeDetails) {
+            is UiState.Success -> {
+                DetailHeaderComponent(header = state.data.animeDetailsHeaderUiModel)
+                DetailInfoComponent(
+                    info = state.data.animeDetailsInfoUiModel,
+                    onClickShare = {}
+                )
+            }
+
+            else -> {}
+        }
         Spacer(Modifier.height(16.dp))
     }
     IconButton(
@@ -48,11 +71,11 @@ internal fun MediaDetailsScreen(
         colors = IconButtonDefaults.iconButtonColors(
             containerColor = MaterialTheme.colorScheme.background
         ),
-        onClick = {}
+        onClick = onBackPressed
     ) {
         Icon(
             imageVector = CustomIcon.FILL_ARROW_BACK,
-            contentDescription = "Back Button"
+            contentDescription = Constant.BACK_BUTTON
         )
     }
 }
@@ -60,5 +83,5 @@ internal fun MediaDetailsScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun MediaDetailScreenPreview() {
-    MediaDetailsScreen(mediaId = 1, mediaType = "Lorem")
+    MediaDetailsScreen(mediaId = 1, mediaType = "Lorem", onBackPressed = {})
 }
