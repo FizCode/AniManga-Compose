@@ -3,8 +3,9 @@ package dev.fizcode.anime.presentation.mapper
 import dev.fizcode.anime.domain.model.TopRankingDomainModel
 import dev.fizcode.anime.presentation.model.TopRankingUiModel
 import dev.fizcode.anime.util.Constant
-import dev.fizcode.common.util.airingStatus
-import dev.fizcode.common.util.animeMediaType
+import dev.fizcode.common.util.extensions.airingStatus
+import dev.fizcode.common.util.extensions.animeMediaType
+import kotlinx.collections.immutable.toImmutableList
 
 internal class TopRankingAnimeUiMapper {
 
@@ -20,7 +21,7 @@ internal class TopRankingAnimeUiMapper {
             title = title,
             subTitle = subTitle(mediaType, numEpisodes, status),
             studio = studios.joinToString(", ") { it.name },
-            genre = genres.map { it.name }
+            genre = genres.map { it.name }.toImmutableList()
         )
 
     private fun subTitle(

@@ -6,7 +6,7 @@ import dev.fizcode.common.base.responsehandler.UiState
 import dev.fizcode.common.util.AnimeFieldsConstant
 import dev.fizcode.common.util.AnimeSortingConstant
 import dev.fizcode.common.util.SeasonHelper
-import dev.fizcode.common.util.fieldsPicker
+import dev.fizcode.common.util.extensions.fieldsPicker
 
 internal class FetchSeasonalAnimeUseCase(
     private val animeRepository: AnimeRepository,

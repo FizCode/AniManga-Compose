@@ -1,4 +1,6 @@
-package dev.fizcode.common.util
+package dev.fizcode.common.util.extensions
+
+import dev.fizcode.common.util.Constant
 
 /**
  * Builds a comma-separated string of field names for use with MyAnimeList API's `fields` parameter.

@@ -1,5 +1,7 @@
 package dev.fizcode.anime.presentation.model
 
+import kotlinx.collections.immutable.persistentListOf
+
 internal val dummySeasonalUiModel = SeasonalUiModel(
     id= 0,
     mediaType = "tv",
@@ -7,9 +9,9 @@ internal val dummySeasonalUiModel = SeasonalUiModel(
     posterPath = "",
     releaseInfo = "Eps. 10 of 12 in 6d 2h",
     rating = "5.00",
-    studio = listOf("Toei Animation"),
+    studio = "Toei Animation",
     synopsis = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam varius mi at neque consequat placerat. Nunc nisl nisi, tempus at consequat sodales, imperdiet sit amet dui.",
-    genre = listOf("Action", "Adventure", "Comedy")
+    genre = persistentListOf("Action", "Adventure", "Comedy")
 )
 
 internal val dummyTopAiringUiModel = TopAiringUiModel(
@@ -26,5 +28,5 @@ internal val dummyTopRankingUiModel = TopRankingUiModel(
     title = "BLEACH: Sennen Kessen-hen",
     subTitle = "TV | Eps. 10 of 12 in 6d 2h",
     studio = "Toei Animation",
-    genre = listOf("Action", "Adventure", "Comedy")
+    genre = persistentListOf("Action", "Adventure", "Comedy")
 )

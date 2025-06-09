@@ -3,7 +3,9 @@ package dev.fizcode.mediadetailinfo.presentation.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -13,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.mediadetailinfo.model.AnimeThemes
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun SongsTabComponent(
@@ -25,6 +28,7 @@ internal fun SongsTabComponent(
     ) {
         SongContent(title = "Opening Theme", songs = songThemes.openingTheme)
         SongContent(title = "Ending Theme", songs = songThemes.endingTheme)
+        Spacer(Modifier.height(8.dp))
     }
 }
 
@@ -63,8 +67,9 @@ private fun SongContent(
 @Composable
 private fun SongsTabPreview() {
 
-    val singleContent = listOf("\"Scar (スカー)\" by Tatsuya Kitani (キタニタツヤ) (eps 2-13)")
-    val multipleContents = listOf(
+    val singleContent =
+        persistentListOf("\"Scar (スカー)\" by Tatsuya Kitani (キタニタツヤ) (eps 2-13)")
+    val multipleContents = persistentListOf(
         "\"Rapport\" by Tatsuya Kitani (キタニタツヤ) (eps 1)",
         "\"Saihate (最果て)\" by SennaRin (eps 2-12)",
         "\"Number One - Bankai\" by Hazel Fernandes (eps 13)"

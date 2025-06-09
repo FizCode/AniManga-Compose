@@ -4,75 +4,35 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.fizcode.common.util.orDash
+import dev.fizcode.common.util.extensions.orDash
 import dev.fizcode.designsystem.component.other.HyperlinkText
 import dev.fizcode.designsystem.component.other.MultipleHyperlinkText
 import dev.fizcode.mediadetailinfo.model.AnimeInfo
 import dev.fizcode.mediadetailinfo.model.TextTableData
+import dev.fizcode.mediadetailinfo.presentation.util.buildInformationList
+import dev.fizcode.mediadetailinfo.presentation.util.buildStatisticsList
 import dev.fizcode.mediadetailinfo.util.Constant
 
 @Composable
 internal fun InformationTabComponent(
     animeInfo: AnimeInfo
 ) {
-    val informationList = listOf(
-        TextTableData(title = Constant.TYPE, desc = animeInfo.type),
-        TextTableData(title = Constant.EPISODES, desc = animeInfo.episodes),
-        TextTableData(title = Constant.STATUS, desc = animeInfo.status),
-        TextTableData(title = Constant.AIRED, desc = animeInfo.aired),
-        TextTableData(
-            title = Constant.PREMIERED,
-            desc = animeInfo.premiered,
-            link = listOf(animeInfo.premieredUrl)
-        ),
-        TextTableData(title = Constant.BROADCAST, desc = animeInfo.aired),
-        TextTableData(
-            title = Constant.PRODUCERS,
-            listDesc = animeInfo.producers.map { it.name },
-            link = animeInfo.producers.map { it.link }),
-        TextTableData(
-            title = Constant.LICENSORS,
-            listDesc = animeInfo.licensors.map { it.name },
-            link = animeInfo.licensors.map { it.link }),
-        TextTableData(
-            title = Constant.STUDIOS,
-            listDesc = animeInfo.studios.map { it.name },
-            link = animeInfo.studios.map { it.link }),
-        TextTableData(
-            title = Constant.SOURCE,
-            desc = animeInfo.source.name,
-            link = listOf(animeInfo.source.link)
-        ),
-        TextTableData(
-            title = Constant.GENRES,
-            listDesc = animeInfo.genre.map { it.name },
-            link = animeInfo.genre.map { it.link }),
-        TextTableData(
-            title = Constant.THEMES,
-            listDesc = animeInfo.themes.map { it.name },
-            link = animeInfo.themes.map { it.link }),
-        TextTableData(title = Constant.DURATION, desc = animeInfo.duration),
-        TextTableData(title = Constant.RATING, desc = animeInfo.rating),
-    )
-
-    val statisticsList = listOf(
-        TextTableData(title = Constant.SCORE, desc = animeInfo.score),
-        TextTableData(title = Constant.RANKED, desc = animeInfo.ranked),
-        TextTableData(title = Constant.POPULARITY, desc = animeInfo.popularity),
-        TextTableData(title = Constant.MEMBERS, desc = animeInfo.members),
-        TextTableData(title = Constant.FAVORITES, desc = animeInfo.favorites),
-    )
+    val informationList = remember(animeInfo) { buildInformationList(animeInfo) }
+    val statisticsList = remember(animeInfo) { buildStatisticsList(animeInfo) }
 
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -80,6 +40,7 @@ internal fun InformationTabComponent(
     ) {
         InfoTable(Constant.INFORMATION, informationList)
         InfoTable(Constant.STATISTICS, statisticsList)
+        Spacer(Modifier.height(8.dp))
     }
 }
 

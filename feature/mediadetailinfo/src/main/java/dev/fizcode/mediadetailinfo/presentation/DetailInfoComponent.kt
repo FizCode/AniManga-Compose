@@ -1,7 +1,9 @@
 package dev.fizcode.mediadetailinfo.presentation
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -10,38 +12,48 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import dev.fizcode.mediadetailinfo.model.AnimeCast
+import androidx.compose.ui.unit.dp
+import dev.fizcode.common.base.responsehandler.UiState
+import dev.fizcode.mediadetailinfo.model.AnimeCastUiModel
 import dev.fizcode.mediadetailinfo.model.AnimeDetails
 import dev.fizcode.mediadetailinfo.model.AnimeDetailsInfoUiModel
 import dev.fizcode.mediadetailinfo.model.AnimeInfo
+import dev.fizcode.mediadetailinfo.model.AnimeStaffUiModel
 import dev.fizcode.mediadetailinfo.model.AnimeThemes
 import dev.fizcode.mediadetailinfo.model.TabContents
 import dev.fizcode.mediadetailinfo.presentation.component.CastTabComponent
 import dev.fizcode.mediadetailinfo.presentation.component.DetailsTabComponent
 import dev.fizcode.mediadetailinfo.presentation.component.InformationTabComponent
 import dev.fizcode.mediadetailinfo.presentation.component.SongsTabComponent
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailInfoComponent(
-    info: AnimeDetailsInfoUiModel,
-    onClickShare: () -> Unit
+    infoUiModel: AnimeDetailsInfoUiModel,
+    cast: UiState<ImmutableList<AnimeCastUiModel>>,
+    staff: UiState<ImmutableList<AnimeStaffUiModel>>,
+    onClickShare: (String) -> Unit
 ) {
     val tabItems = TabContents.entries
-    val pagerState = rememberPagerState(pageCount = { tabItems.size })
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = { tabItems.size }
+    )
     val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = Modifier.fillMaxSize()) {
         PrimaryTabRow(
             selectedTabIndex = pagerState.currentPage,
             containerColor = MaterialTheme.colorScheme.background,
-            // Remove the divider line
+            // Let divider empty set! It will remove the divider line
             divider = {}
         ) {
             tabItems.forEachIndexed { index, title ->
@@ -66,17 +78,24 @@ fun DetailInfoComponent(
             verticalAlignment = Alignment.Top,
             state = pagerState
         ) { position ->
-            when (position) {
-                0 -> DetailsTabComponent(
-                    animeDetails = info.animeDetails,
-                    onClickShare = onClickShare
-                )
+            key(position) {
+                when (position) {
+                    0 -> DetailsTabComponent(
+                        animeDetails = infoUiModel.animeDetails,
+                        onClickShare = onClickShare
+                    )
 
-                1 -> InformationTabComponent(animeInfo = info.animeInfo)
-                2 -> CastTabComponent(cast = info.animeCast)
-                3 -> SongsTabComponent(songThemes = info.animeThemes)
+                    1 -> InformationTabComponent(animeInfo = infoUiModel.animeInfo)
+                    2 -> CastTabComponent(
+                        castUiModel = cast,
+                        staffUiModel = staff
+                    )
+
+                    3 -> SongsTabComponent(songThemes = infoUiModel.animeThemes)
+                }
             }
         }
+        Spacer(Modifier.height(16.dp))
     }
 }
 
@@ -84,12 +103,13 @@ fun DetailInfoComponent(
 @Composable
 private fun DetailInfoComponentPreview() {
     DetailInfoComponent(
-        info = AnimeDetailsInfoUiModel(
+        infoUiModel = AnimeDetailsInfoUiModel(
             AnimeDetails(),
             AnimeInfo(),
-            AnimeCast(),
             AnimeThemes()
         ),
+        cast = UiState.Loading,
+        staff = UiState.Loading,
         onClickShare = {}
     )
 }

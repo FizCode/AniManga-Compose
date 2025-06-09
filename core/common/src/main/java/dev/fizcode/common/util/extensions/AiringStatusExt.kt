@@ -1,4 +1,6 @@
-package dev.fizcode.common.util
+package dev.fizcode.common.util.extensions
+
+import dev.fizcode.common.util.Constant
 
 /**
  * Converts a snake_case airing status string from the MyAnimeList API

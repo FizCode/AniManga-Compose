@@ -1,4 +1,6 @@
-package dev.fizcode.common.util
+package dev.fizcode.common.util.extensions
+
+import dev.fizcode.common.util.Constant
 
 /**
  * Maps a snake_case media type string (typically from the API) to its formatted display name.

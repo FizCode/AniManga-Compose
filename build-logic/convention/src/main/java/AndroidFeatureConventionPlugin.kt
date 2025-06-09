@@ -3,7 +3,6 @@ import dev.fizcode.convention.configureGradleManagedDevices
 import dev.fizcode.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
@@ -27,6 +26,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 "implementation"(libs.findLibrary("androidx.hilt.navigation.compose").get())
                 "implementation"(libs.findLibrary("androidx.navigation.compose").get())
                 "implementation"(libs.findLibrary("androidx.tracing.ktx").get())
+                "implementation"(libs.findLibrary("kotlinx.collections.immutable").get())
                 "implementation"(libs.findLibrary("kotlinx.serialization.json").get())
 
                 "testImplementation"(libs.findLibrary("junit").get())

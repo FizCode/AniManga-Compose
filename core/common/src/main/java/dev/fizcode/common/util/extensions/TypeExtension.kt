@@ -1,4 +1,4 @@
-package dev.fizcode.common.util
+package dev.fizcode.common.util.extensions
 
 /**
  * Returns the original string if it is not null or blank,

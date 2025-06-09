@@ -1,26 +1,28 @@
 package dev.fizcode.mediadetails.presentation.mapper
 
-import dev.fizcode.common.util.airingStatus
-import dev.fizcode.common.util.animeMediaType
-import dev.fizcode.common.util.toCapitalFirstChar
-import dev.fizcode.common.util.toCommaSeparators
-import dev.fizcode.common.util.toFormattedTime
+import dev.fizcode.common.util.extensions.airingStatus
+import dev.fizcode.common.util.extensions.animeMediaType
+import dev.fizcode.common.util.extensions.toCapitalFirstChar
+import dev.fizcode.common.util.extensions.toCommaSeparators
+import dev.fizcode.common.util.extensions.toFormattedTime
+import dev.fizcode.common.util.extensions.toStringWithComma
 import dev.fizcode.mediadetailheader.model.AnimeDetailsHeaderUiModel
-import dev.fizcode.mediadetailinfo.model.AnimeCast
-import dev.fizcode.mediadetailinfo.model.AnimeCharacters
+import dev.fizcode.mediadetailinfo.model.AnimeCastUiModel
 import dev.fizcode.mediadetailinfo.model.AnimeDataWithLink
 import dev.fizcode.mediadetailinfo.model.AnimeDetails
 import dev.fizcode.mediadetailinfo.model.AnimeDetailsInfoUiModel
 import dev.fizcode.mediadetailinfo.model.AnimeInfo
-import dev.fizcode.mediadetailinfo.model.AnimeStaff
+import dev.fizcode.mediadetailinfo.model.AnimeStaffUiModel
 import dev.fizcode.mediadetailinfo.model.AnimeThemes
 import dev.fizcode.mediadetails.domain.model.AnimeDetailsDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanData
-import dev.fizcode.mediadetails.domain.model.JikanStaffData
-import dev.fizcode.mediadetails.domain.model.JikanVAData
+import dev.fizcode.mediadetails.domain.model.JikanAnimeDetailsDomainModel
+import dev.fizcode.mediadetails.domain.model.JikanCastDomainModel
+import dev.fizcode.mediadetails.domain.model.JikanStaffDomainModel
 import dev.fizcode.mediadetails.domain.model.MalAnimeDetailsDomainModel
 import dev.fizcode.mediadetails.presentation.model.AnimeDetailsUiModel
 import dev.fizcode.mediadetails.util.Constant
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 internal class AnimeDetailsUiMapper {
 
@@ -31,50 +33,41 @@ internal class AnimeDetailsUiMapper {
         )
 
     private fun AnimeDetailsDomainModel.toHeaderUiModel() = AnimeDetailsHeaderUiModel(
-        pictures = malDomainModel.pictures.map
-        { it.medium },
+        pictures = malDomainModel.pictures.map { it.medium }.toImmutableList(),
+        largePicture = malDomainModel.pictures.map { it.large }.toImmutableList(),
         posterPath = malDomainModel.mainPicture.medium,
         title = malDomainModel.title,
         mediaType = animeMediaType(malDomainModel.mediaType),
         releaseSeason = malDomainModel.startSeason.season.toCapitalFirstChar() +
                 " ${malDomainModel.startSeason.year}",
-        studio = malDomainModel.studios.joinToString(", ")
-        { it.name },
+        studio = malDomainModel.studios.toStringWithComma { it.name },
         releaseInfo = episodeInfo(malDomainModel.numEpisodes) +
                 ", ${airingStatus(malDomainModel.status)}",
         duration = "${malDomainModel.averageEpisodeDuration.toFormattedTime()} per ep.",
         rank = malDomainModel.rank,
         popularity = malDomainModel.popularity,
         members = malDomainModel.numListUsers,
-        favorites = jikanDomainModel.data.favorites,
+        favorites = jikanDomainModel.favorites,
         score = malDomainModel.mean,
         totalVote = malDomainModel.numScoringUsers,
-        genre = malDomainModel.genres.map { it.name },
+        genre = malDomainModel.genres.map { it.name }.toImmutableList(),
     )
 
-    private fun AnimeDetailsDomainModel.toInfoUiModel(): AnimeDetailsInfoUiModel {
-
-        val jikanData = jikanDomainModel.data
-
-        return AnimeDetailsInfoUiModel(
-            animeDetails = mapToAnimeDetails(jikan = jikanData, mal = malDomainModel),
-            animeInfo = mapToAnimeInfo(jikan = jikanData, mal = malDomainModel),
-            animeCast = mapToAnimeCast(
-                jikanVaData = jikanDomainModel.voiceActors,
-                jikanStaffs = jikanDomainModel.staffs
-            ),
+    private fun AnimeDetailsDomainModel.toInfoUiModel(): AnimeDetailsInfoUiModel =
+        AnimeDetailsInfoUiModel(
+            animeDetails = mapToAnimeDetails(jikan = jikanDomainModel, mal = malDomainModel),
+            animeInfo = mapToAnimeInfo(jikan = jikanDomainModel, mal = malDomainModel),
             animeThemes = AnimeThemes(
-                openingTheme = jikanData.theme.openings,
-                endingTheme = jikanData.theme.endings
+                openingTheme = jikanDomainModel.theme.openings.toImmutableList(),
+                endingTheme = jikanDomainModel.theme.endings.toImmutableList()
             )
         )
-    }
 
     private fun mapToAnimeDetails(
-        jikan: JikanData,
+        jikan: JikanAnimeDetailsDomainModel,
         mal: MalAnimeDetailsDomainModel
     ) = AnimeDetails(
-        synonym = jikan.titleSynonyms.joinToString(", "),
+        synonym = jikan.titleSynonyms.toStringWithComma(),
         japanese = jikan.titleJapanese,
         english = jikan.titleEnglish,
         synopsis = mal.synopsis,
@@ -82,7 +75,7 @@ internal class AnimeDetailsUiMapper {
     )
 
     private fun mapToAnimeInfo(
-        jikan: JikanData,
+        jikan: JikanAnimeDetailsDomainModel,
         mal: MalAnimeDetailsDomainModel
     ) = AnimeInfo(
         type = animeMediaType(mal.mediaType),
@@ -96,32 +89,32 @@ internal class AnimeDetailsUiMapper {
                 name = it.name,
                 link = it.url // TODO
             )
-        },
+        }.toImmutableList(),
         licensors = jikan.licensors.map {
             AnimeDataWithLink(
                 name = it.name,
                 link = it.url // TODO
             )
-        },
+        }.toImmutableList(),
         studios = jikan.studios.map {
             AnimeDataWithLink(
                 name = it.name,
                 link = it.url // TODO
             )
-        },
+        }.toImmutableList(),
         source = AnimeDataWithLink(name = jikan.source, link = "https://google.com"), // TODO
         genre = jikan.genres.map {
             AnimeDataWithLink(
                 name = it.name,
                 link = it.url // TODO
             )
-        },
+        }.toImmutableList(),
         themes = jikan.themes.map {
             AnimeDataWithLink(
                 name = it.name,
                 link = it.url // TODO
             )
-        },
+        }.toImmutableList(),
         duration = "${mal.averageEpisodeDuration.toFormattedTime()} per ep.",
         rating = jikan.rating,
         score = "${mal.mean} (scored by ${mal.numScoringUsers.toCommaSeparators()} users)",
@@ -131,40 +124,39 @@ internal class AnimeDetailsUiMapper {
         favorites = jikan.favorites.toCommaSeparators()
     )
 
-    private fun mapToAnimeCast(
-        jikanVaData: List<JikanVAData>,
-        jikanStaffs: List<JikanStaffData>
-    ): AnimeCast = AnimeCast(
-        characters = mapToCharacterUiModel(jikanVaData.take(10)),
-        animeStaffs = mapToStaffUiModel(jikanStaffs).take(10),
-    )
+    internal fun mapToAnimeCastUiModel(
+        voiceActors: List<JikanCastDomainModel>
+    ): ImmutableList<AnimeCastUiModel> = voiceActors.sortedWith(
+        compareBy(
+            { it.role.lowercase() != Constant.SORT_MAIN },
+            { it.character.malId }
+        )
+    ).take(10).map {
+        AnimeCastUiModel(
+            characterId = it.character.malId,
+            character = it.character.name,
+            characterImage = it.character.images.jpg.imageUrl,
+            characterRole = it.role,
+            characterUrl = it.character.url,
+            voiceActorId = it.voiceActors.person.malId,
+            voiceActorName = it.voiceActors.person.name,
+            voiceActorImage = it.voiceActors.person.images.jpg.imageUrl,
+            voiceActorLang = it.voiceActors.language,
+            voiceActorUrl = it.voiceActors.person.url
+        )
+    }.toImmutableList()
 
-    private fun mapToCharacterUiModel(voiceActors: List<JikanVAData>): List<AnimeCharacters> =
-        voiceActors.map {
-            AnimeCharacters(
-                characterId = it.character.malId,
-                character = it.character.name,
-                characterImage = it.character.images.jpg.imageUrl,
-                characterRole = it.role,
-                characterUrl = it.character.url,
-                voiceActorId = it.voiceActors.person.malId,
-                voiceActorName = it.voiceActors.person.name,
-                voiceActorImage = it.voiceActors.person.images.jpg.imageUrl,
-                voiceActorLang = it.voiceActors.language,
-                voiceActorUrl = it.voiceActors.person.url
-            )
-        }
-
-    private fun mapToStaffUiModel(staff: List<JikanStaffData>): List<AnimeStaff> =
-        staff.map {
-            AnimeStaff(
-                staffId = it.person.malId,
-                name = it.person.name,
-                role = it.positions.joinToString(", "),
-                image = it.person.images.jpg.imageUrl,
-                url = it.person.url
-            )
-        }
+    internal fun mapToStaffUiModel(
+        jiaknStaffData: List<JikanStaffDomainModel>
+    ): ImmutableList<AnimeStaffUiModel> = jiaknStaffData.map {
+        AnimeStaffUiModel(
+            staffId = it.person.malId,
+            name = it.person.name,
+            role = it.positions.toStringWithComma(),
+            image = it.person.images.jpg.imageUrl,
+            url = it.person.url
+        )
+    }.take(10).toImmutableList()
 
     private fun episodeInfo(numEpisodes: Int): String = when (numEpisodes) {
         0 -> Constant.UNKNOWN_EPISODE

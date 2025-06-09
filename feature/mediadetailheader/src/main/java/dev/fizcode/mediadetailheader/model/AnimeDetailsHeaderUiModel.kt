@@ -1,7 +1,13 @@
 package dev.fizcode.mediadetailheader.model
 
+import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+
+@Immutable
 data class AnimeDetailsHeaderUiModel(
-    val pictures: List<String> = emptyList(),
+    val pictures: ImmutableList<String> = persistentListOf(),
+    val largePicture: ImmutableList<String> = persistentListOf(),
     val posterPath: String = "",
     val title: String = "",
     val mediaType: String = "",
@@ -15,5 +21,5 @@ data class AnimeDetailsHeaderUiModel(
     val favorites: Int = 0,
     val score: Double = 0.0,
     val totalVote: Int = 0,
-    val genre: List<String> = emptyList()
+    val genre: ImmutableList<String> = persistentListOf()
 )

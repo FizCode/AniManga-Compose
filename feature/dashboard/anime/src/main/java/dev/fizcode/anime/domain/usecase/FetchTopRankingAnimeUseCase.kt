@@ -5,7 +5,7 @@ import dev.fizcode.anime.domain.repository.AnimeRepository
 import dev.fizcode.common.base.responsehandler.UiState
 import dev.fizcode.common.util.AnimeFieldsConstant
 import dev.fizcode.common.util.RankingTypeConstant
-import dev.fizcode.common.util.fieldsPicker
+import dev.fizcode.common.util.extensions.fieldsPicker
 
 internal class FetchTopRankingAnimeUseCase(
     private val animeRepository: AnimeRepository,

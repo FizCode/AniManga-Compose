@@ -1,8 +1,8 @@
 package dev.fizcode.mediadetails.data.mapper
 
-import dev.fizcode.common.util.orDash
-import dev.fizcode.common.util.orDashList
-import dev.fizcode.common.util.orZero
+import dev.fizcode.common.util.extensions.orDash
+import dev.fizcode.common.util.extensions.orDashList
+import dev.fizcode.common.util.extensions.orZero
 import dev.fizcode.mediadetails.data.response.JikanAnimeDetailsResponse
 import dev.fizcode.mediadetails.data.response.JikanStaffResponse
 import dev.fizcode.mediadetails.data.response.JikanVoiceActorsResponse
@@ -11,9 +11,8 @@ import dev.fizcode.mediadetails.domain.model.AlternativeTitles
 import dev.fizcode.mediadetails.domain.model.Broadcast
 import dev.fizcode.mediadetails.domain.model.Genre
 import dev.fizcode.mediadetails.domain.model.JikanAnimeDetailsDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanData
-import dev.fizcode.mediadetails.domain.model.JikanStaffData
-import dev.fizcode.mediadetails.domain.model.JikanVAData
+import dev.fizcode.mediadetails.domain.model.JikanCastDomainModel
+import dev.fizcode.mediadetails.domain.model.JikanStaffDomainModel
 import dev.fizcode.mediadetails.domain.model.MainPicture
 import dev.fizcode.mediadetails.domain.model.MalAnimeDetailsDomainModel
 import dev.fizcode.mediadetails.domain.model.Picture
@@ -104,18 +103,9 @@ internal class AnimeDetailsDomainMapper {
 
     // Jikan Anime Domain Mapper section
     fun mapToJikanAnimeDetailsModel(
-        detailsResponse: JikanAnimeDetailsResponse,
-        castResponse: JikanVoiceActorsResponse,
-        staffResponse: JikanStaffResponse
-    ): JikanAnimeDetailsDomainModel =
+        detailsResponse: JikanAnimeDetailsResponse
+    ): JikanAnimeDetailsDomainModel = detailsResponse.data?.run {
         JikanAnimeDetailsDomainModel(
-            data = detailsResponse.data.mapToJikanData(),
-            voiceActors = castResponse.data.toCastDomainModel(),
-            staffs = staffResponse.data.toStaffDomainModel()
-        )
-
-    private fun JikanAnimeDetailsResponse.Data?.mapToJikanData() = this?.run {
-        JikanData(
             aired = aired.toDomainModel(),
             airing = airing ?: false,
             approved = approved ?: false,
@@ -154,52 +144,52 @@ internal class AnimeDetailsDomainMapper {
             url = url.orEmpty(),
             year = year.orZero()
         )
-    } ?: JikanData()
+    } ?: JikanAnimeDetailsDomainModel()
 
     private fun JikanAnimeDetailsResponse.Aired?.toDomainModel() = this?.run {
-        JikanData.Aired(
+        JikanAnimeDetailsDomainModel.Aired(
             from = from.orEmpty(),
             string = string.orEmpty(),
             to = to.orEmpty(),
             prop = prop.toDomainModel()
         )
-    } ?: JikanData.Aired()
+    } ?: JikanAnimeDetailsDomainModel.Aired()
 
     private fun JikanAnimeDetailsResponse.Prop?.toDomainModel() = this?.run {
-        JikanData.Prop(
+        JikanAnimeDetailsDomainModel.Prop(
             from = from.toDomainModel(),
             to = to.toDomainModel()
         )
-    } ?: JikanData.Prop()
+    } ?: JikanAnimeDetailsDomainModel.Prop()
 
     private fun JikanAnimeDetailsResponse.From?.toDomainModel() = this?.run {
-        JikanData.From(
+        JikanAnimeDetailsDomainModel.From(
             day = day.orZero(),
             month = month.orZero(),
             year = year.orZero()
         )
-    } ?: JikanData.From()
+    } ?: JikanAnimeDetailsDomainModel.From()
 
     private fun JikanAnimeDetailsResponse.To?.toDomainModel() = this?.run {
-        JikanData.To(
+        JikanAnimeDetailsDomainModel.To(
             day = day.orZero(),
             month = month.orZero(),
             year = year.orZero()
         )
-    } ?: JikanData.To()
+    } ?: JikanAnimeDetailsDomainModel.To()
 
     private fun JikanAnimeDetailsResponse.Broadcast?.toDomainModel() = this?.run {
-        JikanData.Broadcast(
+        JikanAnimeDetailsDomainModel.Broadcast(
             day = day.orEmpty(),
             string = string.orEmpty(),
             time = time.orEmpty(),
             timezone = timezone.orEmpty()
         )
-    } ?: JikanData.Broadcast()
+    } ?: JikanAnimeDetailsDomainModel.Broadcast()
 
     private fun List<JikanAnimeDetailsResponse.Demographic>?.toJikanDemographicDomainModel() =
         this.orEmpty().map {
-            JikanData.Demographic(
+            JikanAnimeDetailsDomainModel.Demographic(
                 malId = it.malId.orZero(),
                 name = it.name.orDash(),
                 type = it.type.orEmpty(),
@@ -209,7 +199,7 @@ internal class AnimeDetailsDomainMapper {
 
     private fun List<JikanAnimeDetailsResponse.ExplicitGenres>?.toJikanExplicitGenresDomainModel() =
         this.orEmpty().map {
-            JikanData.ExplicitGenres(
+            JikanAnimeDetailsDomainModel.ExplicitGenres(
                 malId = it.malId.orZero(),
                 name = it.name.orEmpty(),
                 type = it.type.orEmpty(),
@@ -219,7 +209,7 @@ internal class AnimeDetailsDomainMapper {
 
     private fun List<JikanAnimeDetailsResponse.Genre>?.toJikanGenreDomainModel() =
         this.orEmpty().map {
-            JikanData.Genre(
+            JikanAnimeDetailsDomainModel.Genre(
                 malId = it.malId.orZero(),
                 name = it.name.orDash(),
                 type = it.type.orEmpty(),
@@ -228,31 +218,31 @@ internal class AnimeDetailsDomainMapper {
         }
 
     private fun JikanAnimeDetailsResponse.Images?.toDomainModel() = this?.run {
-        JikanData.Images(
+        JikanAnimeDetailsDomainModel.Images(
             jpg = jpg.toDomainModel(),
             webp = webp.toDomainModel()
         )
-    } ?: JikanData.Images()
+    } ?: JikanAnimeDetailsDomainModel.Images()
 
     private fun JikanAnimeDetailsResponse.Jpg?.toDomainModel() = this?.run {
-        JikanData.Jpg(
+        JikanAnimeDetailsDomainModel.Jpg(
             imageUrl = imageUrl.orEmpty(),
             largeImageUrl = largeImageUrl.orEmpty(),
             smallImageUrl = smallImageUrl.orEmpty()
         )
-    } ?: JikanData.Jpg()
+    } ?: JikanAnimeDetailsDomainModel.Jpg()
 
     private fun JikanAnimeDetailsResponse.Webp?.toDomainModel() = this?.run {
-        JikanData.Webp(
+        JikanAnimeDetailsDomainModel.Webp(
             imageUrl = imageUrl.orEmpty(),
             largeImageUrl = largeImageUrl.orEmpty(),
             smallImageUrl = smallImageUrl.orEmpty()
         )
-    } ?: JikanData.Webp()
+    } ?: JikanAnimeDetailsDomainModel.Webp()
 
     private fun List<JikanAnimeDetailsResponse.Licensor>?.toJikanLicensorDomainModel() =
         this.orEmpty().map {
-            JikanData.Licensor(
+            JikanAnimeDetailsDomainModel.Licensor(
                 malId = it.malId.orZero(),
                 name = it.name.orDash(),
                 type = it.type.orEmpty(),
@@ -262,7 +252,7 @@ internal class AnimeDetailsDomainMapper {
 
     private fun List<JikanAnimeDetailsResponse.Producer>?.toJikanProducerDomainModel() =
         this.orEmpty().map {
-            JikanData.Producer(
+            JikanAnimeDetailsDomainModel.Producer(
                 malId = it.malId.orZero(),
                 name = it.name.orDash(),
                 type = it.type.orEmpty(),
@@ -272,7 +262,7 @@ internal class AnimeDetailsDomainMapper {
 
     private fun List<JikanAnimeDetailsResponse.Studio>?.toJikanStudioDomainModel() =
         this.orEmpty().map {
-            JikanData.Studio(
+            JikanAnimeDetailsDomainModel.Studio(
                 malId = it.malId.orZero(),
                 name = it.name.orDash(),
                 type = it.type.orEmpty(),
@@ -281,15 +271,15 @@ internal class AnimeDetailsDomainMapper {
         }
 
     private fun JikanAnimeDetailsResponse.Theme?.mapToDomainModel() = this?.run {
-        JikanData.Theme(
+        JikanAnimeDetailsDomainModel.Theme(
             openings = openings.orEmpty(),
             endings = endings.orEmpty()
         )
-    } ?: JikanData.Theme()
+    } ?: JikanAnimeDetailsDomainModel.Theme()
 
     private fun List<JikanAnimeDetailsResponse.Themes>?.toJikanThemeDomainModel() =
         this.orEmpty().map {
-            JikanData.Themes(
+            JikanAnimeDetailsDomainModel.Themes(
                 malId = it.malId.orZero(),
                 name = it.name.orDash(),
                 type = it.type.orEmpty(),
@@ -299,125 +289,125 @@ internal class AnimeDetailsDomainMapper {
 
     private fun List<JikanAnimeDetailsResponse.Title>?.toJikanTitleDomainModel() =
         this.orEmpty().map {
-            JikanData.Title(
+            JikanAnimeDetailsDomainModel.Title(
                 title = it.title.orEmpty(),
                 type = it.type.orEmpty()
             )
         }
 
     private fun JikanAnimeDetailsResponse.Trailer?.toDomainModel() = this?.run {
-        JikanData.Trailer(
+        JikanAnimeDetailsDomainModel.Trailer(
             embedUrl = embedUrl.orEmpty(),
             url = url.orEmpty(),
             youtubeId = youtubeId.orEmpty(),
             images = images.toDomainModel()
         )
-    } ?: JikanData.Trailer()
+    } ?: JikanAnimeDetailsDomainModel.Trailer()
 
     private fun JikanAnimeDetailsResponse.TrailerImages?.toDomainModel() = this?.run {
-        JikanData.TrailerImages(
+        JikanAnimeDetailsDomainModel.TrailerImages(
             imageUrl = imageUrl.orEmpty(),
             largeImageUrl = largeImageUrl.orEmpty(),
             maximumImageUrl = maximumImageUrl.orEmpty(),
             mediumImageUrl = mediumImageUrl.orEmpty(),
             smallImageUrl = smallImageUrl.orEmpty()
         )
-    } ?: JikanData.TrailerImages()
+    } ?: JikanAnimeDetailsDomainModel.TrailerImages()
 
-    private fun List<JikanVoiceActorsResponse.Data>?.toCastDomainModel() = this.orEmpty().map {
-        JikanVAData(
+    internal fun mapToCastDomainModel(cast: JikanVoiceActorsResponse) = cast.data.orEmpty().map {
+        JikanCastDomainModel(
             character = it.character.toDomainModel(),
             favorites = it.favorites.orZero(),
             role = it.role.orEmpty(),
             voiceActors = it.voiceActors.toVADomainModel().firstOrNull { va ->
                 va.language.equals(Constant.JAPANESE, ignoreCase = true)
-            } ?: JikanVAData.VoiceActor()
+            } ?: JikanCastDomainModel.VoiceActor()
         )
     }
 
     private fun JikanVoiceActorsResponse.Character?.toDomainModel() = this?.run {
-        JikanVAData.Character(
+        JikanCastDomainModel.Character(
             images = images.toDomainModel(),
             malId = malId.orZero(),
             name = name.orEmpty(),
             url = url.orEmpty()
         )
-    } ?: JikanVAData.Character()
+    } ?: JikanCastDomainModel.Character()
 
     private fun JikanVoiceActorsResponse.Images?.toDomainModel() = this?.run {
-        JikanVAData.Images(
+        JikanCastDomainModel.Images(
             jpg = jpg.toDomainModel(),
             webp = webp.toDomainModel(),
         )
-    } ?: JikanVAData.Images()
+    } ?: JikanCastDomainModel.Images()
 
     private fun JikanVoiceActorsResponse.Jpg?.toDomainModel() = this?.run {
-        JikanVAData.Jpg(
+        JikanCastDomainModel.Jpg(
             imageUrl = imageUrl.orEmpty(),
         )
-    } ?: JikanVAData.Jpg()
+    } ?: JikanCastDomainModel.Jpg()
 
     private fun JikanVoiceActorsResponse.Webp?.toDomainModel() = this?.run {
-        JikanVAData.Webp(
+        JikanCastDomainModel.Webp(
             imageUrl = imageUrl.orEmpty(),
             smallImageUrl = smallImageUrl.orEmpty()
         )
-    } ?: JikanVAData.Webp()
+    } ?: JikanCastDomainModel.Webp()
 
     private fun List<JikanVoiceActorsResponse.VoiceActor>?.toVADomainModel() = this.orEmpty().map {
-        JikanVAData.VoiceActor(
+        JikanCastDomainModel.VoiceActor(
             language = it.language.orEmpty(),
             person = it.person.toDomainModel()
         )
     }
 
     private fun JikanVoiceActorsResponse.Person?.toDomainModel() = this?.run {
-        JikanVAData.Person(
+        JikanCastDomainModel.Person(
             images = images.toDomainModel(),
             malId = malId.orZero(),
             name = name.orEmpty(),
             url = url.orEmpty()
         )
-    } ?: JikanVAData.Person()
+    } ?: JikanCastDomainModel.Person()
 
     private fun JikanVoiceActorsResponse.PersonImages?.toDomainModel() = this?.run {
-        JikanVAData.PersonImages(
+        JikanCastDomainModel.PersonImages(
             jpg = jpg.toDomainModel()
         )
-    } ?: JikanVAData.PersonImages()
+    } ?: JikanCastDomainModel.PersonImages()
 
     private fun JikanVoiceActorsResponse.PersonImagesJpg?.toDomainModel() = this?.run {
-        JikanVAData.PersonImagesJpg(
+        JikanCastDomainModel.PersonImagesJpg(
             imageUrl = imageUrl.orEmpty()
         )
-    } ?: JikanVAData.PersonImagesJpg()
+    } ?: JikanCastDomainModel.PersonImagesJpg()
 
-    private fun List<JikanStaffResponse.Data>?.toStaffDomainModel() = this.orEmpty().map {
-        JikanStaffData(
+    internal fun mapToStaffDomainModel(staff: JikanStaffResponse) = staff.data.orEmpty().map {
+        JikanStaffDomainModel(
             person = it.person.toDomainModel(),
             positions = it.positions.orEmpty()
         )
     }
 
     private fun JikanStaffResponse.Person?.toDomainModel() = this?.run {
-        JikanStaffData.Person(
+        JikanStaffDomainModel.Person(
             images = images.toDomainModel(),
             malId = malId.orZero(),
             name = name.orEmpty(),
             url = url.orEmpty()
         )
-    } ?: JikanStaffData.Person()
+    } ?: JikanStaffDomainModel.Person()
 
     private fun JikanStaffResponse.Images?.toDomainModel() = this?.run {
-        JikanStaffData.Images(
+        JikanStaffDomainModel.Images(
             jpg = jpg.toDomainModel()
         )
-    } ?: JikanStaffData.Images()
+    } ?: JikanStaffDomainModel.Images()
 
     private fun JikanStaffResponse.Jpg?.toDomainModel() = this?.run {
-        JikanStaffData.Jpg(
+        JikanStaffDomainModel.Jpg(
             imageUrl = imageUrl.orEmpty()
         )
-    } ?: JikanStaffData.Jpg()
+    } ?: JikanStaffDomainModel.Jpg()
 
 }

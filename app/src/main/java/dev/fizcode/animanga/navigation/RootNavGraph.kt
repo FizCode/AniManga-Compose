@@ -14,6 +14,7 @@ import dev.fizcode.mediadetails.navigation.navigateToMediaDetailsScreen
 import dev.fizcode.navigation.route.RootRoute
 import dev.fizcode.onboarding.navigation.onBoardingNavGraph
 
+@Suppress("FunctionNaming")
 @Composable
 fun RootNavGraph(
     navHostController: NavHostController,

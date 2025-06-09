@@ -3,7 +3,8 @@ package dev.fizcode.anime.presentation.mapper
 import dev.fizcode.anime.domain.model.Node
 import dev.fizcode.anime.domain.model.SeasonalAnimeDomainModel
 import dev.fizcode.anime.presentation.model.SeasonalUiModel
-import dev.fizcode.common.util.releaseInfo
+import dev.fizcode.common.util.extensions.releaseInfo
+import kotlinx.collections.immutable.toImmutableList
 
 internal class SeasonalAnimeUiMapper {
 
@@ -22,10 +23,10 @@ internal class SeasonalAnimeUiMapper {
                 status = status,
                 numEpisodes = numEpisodes
             ),
-            studio = studios.map { it.name },
+            studio = studios.joinToString(", ") { it.name },
             synopsis = synopsis,
             rating = mean.toString(),
-            genre = genres.map { it.name }
+            genre = genres.map { it.name }.toImmutableList()
         )
     }
 }

@@ -1,12 +1,6 @@
 package dev.fizcode.mediadetails.domain.model
 
 internal data class JikanAnimeDetailsDomainModel(
-    val data: JikanData,
-    val voiceActors: List<JikanVAData>,
-    val staffs: List<JikanStaffData>
-)
-
-internal data class JikanData(
     val aired: Aired = Aired(),
     val airing: Boolean = false,
     val approved: Boolean = false,
@@ -191,73 +185,5 @@ internal data class JikanData(
         val maximumImageUrl: String = "",
         val mediumImageUrl: String = "",
         val smallImageUrl: String = ""
-    )
-}
-
-internal data class JikanVAData(
-    val character: Character = Character(),
-    val favorites: Int = 0,
-    val role: String = "",
-    val voiceActors: VoiceActor = VoiceActor()
-) {
-    data class Character(
-        val images: Images = Images(),
-        val malId: Int = 0,
-        val name: String = "",
-        val url: String = ""
-    )
-
-    data class Images(
-        val jpg: Jpg = Jpg(),
-        val webp: Webp = Webp()
-    )
-
-    data class Jpg(
-        val imageUrl: String = ""
-    )
-
-    data class Webp(
-        val imageUrl: String = "",
-        val smallImageUrl: String = ""
-    )
-
-    data class VoiceActor(
-        val language: String = "",
-        val person: Person = Person()
-    )
-
-    data class Person(
-        val images: PersonImages = PersonImages(),
-        val malId: Int = 0,
-        val name: String = "",
-        val url: String = ""
-    )
-
-    data class PersonImages(
-        val jpg: PersonImagesJpg = PersonImagesJpg()
-    )
-
-    data class PersonImagesJpg(
-        val imageUrl: String = ""
-    )
-}
-
-internal data class JikanStaffData(
-    val person: Person = Person(),
-    val positions: List<String> = emptyList()
-) {
-    data class Person(
-        val images: Images = Images(),
-        val malId: Int = 0,
-        val name: String = "",
-        val url: String = ""
-    )
-
-    data class Images(
-        val jpg: Jpg = Jpg()
-    )
-
-    data class Jpg(
-        val imageUrl: String = ""
     )
 }

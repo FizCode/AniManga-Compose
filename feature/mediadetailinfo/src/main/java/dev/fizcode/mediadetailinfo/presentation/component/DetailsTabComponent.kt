@@ -1,6 +1,10 @@
 package dev.fizcode.mediadetailinfo.presentation.component
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,33 +31,37 @@ import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.mediadetailinfo.model.AnimeDetails
 import dev.fizcode.mediadetailinfo.util.Constant
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun DetailsTabComponent(
     animeDetails: AnimeDetails,
-    onClickShare: () -> Unit
+    onClickShare: (String) -> Unit
 ) {
     Column(
         modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        val synopsis = animeDetails.synopsis
+        val background = animeDetails.background
+
         ExpandableTitles(
             synonym = animeDetails.synonym,
             japanese = animeDetails.japanese,
             english = animeDetails.english
         )
-        if (animeDetails.synopsis.isNotEmpty()) {
+        if (synopsis.isNotEmpty()) {
             SharableDescription(
                 title = Constant.SYNOPSIS,
-                description = animeDetails.synopsis,
-                onClickShare = onClickShare
+                description = synopsis,
+                onClickShare = { onClickShare(synopsis) }
             )
         }
-        if (animeDetails.background.isNotEmpty()) {
+        if (background.isNotEmpty()) {
             SharableDescription(
                 title = Constant.BACKGROUND,
-                description = animeDetails.background,
-                onClickShare = onClickShare
+                description = background,
+                onClickShare = { onClickShare(background) }
             )
         }
     }
@@ -67,18 +75,24 @@ private fun ExpandableTitles(
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
-    val items = listOf(
-        Constant.SYNONYM to synonym,
-        Constant.JAPANESE to japanese,
-        Constant.ENGLISH to english
-    )
+    val items = remember(synonym, japanese, english) {
+        persistentListOf(
+            Constant.SYNONYM to synonym,
+            Constant.JAPANESE to japanese,
+            Constant.ENGLISH to english
+        )
+    }
 
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
         ExpandableItem(title = items[0].first, items[0].second)
 
-        AnimatedVisibility(visible = isExpanded) {
+        AnimatedVisibility(
+            visible = isExpanded,
+            enter = fadeIn() + expandVertically(),
+            exit = fadeOut() + shrinkVertically()
+        ) {
             Column {
                 items.drop(1).forEach { (title, desc) ->
                     ExpandableItem(title = title, description = desc)

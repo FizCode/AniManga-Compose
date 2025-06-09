@@ -1,4 +1,4 @@
-package dev.fizcode.common.util
+package dev.fizcode.common.util.extensions
 
 /**
  * Converts an [Int] to a string with comma separators for thousands.
@@ -25,25 +25,33 @@ fun Int.toCommaSeparators(): String = "%,d".format(this)
  * Converts an [Int] into a human-readable string:
  * - Numbers >= 1,000,000 are formatted in millions with one decimal precision and suffixed with "M".
  *   (e.g., 1_234_567 -> "1.2M", 1_000_000 -> "1M")
- * - Numbers < 1,000,000 are formatted with comma separators as thousands.
- *   (e.g., 12_345 -> "12,345", 1_000 -> "1,000", 999 -> "999")
+ * - Numbers >= 10,000 are formatted in thousand with one decimal precision and suffixed with "K".
+ *  (e.g., 12_345 -> "12K", 123_456 -> "123K")
+ * - Numbers < 10,000 are formatted with comma separators as thousands.
+ *   (e.g., 12_345 -> "12K", 1_000 -> "1,000", 999 -> "999")
  *
  * Trailing ".0" in million-formatted numbers is removed for cleaner output.
  *
  * Examples:
  * - 999 -> "999"
  * - 1_000 -> "1,000"
- * - 12_345 -> "12,345"
+ * - 12_345 -> "12K"
  * - 1_234_567 -> "1.2M"
  * - 1_000_000 -> "1M"
  *
- * @return A formatted string with "M" for millions, or a comma-formatted number if below 1 million.
+ * @return A formatted string with "M" for millions, "K" for 10,000 and above,
+ * or a comma-formatted number if below 10,000.
  */
-fun Int.toCommaSeparatorMaxM(): String = when {
+fun Int.toCompactNumber(): String = when {
     this >= 1_000_000 -> {
         val inMillions = this / 1_000_000.0
         val formatted = "%,.1f".format(inMillions)
         if (formatted.endsWith(".0")) "${formatted.dropLast(2)}M" else "${formatted}M"
+    }
+
+    this >= 10_000 -> {
+        val inThousands = this / 1_000
+        "${inThousands}K"
     }
 
     else -> "%,d".format(this)

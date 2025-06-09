@@ -7,7 +7,6 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowRightAlt
 import androidx.compose.material.icons.automirrored.outlined.ShowChart
 import androidx.compose.material.icons.automirrored.rounded.ListAlt
 import androidx.compose.material.icons.automirrored.rounded.StarHalf
-import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
@@ -22,6 +21,7 @@ import androidx.compose.material.icons.outlined.WorkspacePremium
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.ArrowDropUp
 import androidx.compose.material.icons.rounded.Book
+import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.StarBorder
 import androidx.compose.material.icons.rounded.StarRate
 import androidx.compose.material.icons.rounded.WbSunny
@@ -29,7 +29,6 @@ import androidx.compose.material.icons.rounded.WbSunny
 object CustomIcon {
 
     val FILL_ARROW_BACK = Icons.AutoMirrored.Filled.ArrowBack
-    val FILL_LINK = Icons.Filled.Link
     val FILL_LIST_ALT = Icons.AutoMirrored.Filled.ListAlt
     val FILL_MOVIE = Icons.Filled.Movie
     val FILL_SEARCH = Icons.Filled.Search
@@ -49,6 +48,7 @@ object CustomIcon {
     val ROUND_ARROW_DROP_DOWN = Icons.Rounded.ArrowDropUp
     val ROUND_ARROW_DROP_UP = Icons.Rounded.ArrowDropDown
     val ROUND_BOOK = Icons.Rounded.Book
+    val ROUND_DOWNLOAD = Icons.Rounded.Download
     val ROUND_LIST_ALT = Icons.AutoMirrored.Rounded.ListAlt
     val ROUND_STAR_BORDER = Icons.Rounded.StarBorder
     val ROUND_STAR_HALF = Icons.AutoMirrored.Rounded.StarHalf

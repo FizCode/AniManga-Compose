@@ -53,7 +53,7 @@ fun MovieCardSimple(
                 AsyncImage(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(shimmerBrush(targetValue = 1300f))
+                        .background(shimmerBrush())
                         .fillMaxWidth()
                         .height(178.dp),
                     contentScale = ContentScale.Crop,
@@ -102,7 +102,7 @@ fun MovieCardSmall(
                 AsyncImage(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(shimmerBrush(targetValue = 1300f))
+                        .background(shimmerBrush())
                         .size(100.dp),
                     contentScale = ContentScale.Crop,
                     contentDescription = Component.CARD_IMAGE,
@@ -175,7 +175,7 @@ fun MovieCardLarge(
                 AsyncImage(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(shimmerBrush(targetValue = 1300f))
+                        .background(shimmerBrush())
                         .width(114.dp)
                         .height(164.dp),
                     contentScale = ContentScale.Crop,

@@ -1,5 +1,10 @@
 package dev.fizcode.anime.presentation.model
 
+import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+
+@Immutable
 internal data class TopRankingUiModel(
     val id: Int = 0,
     val mediaType: String = "",
@@ -8,5 +13,5 @@ internal data class TopRankingUiModel(
     val title: String = "",
     val subTitle: String = "",
     val studio: String = "",
-    val genre: List<String> = emptyList()
+    val genre: ImmutableList<String> = persistentListOf()
 )
