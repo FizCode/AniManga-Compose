@@ -15,13 +15,13 @@ import androidx.compose.material.icons.outlined.BookmarkAdd
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Movie
 import androidx.compose.material.icons.outlined.People
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material.icons.outlined.WorkspacePremium
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.ArrowDropUp
 import androidx.compose.material.icons.rounded.Book
 import androidx.compose.material.icons.rounded.Download
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.StarBorder
 import androidx.compose.material.icons.rounded.StarRate
 import androidx.compose.material.icons.rounded.WbSunny
@@ -40,7 +40,6 @@ object CustomIcon {
     val OUTL_FAVORITE_BORDER = Icons.Outlined.FavoriteBorder
     val OUTL_MOVIE = Icons.Outlined.Movie
     val OUTL_PEOPLE = Icons.Outlined.People
-    val OUTL_SETTINGS = Icons.Outlined.Settings
     val OUTL_SHOW_CHART = Icons.AutoMirrored.Outlined.ShowChart
     val OUTL_WB_SUNNY = Icons.Outlined.WbSunny
     val OUTL_WORKSPACE_PREMIUM = Icons.Outlined.WorkspacePremium
@@ -50,6 +49,7 @@ object CustomIcon {
     val ROUND_BOOK = Icons.Rounded.Book
     val ROUND_DOWNLOAD = Icons.Rounded.Download
     val ROUND_LIST_ALT = Icons.AutoMirrored.Rounded.ListAlt
+    val ROUND_SETTINGS = Icons.Rounded.Settings
     val ROUND_STAR_BORDER = Icons.Rounded.StarBorder
     val ROUND_STAR_HALF = Icons.AutoMirrored.Rounded.StarHalf
     val ROUND_STAR_RATE = Icons.Rounded.StarRate

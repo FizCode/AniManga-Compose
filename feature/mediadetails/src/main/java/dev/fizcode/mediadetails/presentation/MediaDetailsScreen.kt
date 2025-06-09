@@ -4,8 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,7 +35,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.mediadetails.util.Constant
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MediaDetailsScreen(
     mediaId: Int,
@@ -72,61 +70,76 @@ internal fun MediaDetailsScreen(
                 enter = slideInAnimation + fadeIn(),
                 exit = fadeOut()
             ) {
-                TopAppBar(
-                    title = {
-                        Text(
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            text = headerTitle,
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = onBackPressed) {
-                            Icon(
-                                imageVector = CustomIcon.FILL_ARROW_BACK,
-                                contentDescription = Constant.BACK_BUTTON
-                            )
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                    )
+                TitleBar(
+                    headerTitle = headerTitle,
+                    onBackPressed = onBackPressed
                 )
             }
-        }
+        },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) { innerPadding ->
-        // We don't use inner padding to set content edges padding
+        // Inner padding not used to avoid bumping bug.
         innerPadding.calculateTopPadding()
-        Box(modifier = Modifier.fillMaxSize()) {
-            AnimeDetailsComponent(
-                modifier = observerModifier,
-                animeDetails = animeDetails,
-                animeCast = animeCast,
-                animeStaff = animeStaff,
-                headerTitle = { headerTitle = it },
-                selectedImage = { selectedImage = it }
-            )
-            if (!showTopBars.value) {
-                IconButton(
-                    modifier = Modifier
-                        .padding(top = 32.dp, start = 4.dp)
-                        .clip(RoundedCornerShape(12.dp)),
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer
-                    ),
-                    onClick = onBackPressed
-                ) {
-                    Icon(
-                        imageVector = CustomIcon.FILL_ARROW_BACK,
-                        contentDescription = Constant.BACK_BUTTON
-                    )
-                }
-            }
-            selectedImage?.let { imageUrl ->
-                PopUpImage(imageUrl = imageUrl, onDismiss = { selectedImage = null })
-            }
+        AnimeDetailsComponent(
+            modifier = observerModifier,
+            animeDetails = animeDetails,
+            animeCast = animeCast,
+            animeStaff = animeStaff,
+            headerTitle = { headerTitle = it },
+            selectedImage = { selectedImage = it }
+        )
+        if (!showTopBars.value) {
+            FloatingBackButton(onBackPressed = onBackPressed)
+        }
+        selectedImage?.let { imageUrl ->
+            PopUpImage(imageUrl = imageUrl, onDismiss = { selectedImage = null })
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TitleBar(
+    headerTitle: String,
+    onBackPressed: () -> Unit
+) = TopAppBar(
+    title = {
+        Text(
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            text = headerTitle,
+        )
+    },
+    navigationIcon = {
+        IconButton(onClick = onBackPressed) {
+            Icon(
+                imageVector = CustomIcon.FILL_ARROW_BACK,
+                contentDescription = Constant.BACK_BUTTON
+            )
+        }
+    },
+    colors = TopAppBarDefaults.topAppBarColors(
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+    )
+)
+
+@Composable
+private fun FloatingBackButton(
+    onBackPressed: () -> Unit
+) = IconButton(
+    modifier = Modifier
+        .padding(top = 32.dp)
+        .padding(horizontal = 4.dp)
+        .clip(RoundedCornerShape(12.dp)),
+    colors = IconButtonDefaults.iconButtonColors(
+        containerColor = MaterialTheme.colorScheme.surfaceContainer
+    ),
+    onClick = onBackPressed
+) {
+    Icon(
+        imageVector = CustomIcon.FILL_ARROW_BACK,
+        contentDescription = Constant.BACK_BUTTON
+    )
 }
 
 @Preview(showBackground = true, showSystemUi = true)

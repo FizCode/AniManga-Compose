@@ -1,5 +1,6 @@
 package dev.fizcode.dashboard.presentation
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -12,7 +13,8 @@ fun DashboardScreen(
     onCardClick: (mediaType: String, mediaId: Int) -> Unit
 ) {
     Scaffold(
-        bottomBar = { NavigationBarComponent(navHostController = navHostController) }
+        bottomBar = { NavigationBarComponent(navHostController = navHostController) },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { innerPadding ->
         NavigationBarNavGraph(
             navHostController = navHostController,

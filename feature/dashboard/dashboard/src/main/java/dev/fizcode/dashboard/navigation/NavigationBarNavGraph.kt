@@ -1,8 +1,10 @@
 package dev.fizcode.dashboard.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -21,16 +23,16 @@ fun NavigationBarNavGraph(
     onCardClick: (mediaType: String, mediaId: Int) -> Unit
 ) {
     NavHost(
+        modifier = Modifier.padding(innerPadding),
         navController = navHostController,
         startDestination = AnimeBaseRoute,
         popEnterTransition = { navHostEnterTransition() },
         popExitTransition = { navHostExitTransition() }
     ) {
         animeNavGraph(
-            innerPadding = innerPadding,
             onCardClick = onCardClick
         )
-        seasonalNavGraph(innerPadding)
+        seasonalNavGraph()
         composable<MangaRoute> {
             Text(text = "Manga")
         }
@@ -50,7 +52,7 @@ data object MangaRoute : DashboardRoute
 @Serializable
 data object BookmarkRoute : DashboardRoute
 
-fun NavGraphBuilder.seasonalNavGraph(innerPadding: PaddingValues) {
+fun NavGraphBuilder.seasonalNavGraph() {
     composable<SeasonalRoute> {
         Text(text = "Seasonal")
     }
