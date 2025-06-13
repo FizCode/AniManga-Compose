@@ -88,7 +88,9 @@ fun DetailInfoComponent(
                     1 -> InformationTabComponent(animeInfo = infoUiModel.animeInfo)
                     2 -> CastTabComponent(
                         castUiModel = cast,
-                        staffUiModel = staff
+                        staffUiModel = staff,
+                        onMoreClick = {},
+                        onCastImageClick = {}
                     )
 
                     3 -> SongsTabComponent(songThemes = infoUiModel.animeThemes)

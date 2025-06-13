@@ -1,6 +1,7 @@
 package dev.fizcode.mediadetailinfo.presentation.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,13 +26,15 @@ import dev.fizcode.mediadetailinfo.util.Constant
 
 @Composable
 internal fun CharacterCast(
-    characterData: AnimeCastUiModel
+    characterData: AnimeCastUiModel,
+    onCastImageClick: () -> Unit
 ) = Row(
     horizontalArrangement = Arrangement.spacedBy(8.dp)
 ) {
     val shimmer = shimmerBrush()
     AsyncImage(
         modifier = Modifier
+            .clickable { onCastImageClick() }
             .clip(RoundedCornerShape(8.dp))
             .background(shimmer)
             .width(50.dp)
@@ -74,6 +77,7 @@ internal fun CharacterCast(
     }
     AsyncImage(
         modifier = Modifier
+            .clickable { onCastImageClick() }
             .clip(RoundedCornerShape(8.dp))
             .background(shimmer)
             .width(50.dp)

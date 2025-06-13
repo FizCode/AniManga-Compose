@@ -34,7 +34,9 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 internal fun CastTabComponent(
     castUiModel: UiState<ImmutableList<AnimeCastUiModel>>,
-    staffUiModel: UiState<ImmutableList<AnimeStaffUiModel>>
+    staffUiModel: UiState<ImmutableList<AnimeStaffUiModel>>,
+    onMoreClick: () -> Unit,
+    onCastImageClick: () -> Unit
 ) = Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
     when (castUiModel) {
         is UiState.Loading -> {
@@ -48,10 +50,13 @@ internal fun CastTabComponent(
         is UiState.Success -> {
             SectionContainer(
                 title = Constant.CHARACTERS_AND_VA,
-                onMoreClick = { /* TODO */ }
+                onMoreClick = onMoreClick
             ) {
                 castUiModel.data.forEach { data ->
-                    CharacterCast(characterData = data)
+                    CharacterCast(
+                        characterData = data,
+                        onCastImageClick = onCastImageClick
+                    )
                 }
             }
         }
@@ -71,15 +76,20 @@ internal fun CastTabComponent(
         is UiState.Success -> {
             SectionContainer(
                 title = Constant.STAFF,
-                onMoreClick = { /* TODO */ }
+                onMoreClick = onMoreClick
             ) {
                 staffUiModel.data.forEach { data ->
-                    Staffs(staffData = data)
+                    Staffs(
+                        staffData = data,
+                        onCastImageClick = onCastImageClick
+                    )
                 }
             }
         }
 
-        else -> {}
+        else -> {
+
+        }
     }
     Spacer(Modifier.height(4.dp))
 }
@@ -87,7 +97,7 @@ internal fun CastTabComponent(
 @Composable
 private fun SectionContainer(
     title: String,
-    onMoreClick: (() -> Unit),
+    onMoreClick: () -> Unit,
     content: @Composable ColumnScope.() -> Unit
 ) = Column(
     modifier = Modifier
@@ -159,6 +169,8 @@ private fun CastTabPreview() {
 
     CastTabComponent(
         castUiModel = UiState.Loading,
-        staffUiModel = UiState.Loading
+        staffUiModel = UiState.Loading,
+        onMoreClick = {},
+        onCastImageClick = {}
     )
 }

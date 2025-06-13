@@ -66,7 +66,8 @@ internal fun CurrentSeason(
             }
         }
 
-        else -> {}
+        else -> {
+        }
     }
 }
 

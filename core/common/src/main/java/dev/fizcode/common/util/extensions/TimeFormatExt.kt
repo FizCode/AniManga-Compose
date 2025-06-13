@@ -22,11 +22,15 @@ fun Int.toFormattedTime(): String {
     val minutes = (this % 3600) / 60
     val seconds = this % 60
 
-    return buildString {
-        if (hours > 0) append("$hours ${if (hours == 1) Constant.HOUR else Constant.HOURS} ")
-        if (minutes > 0) append("$minutes ${if (minutes == 1) Constant.MIN else Constant.MINS} ")
-        if (seconds > 0 || (hours == 0 && minutes == 0)) {
-            append("$seconds ${if (seconds == 1) Constant.SEC else Constant.SECS}")
+    return listOfNotNull(
+        formatUnit(hours, Constant.HOUR, Constant.HOURS).takeIf { hours > 0 },
+        formatUnit(minutes, Constant.MIN, Constant.MINS).takeIf { minutes > 0 },
+        formatUnit(seconds, Constant.SEC, Constant.SECS).takeIf {
+            seconds > 0 || (hours == 0 && minutes == 0)
         }
-    }.trim()
+    ).joinToString(" ")
+}
+
+private fun formatUnit(value: Int, singular: String, plural: String): String {
+    return "$value ${if (value == 1) singular else plural}"
 }

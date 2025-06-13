@@ -1,6 +1,7 @@
 package dev.fizcode.mediadetailinfo.presentation.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,8 +25,10 @@ import dev.fizcode.mediadetailinfo.util.Constant
 
 @Composable
 internal fun Staffs(
-    staffData: AnimeStaffUiModel
+    staffData: AnimeStaffUiModel,
+    onCastImageClick: () -> Unit,
 ) = Row(
+    modifier = Modifier.clickable { onCastImageClick() },
     horizontalArrangement = Arrangement.spacedBy(8.dp)
 ) {
     AsyncImage(

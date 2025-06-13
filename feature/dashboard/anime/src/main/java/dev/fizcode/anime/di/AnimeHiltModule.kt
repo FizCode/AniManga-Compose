@@ -9,7 +9,6 @@ import dev.fizcode.anime.data.mapper.SeasonalDomainMapper
 import dev.fizcode.anime.data.mapper.TopAiringDomainMapper
 import dev.fizcode.anime.data.mapper.TopRankingDomainMapper
 import dev.fizcode.anime.data.repository.AnimeRepositoryImpl
-import dev.fizcode.anime.domain.model.Season
 import dev.fizcode.anime.domain.repository.AnimeRepository
 import dev.fizcode.anime.domain.usecase.AnimeUseCaseGroup
 import dev.fizcode.anime.domain.usecase.FetchSeasonalAnimeUseCase
