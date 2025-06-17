@@ -16,7 +16,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fizcode.anime.presentation.component.AnimeScreenHeader
 import dev.fizcode.anime.presentation.component.CurrentSeason
@@ -30,11 +29,12 @@ import dev.fizcode.anime.presentation.model.dummyTopAiringUiModel
 import dev.fizcode.anime.presentation.model.dummyTopRankingUiModel
 import dev.fizcode.anime.util.Constant
 import dev.fizcode.common.base.responsehandler.UiState
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun AnimeScreen(
     onCardClick: (mediaType: String, mediaId: Int) -> Unit,
-    animeViewModel: AnimeViewModel = hiltViewModel()
+    animeViewModel: AnimeViewModel = koinViewModel()
 ) {
 
     val currentSeason by animeViewModel.currentSeason.collectAsStateWithLifecycle()

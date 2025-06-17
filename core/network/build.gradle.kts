@@ -2,7 +2,6 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.animanga.android.library)
-    alias(libs.plugins.animanga.hilt)
 }
 
 android {
@@ -36,12 +35,14 @@ android {
 
 dependencies {
 
-    // Ktor Client
     api(libs.ktor.client.core)
     api(libs.ktor.client.android)
     api(libs.ktor.client.okhttp)
     api(libs.ktor.serialization.kotlinx.json)
     api(libs.ktor.client.content.negotiation)
+
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.core)
 
     // Chucker
     debugImplementation(libs.chucker.library)

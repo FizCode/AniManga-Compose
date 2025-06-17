@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.animanga.android.library)
-    alias(libs.plugins.animanga.hilt)
 }
 
 android {
@@ -10,5 +9,7 @@ android {
 dependencies {
 
     api(libs.androidx.datastore)
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.core)
 
 }

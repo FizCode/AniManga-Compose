@@ -2,7 +2,6 @@ package dev.fizcode.anime.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.fizcode.anime.domain.usecase.AnimeUseCaseGroup
 import dev.fizcode.anime.presentation.mapper.SeasonalAnimeUiMapper
 import dev.fizcode.anime.presentation.mapper.TopAiringAnimeUiMapper
@@ -14,10 +13,8 @@ import dev.fizcode.anime.util.Constant
 import dev.fizcode.common.base.presentationhandler.asStateFlow
 import dev.fizcode.common.base.responsehandler.UiState
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
 
-@HiltViewModel
-internal class AnimeViewModel @Inject constructor(
+internal class AnimeViewModel(
     private val animeUseCaseGroup: AnimeUseCaseGroup,
     private val seasonalUiMapper: SeasonalAnimeUiMapper,
     private val topAiringUiMapper: TopAiringAnimeUiMapper,

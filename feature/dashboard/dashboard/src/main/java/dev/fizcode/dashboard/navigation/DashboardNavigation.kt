@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import dev.fizcode.dashboard.presentation.DashboardScreen
 import dev.fizcode.navigation.route.RootRoute
 import kotlinx.serialization.Serializable
@@ -13,6 +14,7 @@ fun NavGraphBuilder.dashboardNavGraph(
 ) {
     composable<DashboardRoute> {
         DashboardScreen(
+            navHostController = rememberNavController(),
             onCardClick = onCardClick
         )
     }

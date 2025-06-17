@@ -4,13 +4,12 @@ import dev.fizcode.datasource.remote.response.CurrentSeasonAnimeResponse
 import dev.fizcode.datasource.remote.response.TopAiringAnimeResponse
 import dev.fizcode.datasource.remote.response.TopRankingResponse
 import dev.fizcode.datasource.remote.utils.Constant
-import dev.fizcode.network.di.MalClient
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 
-class DashboardAnimeService(@MalClient private val client: HttpClient) {
+class DashboardAnimeService(private val malClient: HttpClient) {
 
     suspend fun fetchSeasonAnime(
         year: Int,
@@ -19,7 +18,7 @@ class DashboardAnimeService(@MalClient private val client: HttpClient) {
         limit: Int,
         fields: String
     ): CurrentSeasonAnimeResponse =
-        client.get("anime/season/${year}/${season}") {
+        malClient.get("anime/season/${year}/${season}") {
             parameter(Constant.SORT, sortBy)
             parameter(Constant.LIMIT, limit)
             parameter(Constant.FIELDS, fields)
@@ -30,7 +29,7 @@ class DashboardAnimeService(@MalClient private val client: HttpClient) {
         limit: Int,
         fields: String
     ): TopAiringAnimeResponse =
-        client.get("anime/ranking") {
+        malClient.get("anime/ranking") {
             parameter(Constant.RANKING_TYPE, rankingType)
             parameter(Constant.LIMIT, limit)
             parameter(Constant.FIELDS, fields)
@@ -41,7 +40,7 @@ class DashboardAnimeService(@MalClient private val client: HttpClient) {
         limit: Int,
         fields: String
     ): TopRankingResponse =
-        client.get("anime/ranking") {
+        malClient.get("anime/ranking") {
             parameter(Constant.RANKING_TYPE, rankingType)
             parameter(Constant.LIMIT, limit)
             parameter(Constant.FIELDS, fields)
