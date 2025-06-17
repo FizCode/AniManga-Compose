@@ -3,9 +3,8 @@ package dev.fizcode.anime.presentation.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,39 +19,56 @@ internal fun TopRanking(
     headerTitle: String,
     cardItem: UiState<List<TopRankingUiModel>>,
     onHeaderClick: () -> Unit,
-    onCardClick: (Int) -> Unit
+    onCardClick: (mediaType: String, mediaId: Int) -> Unit
 ) {
-    AnimeContent(
-        headerTitle = headerTitle,
-        onHeaderClick = { onHeaderClick() }
-    ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            when (cardItem) {
-                is UiState.Success -> {
-                    cardItem.data.forEachIndexed { index, item ->
-                        MovieCardSmall(
-                            posterPath = item.posterPath,
-                            rating = item.rating,
-                            title = "${index+1}. ${item.title}",
-                            subTitle = item.subTitle,
-                            studio = item.studio,
-                            genre = item.genre,
-                            onCardClick = { onCardClick(item.id) }
-                        )
-                    }
-                }
-
-                else -> {
-                    repeat(times = 5) {
+    when (cardItem) {
+        is UiState.Loading -> {
+            AnimeContent(
+                headerTitle = headerTitle,
+                onHeaderClick = { }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .padding(bottom = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    repeat(5) {
                         MovieCardSmallShimmer()
                     }
                 }
-
             }
         }
+
+        is UiState.Success -> {
+            AnimeContent(
+                headerTitle = headerTitle,
+                onHeaderClick = { onHeaderClick() }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    cardItem.data.forEachIndexed { index, item ->
+                        key(item.id) {
+                            MovieCardSmall(
+                                posterPath = item.posterPath,
+                                rating = item.rating,
+                                title = "${index + 1}. ${item.title}",
+                                subTitle = item.subTitle,
+                                studio = item.studio,
+                                genre = item.genre,
+                                onCardClick = { onCardClick(item.mediaType, item.id) }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        else -> {}
     }
 }
 
@@ -68,6 +84,6 @@ private fun TopRankingPreview() {
             dummyTopRankingUiModel,
         )),
         onHeaderClick = {},
-        onCardClick = {}
+        onCardClick = { _, _ -> }
     )
 }

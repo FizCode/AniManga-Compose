@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import dev.fizcode.navigation.route.InitialRoute
+import dev.fizcode.navigation.route.RootRoute
 import dev.fizcode.onboarding.presentation.presentation.OnBoardingScreen
 import kotlinx.serialization.Serializable
 
@@ -20,4 +20,4 @@ fun NavController.navigateToOnboarding(navOptions: NavOptions? = null) =
     navigate(route = OnBoardingRoute, navOptions)
 
 @Serializable
-data object OnBoardingRoute : InitialRoute
+data object OnBoardingRoute : RootRoute

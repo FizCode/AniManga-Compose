@@ -10,6 +10,30 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
+/**
+ * Creates a shimmering brush effect using an animated linear gradient.
+ *
+ * This function provides a shimmer effect commonly used as a placeholder for loading UI elements.
+ * When [showShimmer] is true, it returns a [Brush.linearGradient] with animated shimmer colors.
+ * When false, it returns a transparent brush.
+ *
+ * The shimmer animation transitions the gradient diagonally using [rememberInfiniteTransition].
+ * The shimmer colors fade in and out with light gray shades for a smooth effect.
+ *
+ * @param showShimmer A flag indicating whether to show the shimmer effect. Defaults to true.
+ * @param targetValue The target offset value for the shimmer animation. Controls the shimmer distance. Defaults to 1000f.
+ *
+ * @return A [Brush] that can be used for background painting with shimmer animation or transparent fallback.
+ *
+ * Example usage:
+ * ```kotlin
+ * Box(
+ *     modifier = Modifier
+ *         .size(100.dp)
+ *         .background(brush = shimmerBrush())
+ * )
+ * ```
+ */
 @Composable
 fun shimmerBrush(showShimmer: Boolean = true, targetValue: Float = 1000f): Brush {
     return if (showShimmer) {

@@ -2,13 +2,23 @@ package dev.fizcode.common.util
 
 internal object Constant {
 
-    const val CURRENTLY_AIRING = "Airing"
+    const val COMMA = ","
+    const val CURRENTLY_AIRING = "Currently Airing"
+    const val EPISODE = "Episode"
+    const val EPISODES = "Episodes"
     const val FINISHED_AIRING = "Finished"
+    const val HOUR = "hour"
+    const val HOURS = "hours"
+    const val JST = "JST"
     const val OVA = "OVA"
     const val ONA = "ONA"
+    const val MIN = "min."
+    const val MINS = "mins."
     const val MOVIE = "Movie"
     const val MUSIC = "Music"
     const val NOT_YET_AIRED = "Not Yet Aired"
+    const val SEC = "sec."
+    const val SECS = "secs."
     const val SNAKE_CURRENTLY_AIRING = "currently_airing"
     const val SNAKE_FINISHED_AIRING = "finished_airing"
     const val SNAKE_MOVIE = "movie"
@@ -23,6 +33,7 @@ internal object Constant {
     const val SPECIAL = "Special"
     const val TV = "TV"
     const val TV_SPECIAL = "TV Special"
+    const val UNKNOWN_AIRING_TIME = "Unknown Airing Time"
     const val UNKNOWN_AIRING_STATUS = "Unknown Airing Status"
     const val UNKNOWN_MEDIA_TYPE = "Unknown Media Type"
 }

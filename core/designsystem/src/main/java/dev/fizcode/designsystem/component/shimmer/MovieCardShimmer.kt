@@ -12,18 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import dev.fizcode.designsystem.util.DesignSystemConstant.Component
 import dev.fizcode.designsystem.util.base.shimmerBrush
 
 /**
@@ -31,35 +24,29 @@ import dev.fizcode.designsystem.util.base.shimmerBrush
  */
 @Composable
 fun MovieCardSimpleShimmer() {
-    Card(
+    val clipRounded8 = RoundedCornerShape(8.dp)
+    val shimmer = shimmerBrush()
+    Column(
         modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-            .width(140.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+            .clip(clipRounded8)
+            .width(140.dp)
+            .padding(8.dp),
     ) {
-        Column(modifier = Modifier.padding(8.dp)) {
-            Box {
-                AsyncImage(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(shimmerBrush(targetValue = 1300f))
-                        .fillMaxWidth()
-                        .height(178.dp),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = Component.CARD_IMAGE,
-                    model = null
-                )
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(shimmerBrush(targetValue = 1300f)),
-                text = ""
-            )
-        }
+        Box(
+            modifier = Modifier
+                .clip(clipRounded8)
+                .background(shimmer)
+                .fillMaxWidth()
+                .height(178.dp)
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(42.dp)
+                .clip(clipRounded8)
+                .background(shimmer)
+        )
     }
 }
 
@@ -68,66 +55,54 @@ fun MovieCardSimpleShimmer() {
  */
 @Composable
 fun MovieCardSmallShimmer() {
-    Card(
+    val clipRounded8 = RoundedCornerShape(8.dp)
+    val shimmer = shimmerBrush()
+    Row(
         modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-            .fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+            .clip(clipRounded8)
+            .fillMaxWidth()
+            .padding(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Row(
-            modifier = Modifier.padding(6.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(6.dp))
+                .background(shimmer)
+                .size(100.dp)
+        )
+        Column(
+            verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
-            Box {
-                AsyncImage(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(shimmerBrush(targetValue = 1300f))
-                        .size(100.dp),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = Component.CARD_IMAGE,
-                    model = null
-                )
-            }
-            Column(
-                verticalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(24.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(shimmerBrush(targetValue = 1300f)),
-                    text = ""
-                )
-                Text(
-                    modifier = Modifier
-                        .width(150.dp)
-                        .height(16.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(shimmerBrush(targetValue = 1300f)),
-                    text = ""
-                )
-                Text(
-                    modifier = Modifier
-                        .width(100.dp)
-                        .height(16.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(shimmerBrush(targetValue = 1300f)),
-                    text = ""
-                )
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(24.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(shimmerBrush(targetValue = 1300f)),
-                    text = ""
-                )
-            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(24.dp)
+                    .clip(clipRounded8)
+                    .background(shimmer)
+            )
+            Box(
+                modifier = Modifier
+                    .width(150.dp)
+                    .height(16.dp)
+                    .clip(clipRounded8)
+                    .background(shimmer)
+            )
+            Box(
+                modifier = Modifier
+                    .width(100.dp)
+                    .height(16.dp)
+                    .clip(clipRounded8)
+                    .background(shimmer)
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(24.dp)
+                    .clip(clipRounded8)
+                    .background(shimmer)
+            )
         }
-
     }
 }
 
@@ -138,75 +113,62 @@ fun MovieCardSmallShimmer() {
 fun MovieCardLargeShimmer(
     modifier: Modifier = Modifier,
 ) {
-    Card(
+    val clipRounded8 = RoundedCornerShape(8.dp)
+    val shimmer = shimmerBrush()
+    Row(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
-            .width(328.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+            .width(328.dp)
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Row(
-            modifier = Modifier.padding(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Box {
-                AsyncImage(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(shimmerBrush(targetValue = 1300f))
-                        .width(114.dp)
-                        .height(164.dp),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = Component.CARD_IMAGE,
-                    model = null
-                )
-            }
-            Column {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(shimmerBrush(targetValue = 1300f)),
-                    text = ""
-                )
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    modifier = Modifier
-                        .width(170.dp)
-                        .height(18.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(shimmerBrush(targetValue = 1300f)),
-                    text = ""
-                )
-                Text(
-                    modifier = Modifier
-                        .padding(vertical = 4.dp)
-                        .width(140.dp)
-                        .height(16.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(shimmerBrush(targetValue = 1300f)),
-                    text = ""
-                )
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(shimmerBrush(targetValue = 1300f)),
-                    text = ""
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(24.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(shimmerBrush(targetValue = 1300f)),
-                    text = ""
-                )
-            }
+        Box(
+            modifier = Modifier
+                .clip(clipRounded8)
+                .background(shimmer)
+                .width(114.dp)
+                .height(164.dp)
+        )
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .clip(clipRounded8)
+                    .background(shimmer)
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Box(
+                modifier = Modifier
+                    .width(170.dp)
+                    .height(18.dp)
+                    .clip(clipRounded8)
+                    .background(shimmer)
+            )
+            Box(
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
+                    .width(140.dp)
+                    .height(16.dp)
+                    .clip(clipRounded8)
+                    .background(shimmer)
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .clip(clipRounded8)
+                    .background(shimmer)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(24.dp)
+                    .clip(clipRounded8)
+                    .background(shimmer)
+            )
         }
-
     }
 }
 

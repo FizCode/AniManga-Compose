@@ -12,12 +12,12 @@ internal data class Data(
 
 internal data class Node(
     val id: Int = 0,
+    val mediaType: String = "",
     val title: String = "",
     val mainPicture: MainPicture = MainPicture(),
     val mean: Double = 0.0,
     val broadcast: Broadcast = Broadcast(),
     val status: String = "",
-    val mediaType: String = "",
     val numEpisodes: Int = 0,
     val studios: List<Studio> = emptyList(),
     val synopsis: String = "",

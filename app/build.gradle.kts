@@ -28,7 +28,7 @@ android {
             applicationIdSuffix = AniMangaBuildType.DEBUG.applicationIdSuffix
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             applicationIdSuffix = AniMangaBuildType.RELEASE.applicationIdSuffix
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -46,8 +46,9 @@ android {
 
 dependencies {
 
-    implementation(projects.feature.onboarding)
     implementation(projects.feature.dashboard.dashboard)
+    implementation(projects.feature.mediadetails)
+    implementation(projects.feature.onboarding)
 
     implementation(projects.core.designsystem)
     implementation(projects.core.datasource)

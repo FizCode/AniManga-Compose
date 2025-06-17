@@ -21,9 +21,10 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class KtorClientHiltModule {
 
+    @MalClient
     @Provides
     @Singleton
-    fun provideKtorHttpClientModule(okHttpClient: OkHttpClient): HttpClient =
+    fun provideMalKtorHttpClientModule(okHttpClient: OkHttpClient): HttpClient =
         HttpClient(OkHttp) {
             engine {
                 preconfigured = okHttpClient
@@ -44,7 +45,34 @@ class KtorClientHiltModule {
 
             install(DefaultRequest) {
                 header(Constant.HEADER_MAL_CLIENT_ID, BuildConfig.X_MAL_CLIENT_ID)
-                url(Constant.BASE_URL)
+                url(Constant.BASE_MAL_URL)
+            }
+        }
+
+    @JikanClient
+    @Provides
+    @Singleton
+    fun provideJikanKtorHttpClient(okHttpClient: OkHttpClient): HttpClient =
+        HttpClient(OkHttp) {
+            engine {
+                preconfigured = okHttpClient
+            }
+            expectSuccess = false
+
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        coerceInputValues = true
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                    }
+                )
+            }
+
+            install(HttpCache)
+
+            install(DefaultRequest) {
+                url(Constant.BASE_JIKAN_URL)
             }
         }
 

@@ -26,6 +26,8 @@ rootProject.name = "AniManga"
 include(":app")
 include(":feature:dashboard:anime")
 include(":feature:dashboard:dashboard")
+include(":feature:mediadetailheader")
+include(":feature:mediadetails")
 include(":feature:onboarding")
 
 include(":core:common")
@@ -34,3 +36,4 @@ include(":core:datastore")
 include(":core:designsystem")
 include(":core:network")
 include(":core:navigation")
+include(":feature:mediadetailinfo")

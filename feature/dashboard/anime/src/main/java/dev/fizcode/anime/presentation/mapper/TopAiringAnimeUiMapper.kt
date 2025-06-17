@@ -10,6 +10,7 @@ internal class TopAiringAnimeUiMapper {
 
     private fun TopAiringDomainModel.Node.toUiData() = TopAiringUiModel(
         id = id,
+        mediaType = mediaType,
         title = title,
         posterPath = mainPicture.large,
         rating = mean.toString()

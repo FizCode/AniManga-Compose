@@ -11,6 +11,7 @@ internal data class TopAiringDomainModel(
 
     data class Node(
         val id: Int = 0,
+        val mediaType: String = "",
         val title: String = "",
         val mainPicture: MainPicture = MainPicture(),
         val mean: Double = 0.0

@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.fizcode.datasource.remote.service.DashboardAnimeService
+import dev.fizcode.network.di.MalClient
 import io.ktor.client.HttpClient
 import javax.inject.Singleton
 
@@ -13,6 +14,6 @@ import javax.inject.Singleton
 class RemoteDataSourceHiltModule {
     @Provides
     @Singleton
-    fun provideDashboardAnimeService(client: HttpClient): DashboardAnimeService =
+    fun provideDashboardAnimeService(@MalClient client: HttpClient): DashboardAnimeService =
         DashboardAnimeService(client = client)
 }
