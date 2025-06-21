@@ -47,7 +47,6 @@ internal fun MediaDetailsScreen(
         mediaDetailsViewModel.fetchMediaId(mediaId = mediaId)
     }
 
-
     val animeDetails by mediaDetailsViewModel.animeDetails.collectAsStateWithLifecycle()
     val animeCast by mediaDetailsViewModel.animeCast.collectAsStateWithLifecycle()
     val animeStaff by mediaDetailsViewModel.animeStaff.collectAsStateWithLifecycle()

@@ -97,7 +97,7 @@ private fun TextTable(
 
         when {
 
-            desc.isNotEmpty() && listDesc.isEmpty() -> {
+            desc.isNotBlank() && listDesc.isNotEmpty() -> {
                 HyperlinkText(
                     modifier = modifier,
                     style = MaterialTheme.typography.bodyMedium,
