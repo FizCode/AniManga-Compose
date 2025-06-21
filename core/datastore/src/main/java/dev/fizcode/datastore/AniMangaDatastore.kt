@@ -9,9 +9,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import dev.fizcode.datastore.util.Constant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class AniMangaDatastore @Inject constructor(private val context: Context) {
+class AniMangaDatastore(private val context: Context) {
 
     companion object {
         val Context.aniMangaDatastore: DataStore<Preferences> by preferencesDataStore(

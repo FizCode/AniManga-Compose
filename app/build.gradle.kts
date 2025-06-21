@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.animanga.android.application.compose)
     alias(libs.plugins.animanga.android.application.flavors)
     alias(libs.plugins.android.application)
-    alias(libs.plugins.animanga.hilt)
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 

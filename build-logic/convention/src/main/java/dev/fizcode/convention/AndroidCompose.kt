@@ -5,6 +5,7 @@ import org.gradle.api.Project
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 
 /**
@@ -48,6 +49,11 @@ internal fun Project.configureAndroidCompose(
             .relativeToRootProject("compose-reports")
             .let(reportsDestination::set)
 
-        enableStrongSkippingMode.set(true)
+        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>() {
+            compilerOptions.freeCompilerArgs.addAll(
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:featureFlag=StrongSkipping",
+            )
+        }
     }
 }

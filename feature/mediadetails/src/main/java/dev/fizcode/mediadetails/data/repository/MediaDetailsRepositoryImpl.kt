@@ -9,9 +9,8 @@ import dev.fizcode.mediadetails.domain.model.JikanCastDomainModel
 import dev.fizcode.mediadetails.domain.model.JikanStaffDomainModel
 import dev.fizcode.mediadetails.domain.model.MalAnimeDetailsDomainModel
 import dev.fizcode.mediadetails.domain.repository.MediaDetailsRepository
-import javax.inject.Inject
 
-internal class MediaDetailsRepositoryImpl @Inject constructor(
+internal class MediaDetailsRepositoryImpl(
     private val animeDetailsService: MediaDetailsService,
     private val animeDetailsDomainMapper: AnimeDetailsDomainMapper
 ) : MediaDetailsRepository {

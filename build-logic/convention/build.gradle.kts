@@ -62,13 +62,13 @@ gradlePlugin {
             id = libs.plugins.animanga.android.application.flavors.get().pluginId
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
-        register("hilt") {
-            id = libs.plugins.animanga.hilt.get().pluginId
-            implementationClass = "HiltConventionPlugin"
-        }
         register("jvmLibrary") {
             id = libs.plugins.animanga.jvm.library.get().pluginId
             implementationClass = "JvmLibraryConventionPlugin"
+        }
+        register("koin") {
+            id = libs.plugins.animanga.koin.get().pluginId
+            implementationClass = "KoinConventionPlugin"
         }
     }
 }

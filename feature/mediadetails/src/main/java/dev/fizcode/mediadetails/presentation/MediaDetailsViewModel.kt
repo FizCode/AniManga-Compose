@@ -2,7 +2,6 @@ package dev.fizcode.mediadetails.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.fizcode.common.base.presentationhandler.asStateFlow
 import dev.fizcode.common.base.responsehandler.UiState
 import dev.fizcode.mediadetailinfo.model.AnimeCastUiModel
@@ -13,10 +12,8 @@ import dev.fizcode.mediadetails.presentation.mapper.AnimeDetailsUiMapper
 import dev.fizcode.mediadetails.presentation.model.AnimeDetailsUiModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
 
-@HiltViewModel
-internal class MediaDetailsViewModel @Inject constructor(
+internal class MediaDetailsViewModel(
     private val animeDetailsUseCase: FetchAnimeDetailsUseCase,
     private val animeRepository: MediaDetailsRepository,
     private val animeDetailsUiMapper: AnimeDetailsUiMapper

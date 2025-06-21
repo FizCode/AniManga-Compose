@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.animanga.android.library)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.animanga.koin)
 }
 
 

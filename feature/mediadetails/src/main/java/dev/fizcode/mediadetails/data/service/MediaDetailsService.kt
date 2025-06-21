@@ -4,16 +4,14 @@ import dev.fizcode.mediadetails.data.response.JikanAnimeDetailsResponse
 import dev.fizcode.mediadetails.data.response.JikanStaffResponse
 import dev.fizcode.mediadetails.data.response.JikanVoiceActorsResponse
 import dev.fizcode.mediadetails.data.response.MalAnimeDetailsResponse
-import dev.fizcode.network.di.JikanClient
-import dev.fizcode.network.di.MalClient
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 
 internal class MediaDetailsService(
-    @MalClient private val malClient: HttpClient,
-    @JikanClient private val jikanClient: HttpClient
+    private val malClient: HttpClient,
+    private val jikanClient: HttpClient
 ) {
 
     suspend fun fetchMalAnimeDetail(

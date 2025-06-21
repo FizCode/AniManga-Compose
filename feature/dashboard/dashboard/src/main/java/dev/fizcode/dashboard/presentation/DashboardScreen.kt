@@ -4,12 +4,11 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import dev.fizcode.dashboard.navigation.NavigationBarNavGraph
 
 @Composable
 fun DashboardScreen(
-    navHostController: NavHostController = rememberNavController(),
+    navHostController: NavHostController,
     onCardClick: (mediaType: String, mediaId: Int) -> Unit
 ) {
     Scaffold(

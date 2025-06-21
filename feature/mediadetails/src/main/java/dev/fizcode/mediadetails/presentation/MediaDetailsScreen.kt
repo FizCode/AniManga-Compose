@@ -30,23 +30,22 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.mediadetails.util.Constant
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun MediaDetailsScreen(
     mediaId: Int,
     mediaType: String, // to determine what's details ui should be ex: Anime, Manga, VA, etc.
     onBackPressed: () -> Unit,
-    mediaDetailsViewModel: MediaDetailsViewModel = hiltViewModel()
+    mediaDetailsViewModel: MediaDetailsViewModel = koinViewModel()
 ) {
 
     LaunchedEffect(Unit) {
         mediaDetailsViewModel.fetchMediaId(mediaId = mediaId)
     }
-
 
     val animeDetails by mediaDetailsViewModel.animeDetails.collectAsStateWithLifecycle()
     val animeCast by mediaDetailsViewModel.animeCast.collectAsStateWithLifecycle()
