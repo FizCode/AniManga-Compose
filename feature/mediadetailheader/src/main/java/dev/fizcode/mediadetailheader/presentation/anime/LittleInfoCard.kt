@@ -18,16 +18,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import dev.fizcode.common.util.extensions.toCompactNumber
 import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.mediadetailheader.util.Constant
 
 @Composable
 internal fun LittleInfoCard(
-    rank: Int,
-    popularity: Int,
-    members: Int,
-    favorites: Int
+    rank: String,
+    popularity: String,
+    members: String,
+    favorites: String
 ) = LazyRow(
     modifier = Modifier
         .padding(vertical = 6.dp),
@@ -38,28 +37,28 @@ internal fun LittleInfoCard(
         HighlightedBadge(
             icon = CustomIcon.OUTL_WORKSPACE_PREMIUM,
             title = Constant.RANK,
-            value = "#${rank.toCompactNumber()}"
+            value = rank
         )
     }
     item {
         HighlightedBadge(
             icon = CustomIcon.OUTL_SHOW_CHART,
             title = Constant.POPULARITY,
-            value = "#${popularity.toCompactNumber()}"
+            value = popularity
         )
     }
     item {
         HighlightedBadge(
             icon = CustomIcon.OUTL_PEOPLE,
             title = Constant.MEMBERS,
-            value = members.toCompactNumber()
+            value = members
         )
     }
     item {
         HighlightedBadge(
             icon = CustomIcon.OUTL_FAVORITE_BORDER,
             title = Constant.FAVORITES,
-            value = favorites.toCompactNumber()
+            value = favorites
         )
     }
 }

@@ -1,6 +1,6 @@
 package dev.fizcode.common.util
 
-internal object Constant {
+internal object InternalConstant {
 
     const val COMMA = ","
     const val CURRENTLY_AIRING = "Currently Airing"

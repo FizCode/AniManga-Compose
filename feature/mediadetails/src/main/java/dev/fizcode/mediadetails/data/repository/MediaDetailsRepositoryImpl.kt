@@ -16,10 +16,11 @@ internal class MediaDetailsRepositoryImpl(
 ) : MediaDetailsRepository {
 
     override suspend fun fetchMalAnimeDetails(
-        animeId: Int
+        animeId: Int,
+        fields: String
     ): UiState<MalAnimeDetailsDomainModel> = processResponse {
         animeDetailsDomainMapper.mapToMalAnimeDetailsModel(
-            animeDetailsService.fetchMalAnimeDetail(animeId = animeId)
+            animeDetailsService.fetchMalAnimeDetail(animeId = animeId, fields = fields)
         )
     }
 

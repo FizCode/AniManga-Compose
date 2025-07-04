@@ -8,7 +8,10 @@ import dev.fizcode.mediadetails.domain.model.MalAnimeDetailsDomainModel
 
 internal interface MediaDetailsRepository {
 
-    suspend fun fetchMalAnimeDetails(animeId: Int): UiState<MalAnimeDetailsDomainModel>
+    suspend fun fetchMalAnimeDetails(
+        animeId: Int,
+        fields: String
+    ): UiState<MalAnimeDetailsDomainModel>
 
     suspend fun fetchJikanAnimeDetails(animeId: Int): UiState<JikanAnimeDetailsDomainModel>
 

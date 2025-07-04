@@ -41,6 +41,7 @@ data class AnimeInfo(
     val popularity: String = "",
     val members: String = "",
     val favorites: String = "",
+    val relatedAnime: ImmutableList<AnimeRelatedUiModel> = persistentListOf()
 )
 
 @Immutable

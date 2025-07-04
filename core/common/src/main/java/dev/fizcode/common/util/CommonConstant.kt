@@ -1,10 +1,8 @@
-package dev.fizcode.datasource.remote.utils
+package dev.fizcode.common.util
 
-internal object Constant {
-
+object CommonConstant {
     const val FIELDS = "fields"
     const val LIMIT = "limit"
     const val RANKING_TYPE = "ranking_type"
     const val SORT = "sort"
-
 }

@@ -1,9 +1,9 @@
 package dev.fizcode.datasource.remote.service
 
+import dev.fizcode.common.util.CommonConstant
 import dev.fizcode.datasource.remote.response.CurrentSeasonAnimeResponse
 import dev.fizcode.datasource.remote.response.TopAiringAnimeResponse
 import dev.fizcode.datasource.remote.response.TopRankingResponse
-import dev.fizcode.datasource.remote.utils.Constant
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -19,9 +19,9 @@ class DashboardAnimeService(private val malClient: HttpClient) {
         fields: String
     ): CurrentSeasonAnimeResponse =
         malClient.get("anime/season/${year}/${season}") {
-            parameter(Constant.SORT, sortBy)
-            parameter(Constant.LIMIT, limit)
-            parameter(Constant.FIELDS, fields)
+            parameter(CommonConstant.SORT, sortBy)
+            parameter(CommonConstant.LIMIT, limit)
+            parameter(CommonConstant.FIELDS, fields)
         }.body()
 
     suspend fun fetchTopAiringAnime(
@@ -30,9 +30,9 @@ class DashboardAnimeService(private val malClient: HttpClient) {
         fields: String
     ): TopAiringAnimeResponse =
         malClient.get("anime/ranking") {
-            parameter(Constant.RANKING_TYPE, rankingType)
-            parameter(Constant.LIMIT, limit)
-            parameter(Constant.FIELDS, fields)
+            parameter(CommonConstant.RANKING_TYPE, rankingType)
+            parameter(CommonConstant.LIMIT, limit)
+            parameter(CommonConstant.FIELDS, fields)
         }.body()
 
     suspend fun fetchTopRankingAnime(
@@ -41,9 +41,9 @@ class DashboardAnimeService(private val malClient: HttpClient) {
         fields: String
     ): TopRankingResponse =
         malClient.get("anime/ranking") {
-            parameter(Constant.RANKING_TYPE, rankingType)
-            parameter(Constant.LIMIT, limit)
-            parameter(Constant.FIELDS, fields)
+            parameter(CommonConstant.RANKING_TYPE, rankingType)
+            parameter(CommonConstant.LIMIT, limit)
+            parameter(CommonConstant.FIELDS, fields)
         }.body()
 
 }

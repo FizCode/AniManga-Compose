@@ -51,6 +51,7 @@ fun DetailHeaderComponent(
         )
         ScoresAndBookmark(
             score = header.score,
+            stars = header.stars,
             totalVote = header.totalVote
         )
         GenreChips(genre = header.genre)

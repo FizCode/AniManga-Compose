@@ -15,11 +15,12 @@ data class AnimeDetailsHeaderUiModel(
     val studio: String = "",
     val releaseInfo: String = "",
     val duration: String = "",
-    val rank: Int = 0,
-    val popularity: Int = 0,
-    val members: Int = 0,
-    val favorites: Int = 0,
-    val score: Double = 0.0,
-    val totalVote: Int = 0,
+    val rank: String = "",
+    val popularity: String = "",
+    val members: String = "",
+    val favorites: String = "",
+    val score: String = "",
+    val stars: Double = 0.0,
+    val totalVote: String = "",
     val genre: ImmutableList<String> = persistentListOf()
 )
