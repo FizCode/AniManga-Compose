@@ -37,6 +37,8 @@ internal data class MalAnimeDetailsResponse(
     val popularity: Int? = null,
     @SerialName("rank")
     val rank: Int? = null,
+    @SerialName("related_anime")
+    val relatedAnime: List<RelatedAnime>? = null,
     @SerialName("rating")
     val rating: String? = null,
     @SerialName("source")
@@ -94,6 +96,26 @@ internal data class MalAnimeDetailsResponse(
         val large: String? = null,
         @SerialName("medium")
         val medium: String? = null
+    )
+
+    @Serializable
+    data class RelatedAnime(
+        @SerialName("node")
+        val node: Node? = null,
+        @SerialName("relation_type")
+        val relationType: String? = null,
+        @SerialName("relation_type_formatted")
+        val relationTypeFormatted: String? = null
+    )
+
+    @Serializable
+    data class Node(
+        @SerialName("id")
+        val id: Int? = null,
+        @SerialName("main_picture")
+        val mainPicture: MainPicture? = null,
+        @SerialName("title")
+        val title: String? = null
     )
 
     @Serializable

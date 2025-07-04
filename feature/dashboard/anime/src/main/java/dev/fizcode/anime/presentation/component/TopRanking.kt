@@ -20,56 +20,54 @@ internal fun TopRanking(
     cardItem: UiState<List<TopRankingUiModel>>,
     onHeaderClick: () -> Unit,
     onCardClick: (mediaType: String, mediaId: Int) -> Unit
-) {
-    when (cardItem) {
-        is UiState.Loading -> {
-            AnimeContent(
-                headerTitle = headerTitle,
-                onHeaderClick = { }
+) = when (cardItem) {
+    is UiState.Loading -> {
+        AnimeContent(
+            headerTitle = headerTitle,
+            onHeaderClick = { }
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .padding(bottom = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(start = 16.dp)
-                        .padding(bottom = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    repeat(5) {
-                        MovieCardSmallShimmer()
-                    }
+                repeat(5) {
+                    MovieCardSmallShimmer()
                 }
             }
         }
-
-        is UiState.Success -> {
-            AnimeContent(
-                headerTitle = headerTitle,
-                onHeaderClick = { onHeaderClick() }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(bottom = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    cardItem.data.forEachIndexed { index, item ->
-                        key(item.id) {
-                            MovieCardSmall(
-                                posterPath = item.posterPath,
-                                rating = item.rating,
-                                title = "${index + 1}. ${item.title}",
-                                subTitle = item.subTitle,
-                                studio = item.studio,
-                                genre = item.genre,
-                                onCardClick = { onCardClick(item.mediaType, item.id) }
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-        else -> {}
     }
+
+    is UiState.Success -> {
+        AnimeContent(
+            headerTitle = headerTitle,
+            onHeaderClick = { onHeaderClick() }
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                cardItem.data.forEachIndexed { index, item ->
+                    key(item.id) {
+                        MovieCardSmall(
+                            posterPath = item.posterPath,
+                            rating = item.rating,
+                            title = "${index + 1}. ${item.title}",
+                            subTitle = item.subTitle,
+                            studio = item.studio,
+                            genre = item.genre,
+                            onCardClick = { onCardClick(item.mediaType, item.id) }
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    else -> {}
 }
 
 @Preview(showBackground = true)

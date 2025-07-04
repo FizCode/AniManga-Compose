@@ -20,7 +20,7 @@ internal class MediaDetailsService(
         malClient.get("anime/${animeId}") {
             parameter(
                 "fields",
-                "pictures, media_type, status, start_season, num_episodes, average_episode_duration, studios, rank, popularity, num_list_users, mean, num_scoring_users, genres, alternative_titles, synopsis, background, start_date, end_date, broadcast, source, rating, characters"
+                "pictures, media_type, status, start_season, num_episodes, average_episode_duration, studios, rank, popularity, num_list_users, mean, num_scoring_users, genres, alternative_titles, synopsis, background, start_date, end_date, broadcast, source, rating, characters, related_anime"
             )
         }.body()
 

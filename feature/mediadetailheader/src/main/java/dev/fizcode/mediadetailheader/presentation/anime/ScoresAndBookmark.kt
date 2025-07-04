@@ -16,15 +16,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import dev.fizcode.common.util.extensions.toCompactNumber
 import dev.fizcode.designsystem.component.other.FiveStarReview
 import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.mediadetailheader.util.Constant
 
 @Composable
 internal fun ScoresAndBookmark(
-    score: Double,
-    totalVote: Int
+    score: String,
+    stars: Double,
+    totalVote: String
 ) = Row(
     modifier = Modifier
         .padding(horizontal = 16.dp)
@@ -41,14 +41,14 @@ internal fun ScoresAndBookmark(
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.secondary,
             style = MaterialTheme.typography.headlineMedium,
-            text = score.toString()
+            text = score
         )
         Column(modifier = Modifier.weight(1F)) {
-            FiveStarReview(score = score)
+            FiveStarReview(score = stars)
             Text(
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.outline,
-                text = "${totalVote.toCompactNumber()} ${Constant.VOTES}"
+                text = "$totalVote ${Constant.VOTES}"
             )
         }
     }
