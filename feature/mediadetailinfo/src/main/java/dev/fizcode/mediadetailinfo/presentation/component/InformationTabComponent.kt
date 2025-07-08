@@ -46,10 +46,12 @@ internal fun InformationTabComponent(
     ) {
         InfoTable(Constant.INFORMATION, informationList)
         InfoTable(Constant.STATISTICS, statisticsList)
-        RelatedAnimeList(
-            relatedAnime = animeInfo.relatedAnime,
-            onClickRelated = { _ -> }
-        )
+        if (animeInfo.relatedAnime.isNotEmpty()) {
+            RelatedAnimeList(
+                relatedAnime = animeInfo.relatedAnime,
+                onClickRelated = { _ -> }
+            )
+        }
         Spacer(Modifier.height(8.dp))
     }
 }
@@ -151,7 +153,7 @@ private fun RelatedAnimeList(
         style = MaterialTheme.typography.titleMedium,
         color = MaterialTheme.colorScheme.onPrimaryContainer,
         textAlign = TextAlign.Center,
-        text = "Related Anime"
+        text = Constant.RELATED
     )
 
     Column(
@@ -159,9 +161,10 @@ private fun RelatedAnimeList(
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
     ) {
-        relatedAnime.forEach { data ->
+        relatedAnime.forEachIndexed { index, data ->
             key(data.relatedId) {
                 RelatedAnime(
+                    index = index + 1,
                     relatedData = data,
                     onClickRelated = onClickRelated
                 )

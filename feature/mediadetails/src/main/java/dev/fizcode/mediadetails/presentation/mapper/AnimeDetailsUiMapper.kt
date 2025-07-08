@@ -82,53 +82,64 @@ internal class AnimeDetailsUiMapper {
     private fun mapToAnimeInfo(
         jikan: JikanAnimeDetailsDomainModel,
         mal: MalAnimeDetailsDomainModel
-    ) = AnimeInfo(
-        type = animeMediaType(mal.mediaType),
-        episodes = episodeInfo(mal.numEpisodes),
-        status = airingStatus(mal.status),
-        aired = jikan.aired.string,
-        premiered = "${mal.startSeason.season.toCapitalFirstChar()} ${mal.startSeason.year}",
-        premieredUrl = "https://google.com",
-        producers = jikan.producers.map {
-            AnimeDataWithLink(
-                name = it.name,
-                link = it.url
-            )
-        }.toImmutableList(),
-        licensors = jikan.licensors.map {
-            AnimeDataWithLink(
-                name = it.name,
-                link = it.url
-            )
-        }.toImmutableList(),
-        studios = jikan.studios.map {
-            AnimeDataWithLink(
-                name = it.name,
-                link = it.url
-            )
-        }.toImmutableList(),
-        source = AnimeDataWithLink(name = jikan.source, link = "https://google.com"),
-        genre = jikan.genres.map {
-            AnimeDataWithLink(
-                name = it.name,
-                link = it.url
-            )
-        }.toImmutableList(),
-        themes = jikan.themes.map {
-            AnimeDataWithLink(
-                name = it.name,
-                link = it.url
-            )
-        }.toImmutableList(),
-        duration = "${mal.averageEpisodeDuration.toFormattedTime()} per ep.",
-        rating = jikan.rating,
-        score = "${mal.mean} (scored by ${mal.numScoringUsers.toCommaSeparators()} users)",
-        ranked = "#${mal.rank.toCommaSeparators(zeroIsNa = true)}",
-        popularity = "#${mal.popularity.toCommaSeparators()}",
-        members = jikan.members.toCommaSeparators(),
-        favorites = jikan.favorites.toCommaSeparators(),
-        relatedAnime = mapToRelatedAnime(mal.relatedAnime)
-    )
+    ): AnimeInfo {
+        val premiered = "${mal.startSeason.season.toCapitalFirstChar()} ${mal.startSeason.year}"
+        val duration = "${mal.averageEpisodeDuration.toFormattedTime()} per ep."
+        val score = "${mal.mean} (scored by ${mal.numScoringUsers.toCommaSeparators()} users)"
+        val ranked = "#${mal.rank.toCommaSeparators(zeroIsNa = true)}"
+        val popularity = "#${mal.popularity.toCommaSeparators()}"
+        val relatedAnime = mal.relatedAnime.filter {
+            it.relationType in setOf("sequel", "prequel", "adaptation")
+        }
+
+        return AnimeInfo(
+            type = animeMediaType(mal.mediaType),
+            episodes = episodeInfo(mal.numEpisodes),
+            status = airingStatus(mal.status),
+            aired = jikan.aired.string,
+            premiered = premiered,
+            premieredUrl = "https://google.com",
+            producers = jikan.producers.map {
+                AnimeDataWithLink(
+                    name = it.name,
+                    link = it.url
+                )
+            }.toImmutableList(),
+            licensors = jikan.licensors.map {
+                AnimeDataWithLink(
+                    name = it.name,
+                    link = it.url
+                )
+            }.toImmutableList(),
+            studios = jikan.studios.map {
+                AnimeDataWithLink(
+                    name = it.name,
+                    link = it.url
+                )
+            }.toImmutableList(),
+            source = AnimeDataWithLink(name = jikan.source, link = "https://google.com"),
+            genre = jikan.genres.map {
+                AnimeDataWithLink(
+                    name = it.name,
+                    link = it.url
+                )
+            }.toImmutableList(),
+            themes = jikan.themes.map {
+                AnimeDataWithLink(
+                    name = it.name,
+                    link = it.url
+                )
+            }.toImmutableList(),
+            duration = duration,
+            rating = jikan.rating,
+            score = score,
+            ranked = ranked,
+            popularity = popularity,
+            members = jikan.members.toCommaSeparators(),
+            favorites = jikan.favorites.toCommaSeparators(),
+            relatedAnime = mapToRelatedAnime(relatedAnime = relatedAnime)
+        )
+    }
 
     private fun mapToRelatedAnime(
         relatedAnime: List<RelatedAnime>
@@ -136,7 +147,7 @@ internal class AnimeDetailsUiMapper {
         AnimeRelatedUiModel(
             relatedId = it.node.id,
             name = it.node.title,
-            image = it.node.mainPicture.medium,
+            url = it.node.mainPicture.medium,
             relationType = it.relationTypeFormatted
         )
     }.toImmutableList()

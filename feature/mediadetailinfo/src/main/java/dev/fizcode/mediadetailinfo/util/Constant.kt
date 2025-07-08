@@ -24,6 +24,7 @@ internal object Constant {
     const val PRODUCERS = "Producers"
     const val RANKED = "Ranked"
     const val RATING = "Rating"
+    const val RELATED = "Related Entries"
     const val SCORE = "Score"
     const val SHARE_ICON = "Share"
     const val SOURCE = "Source"

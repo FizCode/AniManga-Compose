@@ -87,12 +87,12 @@ internal fun MediaDetailsScreen(
             headerTitle = { headerTitle = it },
             selectedImage = { selectedImage = it }
         )
-        if (!showTopBars.value) {
-            FloatingBackButton(onBackPressed = onBackPressed)
-        }
-        selectedImage?.let { imageUrl ->
-            PopUpImage(imageUrl = imageUrl, onDismiss = { selectedImage = null })
-        }
+    }
+    if (!showTopBars.value) {
+        FloatingBackButton(onBackPressed = onBackPressed)
+    }
+    selectedImage?.let { imageUrl ->
+        PopUpImage(imageUrl = imageUrl, onDismiss = { selectedImage = null })
     }
 }
 

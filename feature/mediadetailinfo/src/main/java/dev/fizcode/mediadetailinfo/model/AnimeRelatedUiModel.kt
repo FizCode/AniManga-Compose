@@ -7,5 +7,5 @@ data class AnimeRelatedUiModel(
     val relatedId: Int = 0,
     val name: String = "",
     val relationType: String = "",
-    val image: String = ""
+    val url: String = ""
 )

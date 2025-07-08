@@ -9,7 +9,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -31,6 +33,7 @@ import dev.fizcode.anime.util.Constant
 import dev.fizcode.common.base.responsehandler.UiState
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AnimeScreen(
     onCardClick: (mediaType: String, mediaId: Int) -> Unit,
@@ -40,11 +43,26 @@ internal fun AnimeScreen(
     val currentSeason by animeViewModel.currentSeason.collectAsStateWithLifecycle()
     val topAiring by animeViewModel.topAiring.collectAsStateWithLifecycle()
     val topRanking by animeViewModel.topRanking.collectAsStateWithLifecycle()
+    val refreshing by animeViewModel.refreshing.collectAsStateWithLifecycle()
+
+    val isRefreshing = refreshing && (
+            currentSeason is UiState.Loading ||
+                    topAiring is UiState.Loading ||
+                    topRanking is UiState.Loading
+            )
+
+    LaunchedEffect(isRefreshing) {
+        if (!isRefreshing) {
+            animeViewModel.shouldNotRefresh()
+        }
+    }
 
     AnimeScreenContent(
         currentSeason = currentSeason,
         topAiring = topAiring,
         topRanking = topRanking,
+        isRefreshing = isRefreshing,
+        onRefreshClick = animeViewModel::refresh,
         onCardClick = onCardClick
     )
 
@@ -56,6 +74,8 @@ private fun AnimeScreenContent(
     currentSeason: UiState<List<SeasonalUiModel>>,
     topAiring: UiState<List<TopAiringUiModel>>,
     topRanking: UiState<List<TopRankingUiModel>>,
+    isRefreshing: Boolean = false,
+    onRefreshClick: () -> Unit = {},
     onCardClick: (mediaType: String, mediaId: Int) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -73,36 +93,40 @@ private fun AnimeScreenContent(
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            state = listState,
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(top = innerPadding.calculateTopPadding()),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        PullToRefreshBox(
+            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+            isRefreshing = isRefreshing,
+            onRefresh = onRefreshClick
         ) {
-            item {
-                CurrentSeason(
-                    headerTitle = Constant.CURRENT_SEASON,
-                    cardItem = currentSeason,
-                    onHeaderClick = {},
-                    onCardClick = onCardClick
-                )
-            }
-            item {
-                TopAiring(
-                    headerTitle = Constant.TOP_AIRING,
-                    cardItem = topAiring,
-                    onHeaderClick = {},
-                    onCardClick = onCardClick
-                )
-            }
-            item {
-                TopRanking(
-                    headerTitle = Constant.TOP_RANKING,
-                    cardItem = topRanking,
-                    onHeaderClick = {},
-                    onCardClick = onCardClick
-                )
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxHeight(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                item {
+                    CurrentSeason(
+                        headerTitle = Constant.CURRENT_SEASON,
+                        cardItem = currentSeason,
+                        onHeaderClick = {},
+                        onCardClick = onCardClick
+                    )
+                }
+                item {
+                    TopAiring(
+                        headerTitle = Constant.TOP_AIRING,
+                        cardItem = topAiring,
+                        onHeaderClick = {},
+                        onCardClick = onCardClick
+                    )
+                }
+                item {
+                    TopRanking(
+                        headerTitle = Constant.TOP_RANKING,
+                        cardItem = topRanking,
+                        onHeaderClick = {},
+                        onCardClick = onCardClick
+                    )
+                }
             }
         }
     }

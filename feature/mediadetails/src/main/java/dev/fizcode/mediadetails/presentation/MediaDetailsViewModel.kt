@@ -22,21 +22,21 @@ internal class MediaDetailsViewModel(
     private var mediaId: Int = 0
 
     val animeDetails: StateFlow<UiState<AnimeDetailsUiModel>> = asStateFlow(
+        scope = viewModelScope,
         domain = { animeDetailsUseCase(mediaId) },
-        mapper = { data -> animeDetailsUiMapper.mapToAnimeDetailsUiModel(data) },
-        scope = viewModelScope
+        mapper = { data -> animeDetailsUiMapper.mapToAnimeDetailsUiModel(data) }
     )
 
     val animeCast: StateFlow<UiState<ImmutableList<AnimeCastUiModel>>> = asStateFlow(
+        scope = viewModelScope,
         domain = { animeRepository.fetchAnimeCast(mediaId) },
-        mapper = { data -> animeDetailsUiMapper.mapToAnimeCastUiModel(data) },
-        scope = viewModelScope
+        mapper = { data -> animeDetailsUiMapper.mapToAnimeCastUiModel(data) }
     )
 
     val animeStaff: StateFlow<UiState<ImmutableList<AnimeStaffUiModel>>> = asStateFlow(
+        scope = viewModelScope,
         domain = { animeRepository.fetchAnimeStaff(mediaId) },
-        mapper = { data -> animeDetailsUiMapper.mapToStaffUiModel(data) },
-        scope = viewModelScope
+        mapper = { data -> animeDetailsUiMapper.mapToStaffUiModel(data) }
     )
 
     fun fetchMediaId(mediaId: Int) {
