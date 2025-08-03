@@ -1,5 +1,6 @@
 package dev.fizcode.mediadetails.data.service
 
+import dev.fizcode.common.util.CommonConstant
 import dev.fizcode.mediadetails.data.response.JikanAnimeDetailsResponse
 import dev.fizcode.mediadetails.data.response.JikanStaffResponse
 import dev.fizcode.mediadetails.data.response.JikanVoiceActorsResponse
@@ -15,13 +16,11 @@ internal class MediaDetailsService(
 ) {
 
     suspend fun fetchMalAnimeDetail(
-        animeId: Int
+        animeId: Int,
+        fields: String
     ): MalAnimeDetailsResponse =
         malClient.get("anime/${animeId}") {
-            parameter(
-                "fields",
-                "pictures, media_type, status, start_season, num_episodes, average_episode_duration, studios, rank, popularity, num_list_users, mean, num_scoring_users, genres, alternative_titles, synopsis, background, start_date, end_date, broadcast, source, rating, characters"
-            )
+            parameter(CommonConstant.FIELDS, fields)
         }.body()
 
     suspend fun fetchJikanAnimeDetail(

@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import dev.fizcode.dashboard.model.DashboardDestinationItems
 import dev.fizcode.anime.navigation.AnimeRoute
+import dev.fizcode.dashboard.model.DashboardDestinationItems
 
 @Composable
 fun NavigationBarComponent(navHostController: NavHostController) {
@@ -33,7 +33,7 @@ fun NavigationBarComponent(navHostController: NavHostController) {
 
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination?.route
-        ?: AnimeRoute::class.qualifiedName.orEmpty() // TODO: Change default to EmptyScreen
+        ?: AnimeRoute::class.qualifiedName.orEmpty()
 
     NavigationBar(
         modifier = Modifier.graphicsLayer {
@@ -87,11 +87,11 @@ private fun RowScope.AddItem(
         label = label,
         alwaysShowLabel = alwaysShowLabel,
         colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = MaterialTheme.colorScheme.primary,
-            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            selectedIconColor = MaterialTheme.colorScheme.onPrimary,
             selectedTextColor = MaterialTheme.colorScheme.primary,
+            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
             unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
+            indicatorColor = MaterialTheme.colorScheme.primary,
         )
     )
 }

@@ -1,6 +1,6 @@
 package dev.fizcode.common.util.extensions
 
-import dev.fizcode.common.util.Constant.SPACE
+import dev.fizcode.common.util.InternalConstant.SPACE
 
 /**
  * Capitalizes the first character of each word in the string.

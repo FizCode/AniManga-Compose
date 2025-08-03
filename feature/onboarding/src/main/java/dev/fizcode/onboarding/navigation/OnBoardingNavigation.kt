@@ -10,11 +10,7 @@ import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.onBoardingNavGraph(
     onClickSkip: () -> Unit
-) {
-    composable<OnBoardingRoute> {
-        OnBoardingScreen(onClickSkip = onClickSkip)
-    }
-}
+) = composable<OnBoardingRoute> { OnBoardingScreen(onClickSkip = onClickSkip) }
 
 fun NavController.navigateToOnboarding(navOptions: NavOptions? = null) =
     navigate(route = OnBoardingRoute, navOptions)

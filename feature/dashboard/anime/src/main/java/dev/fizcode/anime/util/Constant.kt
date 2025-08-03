@@ -10,10 +10,6 @@ internal object Constant {
     const val LIMIT_10 = 10
     const val TOP_AIRING = "Top Airing ✨"
     const val TOP_RANKING = "Top Ranking 🏆"
-
-    object AnimeSearchHeader {
-        const val SEARCH = "Search"
-        const val SEARCH_ICON = "Search Icon"
-        const val SETTINGS_ICON = "Settings Icon"
-    }
+    const val SEARCH = "Search"
+    const val SETTINGS_ICON = "Settings Icon"
 }

@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import dev.fizcode.anime.presentation.model.TopAiringUiModel
 import dev.fizcode.anime.presentation.model.dummyTopAiringUiModel
-import dev.fizcode.common.base.responsehandler.UiState
+import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.MovieCardSimple
 import dev.fizcode.designsystem.component.shimmer.MovieCardSimpleShimmer
 
@@ -23,47 +23,45 @@ internal fun TopAiring(
     cardItem: UiState<List<TopAiringUiModel>>,
     onHeaderClick: () -> Unit,
     onCardClick: (mediaType: String, mediaId: Int) -> Unit
-) {
-    when (cardItem) {
-        is UiState.Loading -> {
-            AnimeContent(
-                headerTitle = headerTitle,
-                onHeaderClick = {}
+) = when (cardItem) {
+    is UiState.Loading -> {
+        AnimeContent(
+            headerTitle = headerTitle,
+            onHeaderClick = {}
+        ) {
+            Row(
+                modifier = Modifier.padding(start = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Row(
-                    modifier = Modifier.padding(start = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    repeat(5) {
-                        MovieCardSimpleShimmer()
-                    }
+                repeat(5) {
+                    MovieCardSimpleShimmer()
                 }
             }
         }
-
-        is UiState.Success -> {
-            AnimeContent(
-                headerTitle = headerTitle,
-                onHeaderClick = { onHeaderClick() }
-            ) {
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp)
-                ) {
-                    items(items = cardItem.data, key = { it.id }) { item ->
-                        MovieCardSimple(
-                            posterPath = item.posterPath,
-                            rating = item.rating,
-                            title = item.title,
-                            onCardClick = { onCardClick(item.mediaType, item.id) }
-                        )
-                    }
-                }
-            }
-        }
-
-        else -> {}
     }
+
+    is UiState.Success -> {
+        AnimeContent(
+            headerTitle = headerTitle,
+            onHeaderClick = { onHeaderClick() }
+        ) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp)
+            ) {
+                items(items = cardItem.data, key = { it.id }) { item ->
+                    MovieCardSimple(
+                        posterPath = item.posterPath,
+                        rating = item.rating,
+                        title = item.title,
+                        onCardClick = { onCardClick(item.mediaType, item.id) }
+                    )
+                }
+            }
+        }
+    }
+
+    else -> {}
 }
 
 @Preview(showBackground = true)

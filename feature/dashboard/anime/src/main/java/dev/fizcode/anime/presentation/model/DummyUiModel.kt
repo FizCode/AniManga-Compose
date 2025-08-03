@@ -16,6 +16,7 @@ internal val dummySeasonalUiModel = SeasonalUiModel(
 
 internal val dummyTopAiringUiModel = TopAiringUiModel(
     id= 0,
+    mediaType = "tv",
     posterPath = "",
     rating = "5.00",
     title = "BLEACH: Sennen Kessen-hen"
@@ -23,6 +24,7 @@ internal val dummyTopAiringUiModel = TopAiringUiModel(
 
 internal val dummyTopRankingUiModel = TopRankingUiModel(
     id= 0,
+    mediaType = "tv",
     posterPath = "",
     rating = "5.00",
     title = "BLEACH: Sennen Kessen-hen",

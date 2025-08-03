@@ -15,12 +15,15 @@ import dev.fizcode.mediadetailheader.presentation.anime.GenreChips
 import dev.fizcode.mediadetailheader.presentation.anime.LittleInfoCard
 import dev.fizcode.mediadetailheader.presentation.anime.ScoresAndBookmark
 import dev.fizcode.mediadetailheader.presentation.anime.SliderLargeImage
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun DetailHeaderComponent(
     modifier: Modifier = Modifier,
+    isBookmarked: Boolean,
     header: AnimeDetailsHeaderUiModel,
-    onPictureClick: (String) -> Unit
+    onPictureClick: (String) -> Unit,
+    onClickBookmark: () -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -50,8 +53,11 @@ fun DetailHeaderComponent(
             favorites = header.favorites
         )
         ScoresAndBookmark(
+            isBookmarked = isBookmarked,
             score = header.score,
-            totalVote = header.totalVote
+            stars = header.stars,
+            totalVote = header.totalVote,
+            onClickBookmark = onClickBookmark
         )
         GenreChips(genre = header.genre)
     }
@@ -60,8 +66,29 @@ fun DetailHeaderComponent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun DetailHeaderComponentPreview() {
+    val dummyHeaderData = AnimeDetailsHeaderUiModel(
+        pictures = persistentListOf(),
+        largePicture = persistentListOf(),
+        posterPath = "",
+        title = "Lorem Ipsum",
+        mediaType = "Media Type",
+        releaseSeason = "Spring 2025",
+        studio = "Studio Name",
+        releaseInfo = "Ep. 1 of 12, currently airing",
+        duration = "24 mins. per ep.",
+        rank = "#10",
+        popularity = "#10",
+        members = "1,234",
+        favorites = "1,234",
+        score = "5.00",
+        stars = 5.0,
+        totalVote = "1,000",
+        genre = persistentListOf()
+    )
     DetailHeaderComponent(
-        header = AnimeDetailsHeaderUiModel(title = "Lorem"),
+        isBookmarked = true,
+        header = dummyHeaderData,
+        onClickBookmark = {},
         onPictureClick = { _ -> }
     )
 }

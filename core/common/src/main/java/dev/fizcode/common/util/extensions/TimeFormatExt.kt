@@ -1,6 +1,6 @@
 package dev.fizcode.common.util.extensions
 
-import dev.fizcode.common.util.Constant
+import dev.fizcode.common.util.InternalConstant
 
 /**
  * Converts an integer (in seconds) into a properly pluralized formatted time string.
@@ -23,9 +23,9 @@ fun Int.toFormattedTime(): String {
     val seconds = this % 60
 
     return listOfNotNull(
-        formatUnit(hours, Constant.HOUR, Constant.HOURS).takeIf { hours > 0 },
-        formatUnit(minutes, Constant.MIN, Constant.MINS).takeIf { minutes > 0 },
-        formatUnit(seconds, Constant.SEC, Constant.SECS).takeIf {
+        formatUnit(hours, InternalConstant.HOUR, InternalConstant.HOURS).takeIf { hours > 0 },
+        formatUnit(minutes, InternalConstant.MIN, InternalConstant.MINS).takeIf { minutes > 0 },
+        formatUnit(seconds, InternalConstant.SEC, InternalConstant.SECS).takeIf {
             seconds > 0 || (hours == 0 && minutes == 0)
         }
     ).joinToString(" ")

@@ -23,6 +23,7 @@ dependencies {
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.room.gradlePlugin)
 }
 
 tasks {
@@ -69,6 +70,10 @@ gradlePlugin {
         register("koin") {
             id = libs.plugins.animanga.koin.get().pluginId
             implementationClass = "KoinConventionPlugin"
+        }
+        register("room") {
+            id = libs.plugins.animanga.room.get().pluginId
+            implementationClass = "RoomConventionPlugin"
         }
     }
 }

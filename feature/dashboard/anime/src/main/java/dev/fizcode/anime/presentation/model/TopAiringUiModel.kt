@@ -4,9 +4,9 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 internal data class TopAiringUiModel(
-    val id: Int = 0,
-    val mediaType: String = "",
-    val posterPath: String = "",
-    val rating: String = "",
-    val title: String = ""
+    val id: Int,
+    val mediaType: String,
+    val posterPath: String,
+    val rating: String,
+    val title: String
 )

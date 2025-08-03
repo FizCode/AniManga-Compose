@@ -2,7 +2,7 @@ package dev.fizcode.anime.domain.usecase
 
 import dev.fizcode.anime.domain.model.SeasonalAnimeDomainModel
 import dev.fizcode.anime.domain.repository.AnimeRepository
-import dev.fizcode.common.base.responsehandler.UiState
+import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.util.AnimeFieldsConstant
 import dev.fizcode.common.util.AnimeSortingConstant
 import dev.fizcode.common.util.SeasonHelper
@@ -12,7 +12,7 @@ internal class FetchSeasonalAnimeUseCase(
     private val animeRepository: AnimeRepository,
     private val seasonHelper: SeasonHelper
 ) {
-    suspend operator fun invoke(limit: Int): UiState<SeasonalAnimeDomainModel> {
+    suspend operator fun invoke(limit: Int): DomainNetworkState<SeasonalAnimeDomainModel> {
         val currentYear = seasonHelper.getCurrentYear()
         val currentSeason = seasonHelper.getCurrentSeason()
         val fields = fieldsPicker(

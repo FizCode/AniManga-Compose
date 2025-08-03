@@ -18,6 +18,7 @@ internal data class MalAnimeDetailsDomainModel(
     val popularity: Int = 0,
     val rank: Int = 0,
     val rating: String = "",
+    val relatedAnime: List<RelatedAnime> = emptyList(),
     val source: String = "",
     val startDate: String = "",
     val startSeason: StartSeason,
@@ -46,6 +47,18 @@ internal data class Genre(
 internal data class MainPicture(
     val large: String = "",
     val medium: String = ""
+)
+
+internal data class RelatedAnime(
+    val node: Node = Node(),
+    val relationType: String = "",
+    val relationTypeFormatted: String = ""
+)
+
+internal data class Node(
+    val id: Int = 0,
+    val mainPicture: MainPicture = MainPicture(),
+    val title: String = ""
 )
 
 internal data class Picture(

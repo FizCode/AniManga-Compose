@@ -3,7 +3,7 @@ package dev.fizcode.anime.domain.repository
 import dev.fizcode.anime.domain.model.SeasonalAnimeDomainModel
 import dev.fizcode.anime.domain.model.TopAiringDomainModel
 import dev.fizcode.anime.domain.model.TopRankingDomainModel
-import dev.fizcode.common.base.responsehandler.UiState
+import dev.fizcode.common.base.callhandler.DomainNetworkState
 
 internal interface AnimeRepository {
 
@@ -13,18 +13,18 @@ internal interface AnimeRepository {
         sortBy: String,
         limit: Int,
         fields: String
-    ): UiState<SeasonalAnimeDomainModel>
+    ): DomainNetworkState<SeasonalAnimeDomainModel>
 
     suspend fun fetchTopAiringAnime(
         rankingType: String,
         limit: Int,
         fields: String
-    ): UiState<TopAiringDomainModel>
+    ): DomainNetworkState<TopAiringDomainModel>
 
     suspend fun fetchTopRankingAnime(
         rankingType: String,
         limit: Int,
         fields: String
-    ): UiState<TopRankingDomainModel>
+    ): DomainNetworkState<TopRankingDomainModel>
 
 }

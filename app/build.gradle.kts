@@ -45,6 +45,7 @@ android {
 
 dependencies {
 
+    implementation(projects.feature.dashboard.bookmark)
     implementation(projects.feature.dashboard.dashboard)
     implementation(projects.feature.mediadetails)
     implementation(projects.feature.onboarding)

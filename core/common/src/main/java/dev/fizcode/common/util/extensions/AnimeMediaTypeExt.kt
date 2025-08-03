@@ -1,6 +1,6 @@
 package dev.fizcode.common.util.extensions
 
-import dev.fizcode.common.util.Constant
+import dev.fizcode.common.util.InternalConstant
 
 /**
  * Maps a snake_case media type string (typically from the API) to its formatted display name.
@@ -30,13 +30,13 @@ import dev.fizcode.common.util.Constant
  * ```
  */
 fun animeMediaType(mediaType: String): String = when(mediaType) {
-    Constant.SNAKE_TV -> Constant.TV
-    Constant.SNAKE_OVA -> Constant.OVA
-    Constant.SNAKE_MOVIE -> Constant.MOVIE
-    Constant.SNAKE_SPECIAL -> Constant.SPECIAL
-    Constant.SNAKE_ONA -> Constant.ONA
-    Constant.SNAKE_MUSIC -> Constant.MUSIC
-    Constant.SNAKE_TV_SPECIAL -> Constant.TV_SPECIAL
-    else -> Constant.UNKNOWN_MEDIA_TYPE
+    InternalConstant.SNAKE_TV -> InternalConstant.TV
+    InternalConstant.SNAKE_OVA -> InternalConstant.OVA
+    InternalConstant.SNAKE_MOVIE -> InternalConstant.MOVIE
+    InternalConstant.SNAKE_SPECIAL -> InternalConstant.SPECIAL
+    InternalConstant.SNAKE_ONA -> InternalConstant.ONA
+    InternalConstant.SNAKE_MUSIC -> InternalConstant.MUSIC
+    InternalConstant.SNAKE_TV_SPECIAL -> InternalConstant.TV_SPECIAL
+    else -> InternalConstant.UNKNOWN_MEDIA_TYPE
 }
 

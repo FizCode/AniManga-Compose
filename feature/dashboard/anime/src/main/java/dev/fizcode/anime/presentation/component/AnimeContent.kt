@@ -23,34 +23,32 @@ internal fun AnimeContent(
     headerTitle: String,
     onHeaderClick: () -> Unit,
     content: @Composable () -> Unit
+) = Column(
+    modifier = Modifier.fillMaxWidth()
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
+    Row(
+        modifier = Modifier
+            .clickable { onHeaderClick() }
+            .fillMaxWidth()
+            .padding(start = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier
-                .clickable { onHeaderClick() }
-                .fillMaxWidth()
-                .padding(start = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier.weight(1f),
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.headlineSmall,
-                text = headerTitle
+        Text(
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.colorScheme.secondary,
+            style = MaterialTheme.typography.headlineSmall,
+            text = headerTitle
+        )
+        IconButton(onClick = { onHeaderClick() }) {
+            Icon(
+                tint = MaterialTheme.colorScheme.secondary,
+                imageVector = CustomIcon.OUTL_ARROW_RIGHT,
+                contentDescription = Constant.HEADER_ICON
             )
-            IconButton(onClick = { onHeaderClick() }) {
-                Icon(
-                    tint = MaterialTheme.colorScheme.secondary,
-                    imageVector = CustomIcon.OUTL_ARROW_RIGHT,
-                    contentDescription = Constant.HEADER_ICON
-                )
-            }
         }
-
-        content()
     }
+
+    content()
 }
 
 @Preview(showBackground = true)

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.animanga.android.library)
     alias(libs.plugins.animanga.android.library.compose)
     alias(libs.plugins.animanga.android.feature)
+    alias(libs.plugins.animanga.room)
 }
 
 android {

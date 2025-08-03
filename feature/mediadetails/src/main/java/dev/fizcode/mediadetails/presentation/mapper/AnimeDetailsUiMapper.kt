@@ -4,7 +4,9 @@ import dev.fizcode.common.util.extensions.airingStatus
 import dev.fizcode.common.util.extensions.animeMediaType
 import dev.fizcode.common.util.extensions.toCapitalFirstChar
 import dev.fizcode.common.util.extensions.toCommaSeparators
+import dev.fizcode.common.util.extensions.toCompactNumber
 import dev.fizcode.common.util.extensions.toFormattedTime
+import dev.fizcode.common.util.extensions.toStringOrNa
 import dev.fizcode.common.util.extensions.toStringWithComma
 import dev.fizcode.mediadetailheader.model.AnimeDetailsHeaderUiModel
 import dev.fizcode.mediadetailinfo.model.AnimeCastUiModel
@@ -12,6 +14,7 @@ import dev.fizcode.mediadetailinfo.model.AnimeDataWithLink
 import dev.fizcode.mediadetailinfo.model.AnimeDetails
 import dev.fizcode.mediadetailinfo.model.AnimeDetailsInfoUiModel
 import dev.fizcode.mediadetailinfo.model.AnimeInfo
+import dev.fizcode.mediadetailinfo.model.AnimeRelatedUiModel
 import dev.fizcode.mediadetailinfo.model.AnimeStaffUiModel
 import dev.fizcode.mediadetailinfo.model.AnimeThemes
 import dev.fizcode.mediadetails.domain.model.AnimeDetailsDomainModel
@@ -19,6 +22,7 @@ import dev.fizcode.mediadetails.domain.model.JikanAnimeDetailsDomainModel
 import dev.fizcode.mediadetails.domain.model.JikanCastDomainModel
 import dev.fizcode.mediadetails.domain.model.JikanStaffDomainModel
 import dev.fizcode.mediadetails.domain.model.MalAnimeDetailsDomainModel
+import dev.fizcode.mediadetails.domain.model.RelatedAnime
 import dev.fizcode.mediadetails.presentation.model.AnimeDetailsUiModel
 import dev.fizcode.mediadetails.util.Constant
 import kotlinx.collections.immutable.ImmutableList
@@ -44,12 +48,13 @@ internal class AnimeDetailsUiMapper {
         releaseInfo = episodeInfo(malDomainModel.numEpisodes) +
                 ", ${airingStatus(malDomainModel.status)}",
         duration = "${malDomainModel.averageEpisodeDuration.toFormattedTime()} per ep.",
-        rank = malDomainModel.rank,
-        popularity = malDomainModel.popularity,
-        members = malDomainModel.numListUsers,
-        favorites = jikanDomainModel.favorites,
-        score = malDomainModel.mean,
-        totalVote = malDomainModel.numScoringUsers,
+        rank = "#${malDomainModel.rank.toCompactNumber()}",
+        popularity = "#${malDomainModel.popularity.toCompactNumber()}",
+        members = malDomainModel.numListUsers.toCompactNumber(),
+        favorites = jikanDomainModel.favorites.toCompactNumber(),
+        score = malDomainModel.mean.toStringOrNa(),
+        stars = malDomainModel.mean,
+        totalVote = malDomainModel.numScoringUsers.toCompactNumber(),
         genre = malDomainModel.genres.map { it.name }.toImmutableList(),
     )
 
@@ -77,52 +82,76 @@ internal class AnimeDetailsUiMapper {
     private fun mapToAnimeInfo(
         jikan: JikanAnimeDetailsDomainModel,
         mal: MalAnimeDetailsDomainModel
-    ) = AnimeInfo(
-        type = animeMediaType(mal.mediaType),
-        episodes = episodeInfo(mal.numEpisodes),
-        status = airingStatus(mal.status),
-        aired = jikan.aired.string,
-        premiered = "${mal.startSeason.season.toCapitalFirstChar()} ${mal.startSeason.year}",
-        premieredUrl = "https://google.com", // TODO
-        producers = jikan.producers.map {
-            AnimeDataWithLink(
-                name = it.name,
-                link = it.url // TODO
-            )
-        }.toImmutableList(),
-        licensors = jikan.licensors.map {
-            AnimeDataWithLink(
-                name = it.name,
-                link = it.url // TODO
-            )
-        }.toImmutableList(),
-        studios = jikan.studios.map {
-            AnimeDataWithLink(
-                name = it.name,
-                link = it.url // TODO
-            )
-        }.toImmutableList(),
-        source = AnimeDataWithLink(name = jikan.source, link = "https://google.com"), // TODO
-        genre = jikan.genres.map {
-            AnimeDataWithLink(
-                name = it.name,
-                link = it.url // TODO
-            )
-        }.toImmutableList(),
-        themes = jikan.themes.map {
-            AnimeDataWithLink(
-                name = it.name,
-                link = it.url // TODO
-            )
-        }.toImmutableList(),
-        duration = "${mal.averageEpisodeDuration.toFormattedTime()} per ep.",
-        rating = jikan.rating,
-        score = "${mal.mean} (scored by ${mal.numScoringUsers.toCommaSeparators()} users)",
-        ranked = "#${mal.rank.toCommaSeparators()}",
-        popularity = "#${mal.popularity.toCommaSeparators()}",
-        members = jikan.members.toCommaSeparators(),
-        favorites = jikan.favorites.toCommaSeparators()
-    )
+    ): AnimeInfo {
+        val premiered = "${mal.startSeason.season.toCapitalFirstChar()} ${mal.startSeason.year}"
+        val duration = "${mal.averageEpisodeDuration.toFormattedTime()} per ep."
+        val score = "${mal.mean} (scored by ${mal.numScoringUsers.toCommaSeparators()} users)"
+        val ranked = "#${mal.rank.toCommaSeparators(zeroIsNa = true)}"
+        val popularity = "#${mal.popularity.toCommaSeparators()}"
+        val relatedAnime = mal.relatedAnime.filter {
+            it.relationType in setOf("sequel", "prequel", "adaptation")
+        }
+
+        return AnimeInfo(
+            type = animeMediaType(mal.mediaType),
+            episodes = episodeInfo(mal.numEpisodes),
+            status = airingStatus(mal.status),
+            aired = jikan.aired.string,
+            premiered = premiered,
+            premieredUrl = "https://google.com",
+            producers = jikan.producers.map {
+                AnimeDataWithLink(
+                    name = it.name,
+                    link = it.url
+                )
+            }.toImmutableList(),
+            licensors = jikan.licensors.map {
+                AnimeDataWithLink(
+                    name = it.name,
+                    link = it.url
+                )
+            }.toImmutableList(),
+            studios = jikan.studios.map {
+                AnimeDataWithLink(
+                    name = it.name,
+                    link = it.url
+                )
+            }.toImmutableList(),
+            source = AnimeDataWithLink(name = jikan.source, link = "https://google.com"),
+            genre = jikan.genres.map {
+                AnimeDataWithLink(
+                    name = it.name,
+                    link = it.url
+                )
+            }.toImmutableList(),
+            themes = jikan.themes.map {
+                AnimeDataWithLink(
+                    name = it.name,
+                    link = it.url
+                )
+            }.toImmutableList(),
+            duration = duration,
+            rating = jikan.rating,
+            score = score,
+            ranked = ranked,
+            popularity = popularity,
+            members = jikan.members.toCommaSeparators(),
+            favorites = jikan.favorites.toCommaSeparators(),
+            relatedAnime = mapToRelatedAnime(relatedAnime = relatedAnime)
+        )
+    }
+
+    private fun mapToRelatedAnime(
+        relatedAnime: List<RelatedAnime>
+    ): ImmutableList<AnimeRelatedUiModel> = relatedAnime.map {
+        AnimeRelatedUiModel(
+            relatedId = it.node.id,
+            name = it.node.title,
+            url = it.node.mainPicture.medium,
+            relationType = it.relationTypeFormatted
+        )
+    }.toImmutableList()
+
 
     internal fun mapToAnimeCastUiModel(
         voiceActors: List<JikanCastDomainModel>

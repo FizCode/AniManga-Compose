@@ -11,13 +11,11 @@ import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.animeNavGraph(
     onCardClick: (mediaType: String, mediaId: Int) -> Unit
-    ) {
-    navigation<AnimeBaseRoute>(startDestination = AnimeRoute) {
-        composable<AnimeRoute> {
-            AnimeScreen(
-                onCardClick = onCardClick
-            )
-        }
+) = navigation<AnimeBaseRoute>(startDestination = AnimeRoute) {
+    composable<AnimeRoute> {
+        AnimeScreen(
+            onCardClick = onCardClick
+        )
     }
 }
 

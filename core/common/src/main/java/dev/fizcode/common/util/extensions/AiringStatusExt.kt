@@ -1,6 +1,6 @@
 package dev.fizcode.common.util.extensions
 
-import dev.fizcode.common.util.Constant
+import dev.fizcode.common.util.InternalConstant
 
 /**
  * Converts a snake_case airing status string from the MyAnimeList API
@@ -22,8 +22,8 @@ import dev.fizcode.common.util.Constant
  * ```
  */
 fun airingStatus(status: String): String = when (status) {
-    Constant.SNAKE_FINISHED_AIRING -> Constant.FINISHED_AIRING
-    Constant.SNAKE_CURRENTLY_AIRING -> Constant.CURRENTLY_AIRING
-    Constant.SNAKE_NOT_YET_AIRED -> Constant.NOT_YET_AIRED
-    else -> Constant.UNKNOWN_AIRING_STATUS
+    InternalConstant.SNAKE_FINISHED_AIRING -> InternalConstant.FINISHED_AIRING
+    InternalConstant.SNAKE_CURRENTLY_AIRING -> InternalConstant.CURRENTLY_AIRING
+    InternalConstant.SNAKE_NOT_YET_AIRED -> InternalConstant.NOT_YET_AIRED
+    else -> InternalConstant.UNKNOWN_AIRING_STATUS
 }

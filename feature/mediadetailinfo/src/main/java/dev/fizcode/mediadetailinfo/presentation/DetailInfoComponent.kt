@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.fizcode.common.base.responsehandler.UiState
+import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.mediadetailinfo.model.AnimeCastUiModel
 import dev.fizcode.mediadetailinfo.model.AnimeDetails
 import dev.fizcode.mediadetailinfo.model.AnimeDetailsInfoUiModel

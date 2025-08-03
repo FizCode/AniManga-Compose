@@ -11,6 +11,7 @@ android {
 dependencies {
 
     implementation(projects.feature.dashboard.anime)
+    implementation(projects.feature.dashboard.bookmark)
 
     implementation(projects.core.common)
     implementation(projects.core.designsystem)

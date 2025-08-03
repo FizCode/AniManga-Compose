@@ -15,7 +15,9 @@ import dev.fizcode.mediadetails.domain.model.JikanCastDomainModel
 import dev.fizcode.mediadetails.domain.model.JikanStaffDomainModel
 import dev.fizcode.mediadetails.domain.model.MainPicture
 import dev.fizcode.mediadetails.domain.model.MalAnimeDetailsDomainModel
+import dev.fizcode.mediadetails.domain.model.Node
 import dev.fizcode.mediadetails.domain.model.Picture
+import dev.fizcode.mediadetails.domain.model.RelatedAnime
 import dev.fizcode.mediadetails.domain.model.StartSeason
 import dev.fizcode.mediadetails.domain.model.Studio
 import dev.fizcode.mediadetails.util.Constant
@@ -42,6 +44,7 @@ internal class AnimeDetailsDomainMapper {
             popularity = response.popularity.orZero(),
             rank = response.rank.orZero(),
             rating = response.rating.orEmpty(),
+            relatedAnime = response.relatedAnime.toRelatedDomainModel(),
             source = response.source.orDash(),
             startDate = response.startDate.orEmpty(),
             startSeason = response.startSeason.toDomainModel(),
@@ -52,7 +55,7 @@ internal class AnimeDetailsDomainMapper {
         )
 
     private fun MalAnimeDetailsResponse.AlternativeTitles?.toDomainModel() = this?.run {
-        return AlternativeTitles(
+        AlternativeTitles(
             en = en.orEmpty(),
             ja = ja.orEmpty(),
             synonyms = synonyms?.map { it }.orEmpty()
@@ -60,7 +63,7 @@ internal class AnimeDetailsDomainMapper {
     } ?: AlternativeTitles()
 
     private fun MalAnimeDetailsResponse.Broadcast?.toDomainModel() = this?.run {
-        return Broadcast(
+        Broadcast(
             dayOfTheWeek = dayOfTheWeek.orEmpty(),
             startTime = startTime.orEmpty()
         )
@@ -86,6 +89,23 @@ internal class AnimeDetailsDomainMapper {
             medium = it.medium.orEmpty()
         )
     }
+
+    private fun List<MalAnimeDetailsResponse.RelatedAnime>?.toRelatedDomainModel() =
+        this.orEmpty().map {
+            RelatedAnime(
+                node = it.node.toDomainModel(),
+                relationType = it.relationType.orEmpty(),
+                relationTypeFormatted = it.relationTypeFormatted.orEmpty()
+            )
+        }
+
+    private fun MalAnimeDetailsResponse.Node?.toDomainModel() = this?.run {
+        Node(
+            id = id.orZero(),
+            mainPicture = mainPicture.toDomainModel(),
+            title = title.orEmpty()
+        )
+    } ?: Node()
 
     private fun MalAnimeDetailsResponse.StartSeason?.toDomainModel() = this?.run {
         StartSeason(

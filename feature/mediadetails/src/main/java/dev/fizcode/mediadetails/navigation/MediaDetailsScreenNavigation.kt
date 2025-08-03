@@ -13,19 +13,17 @@ import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.mediaDetailsNavGraph(
     onBackPressed: () -> Unit
-) {
-    composable<MediaDetailsRoute>(
-        deepLinks = listOf(
-            navDeepLink<MediaDetailsRoute>(basePath = "$DEEPLINK_BASE/details")
-        )
-    ) { backstackEntry ->
-        val backstackEntryRoute = backstackEntry.toRoute<MediaDetailsRoute>()
-        MediaDetailsScreen(
-            mediaType = backstackEntryRoute.mediaType,
-            mediaId = backstackEntryRoute.mediaId,
-            onBackPressed = onBackPressed
-        )
-    }
+) = composable<MediaDetailsRoute>(
+    deepLinks = listOf(
+        navDeepLink<MediaDetailsRoute>(basePath = "$DEEPLINK_BASE/details")
+    )
+) { backstackEntry ->
+    val backstackEntryRoute = backstackEntry.toRoute<MediaDetailsRoute>()
+    MediaDetailsScreen(
+        mediaType = backstackEntryRoute.mediaType,
+        mediaId = backstackEntryRoute.mediaId,
+        onBackPressed = onBackPressed
+    )
 }
 
 fun NavController.navigateToMediaDetailsScreen(

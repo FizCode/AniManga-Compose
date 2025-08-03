@@ -27,6 +27,7 @@
             <option value="$PROJECT_DIR$/build-logic/convention" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/common" />
+            <option value="$PROJECT_DIR$/core/data" />
             <option value="$PROJECT_DIR$/core/datasource" />
             <option value="$PROJECT_DIR$/core/datastore" />
             <option value="$PROJECT_DIR$/core/designsystem" />
@@ -35,6 +36,7 @@
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/dashboard" />
             <option value="$PROJECT_DIR$/feature/dashboard/anime" />
+            <option value="$PROJECT_DIR$/feature/dashboard/bookmark" />
             <option value="$PROJECT_DIR$/feature/dashboard/dashboard" />
             <option value="$PROJECT_DIR$/feature/mediadetailheader" />
             <option value="$PROJECT_DIR$/feature/mediadetailinfo" />
