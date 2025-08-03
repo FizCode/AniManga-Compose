@@ -1,12 +1,16 @@
 package dev.fizcode.common.util
 
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 class DefaultSeasonHelper : SeasonHelper {
-    private val localDate = kotlinx.datetime.Clock.System.now()
+    @OptIn(ExperimentalTime::class)
+    private val localDate = Clock.System.now()
         .toLocalDateTime(kotlinx.datetime.TimeZone.currentSystemDefault())
 
-    private val currentMonth = localDate.monthNumber
+    private val currentMonth = localDate.month.number
     private val currentYear = localDate.year
 
     override fun getCurrentSeason(): String = when (currentMonth) {

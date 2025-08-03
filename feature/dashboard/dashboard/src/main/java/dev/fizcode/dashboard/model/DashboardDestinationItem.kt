@@ -2,7 +2,7 @@ package dev.fizcode.dashboard.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import dev.fizcode.anime.navigation.AnimeRoute
-import dev.fizcode.dashboard.navigation.BookmarkRoute
+import dev.fizcode.bookmark.navigation.BookmarkRoute
 import dev.fizcode.dashboard.navigation.MangaRoute
 import dev.fizcode.dashboard.navigation.SeasonalRoute
 import dev.fizcode.dashboard.util.Constant

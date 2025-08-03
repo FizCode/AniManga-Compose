@@ -30,7 +30,7 @@ import dev.fizcode.anime.presentation.model.dummySeasonalUiModel
 import dev.fizcode.anime.presentation.model.dummyTopAiringUiModel
 import dev.fizcode.anime.presentation.model.dummyTopRankingUiModel
 import dev.fizcode.anime.util.Constant
-import dev.fizcode.common.base.responsehandler.UiState
+import dev.fizcode.common.base.callhandler.UiState
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,7 +87,7 @@ private fun AnimeScreenContent(
         topBar = {
             AnimeScreenHeader(
                 scrollBehavior = scrollBehavior,
-                value = Constant.AnimeSearchHeader.SEARCH,
+                value = Constant.SEARCH,
                 onClickSettings = {},
                 onClickSearch = {}
             )

@@ -10,8 +10,8 @@ import dev.fizcode.anime.presentation.model.SeasonalUiModel
 import dev.fizcode.anime.presentation.model.TopAiringUiModel
 import dev.fizcode.anime.presentation.model.TopRankingUiModel
 import dev.fizcode.anime.util.Constant
+import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.common.base.presentationhandler.asStateFlow
-import dev.fizcode.common.base.responsehandler.UiState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

@@ -1,17 +1,19 @@
 package dev.fizcode.mediadetails.di
 
 import dev.fizcode.common.util.DiConstant
+import dev.fizcode.datasource.local.AniMangaDatabase
 import dev.fizcode.mediadetails.data.mapper.AnimeDetailsDomainMapper
+import dev.fizcode.mediadetails.data.mapper.BookmarkDomainMapper
 import dev.fizcode.mediadetails.data.repository.MediaDetailsRepositoryImpl
 import dev.fizcode.mediadetails.data.service.MediaDetailsService
 import dev.fizcode.mediadetails.domain.repository.MediaDetailsRepository
 import dev.fizcode.mediadetails.domain.usecase.FetchAnimeDetailsUseCase
 import dev.fizcode.mediadetails.presentation.MediaDetailsViewModel
+import dev.fizcode.mediadetails.presentation.mapper.AnimeBookmarkUiMapper
 import dev.fizcode.mediadetails.presentation.mapper.AnimeDetailsUiMapper
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named
-import org.koin.dsl.bind
 import org.koin.dsl.module
 
 fun mediaDetailsKoinModule() = module {
@@ -31,6 +33,7 @@ private fun mediaDetailsViewModelModule() = module {
 
 private fun mediaDetailsUiMapperModule() = module {
     singleOf(::AnimeDetailsUiMapper)
+    singleOf(::AnimeBookmarkUiMapper)
 }
 
 private fun mediaDetailsUseCaseModule() = module {
@@ -39,10 +42,18 @@ private fun mediaDetailsUseCaseModule() = module {
 
 private fun mediaDetailsDomainMapperModule() = module {
     singleOf(::AnimeDetailsDomainMapper)
+    singleOf(::BookmarkDomainMapper)
 }
 
 private fun mediaDetailsRepositoryModule() = module {
-    singleOf(::MediaDetailsRepositoryImpl) bind MediaDetailsRepository::class
+    single<MediaDetailsRepository> {
+        MediaDetailsRepositoryImpl(
+            animeDetailsService = get(),
+            bookmarkDao = get<AniMangaDatabase>().bookmarkDao(),
+            animeDetailsDomainMapper = get(),
+            bookmarkDomainMapper = get(),
+        )
+    }
 }
 
 private fun mediaDetailsServiceModule() = module {

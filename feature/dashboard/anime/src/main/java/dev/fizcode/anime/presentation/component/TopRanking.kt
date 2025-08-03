@@ -10,7 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.anime.presentation.model.TopRankingUiModel
 import dev.fizcode.anime.presentation.model.dummyTopRankingUiModel
-import dev.fizcode.common.base.responsehandler.UiState
+import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.MovieCardSmall
 import dev.fizcode.designsystem.component.shimmer.MovieCardSmallShimmer
 

@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import dev.fizcode.anime.presentation.model.SeasonalUiModel
 import dev.fizcode.anime.presentation.model.dummySeasonalUiModel
-import dev.fizcode.common.base.responsehandler.UiState
+import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.MovieCardLarge
 import dev.fizcode.designsystem.component.shimmer.MovieCardLargeShimmer
 

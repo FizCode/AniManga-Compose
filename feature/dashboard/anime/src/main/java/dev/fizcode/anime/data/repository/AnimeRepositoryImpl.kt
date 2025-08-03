@@ -7,8 +7,8 @@ import dev.fizcode.anime.domain.model.SeasonalAnimeDomainModel
 import dev.fizcode.anime.domain.model.TopAiringDomainModel
 import dev.fizcode.anime.domain.model.TopRankingDomainModel
 import dev.fizcode.anime.domain.repository.AnimeRepository
-import dev.fizcode.common.base.responsehandler.UiState
-import dev.fizcode.common.base.responsehandler.processResponse
+import dev.fizcode.common.base.callhandler.DomainNetworkState
+import dev.fizcode.common.base.callhandler.processResponse
 import dev.fizcode.datasource.remote.service.DashboardAnimeService
 
 internal class AnimeRepositoryImpl(
@@ -24,7 +24,7 @@ internal class AnimeRepositoryImpl(
         sortBy: String,
         limit: Int,
         fields: String
-    ): UiState<SeasonalAnimeDomainModel> = processResponse {
+    ): DomainNetworkState<SeasonalAnimeDomainModel> = processResponse {
         seasonalDomainMapper.mapToSeasonAnime(
             animeService.fetchSeasonAnime(
                 year = year,
@@ -40,7 +40,7 @@ internal class AnimeRepositoryImpl(
         rankingType: String,
         limit: Int,
         fields: String
-    ): UiState<TopAiringDomainModel> = processResponse {
+    ): DomainNetworkState<TopAiringDomainModel> = processResponse {
         topAiringDomainMapper.mapToTopAiringAnime(
             animeService.fetchTopAiringAnime(
                 rankingType = rankingType,
@@ -54,7 +54,7 @@ internal class AnimeRepositoryImpl(
         rankingType: String,
         limit: Int,
         fields: String
-    ): UiState<TopRankingDomainModel> = processResponse {
+    ): DomainNetworkState<TopRankingDomainModel> = processResponse {
         topRankingDomainMapper.mapToTopRankingAnime(
             animeService.fetchTopRankingAnime(
                 rankingType = rankingType,

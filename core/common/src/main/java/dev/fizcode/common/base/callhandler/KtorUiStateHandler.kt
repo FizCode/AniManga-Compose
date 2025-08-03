@@ -1,4 +1,4 @@
-package dev.fizcode.common.base.responsehandler
+package dev.fizcode.common.base.callhandler
 
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException

@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.BookmarkAdd
+import androidx.compose.material.icons.outlined.BookmarkRemove
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Movie
 import androidx.compose.material.icons.outlined.People
@@ -37,6 +38,7 @@ object CustomIcon {
     val OUTL_ARROW_RIGHT = Icons.AutoMirrored.Outlined.ArrowRightAlt
     val OUTL_BOOK = Icons.Outlined.Book
     val OUTL_BOOKMARK_ADD = Icons.Outlined.BookmarkAdd
+    val OUTL_BOOKMARK_REMOVE = Icons.Outlined.BookmarkRemove
     val OUTL_FAVORITE_BORDER = Icons.Outlined.FavoriteBorder
     val OUTL_MOVIE = Icons.Outlined.Movie
     val OUTL_PEOPLE = Icons.Outlined.People

@@ -10,7 +10,8 @@ android {
 
 dependencies {
 
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.collections.immutable)
 
     implementation(projects.core.network)
 

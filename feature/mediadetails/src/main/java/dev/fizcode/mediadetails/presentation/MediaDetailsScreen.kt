@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fizcode.designsystem.icon.CustomIcon
+import dev.fizcode.mediadetails.presentation.mapper.AnimeBookmarkMapper.mapToBookmarkArgs
 import dev.fizcode.mediadetails.util.Constant
 import org.koin.androidx.compose.koinViewModel
 
@@ -47,9 +48,12 @@ internal fun MediaDetailsScreen(
         mediaDetailsViewModel.fetchMediaId(mediaId = mediaId)
     }
 
+    val isBookmarked by mediaDetailsViewModel.isBookmarked.collectAsStateWithLifecycle()
     val animeDetails by mediaDetailsViewModel.animeDetails.collectAsStateWithLifecycle()
     val animeCast by mediaDetailsViewModel.animeCast.collectAsStateWithLifecycle()
     val animeStaff by mediaDetailsViewModel.animeStaff.collectAsStateWithLifecycle()
+
+    println("FizCode: Screen.isBookmarked -> $isBookmarked")
 
     var headerTitle = ""
     var selectedImage by remember { mutableStateOf<String?>(null) }
@@ -81,11 +85,17 @@ internal fun MediaDetailsScreen(
         innerPadding.calculateTopPadding()
         AnimeDetailsComponent(
             modifier = observerModifier,
+            isBookmarked = isBookmarked,
             animeDetails = animeDetails,
             animeCast = animeCast,
             animeStaff = animeStaff,
             headerTitle = { headerTitle = it },
-            selectedImage = { selectedImage = it }
+            selectedImage = { selectedImage = it },
+            onClickBookmark = { animeMediaDetails ->
+                mediaDetailsViewModel.bookmarkMedia(
+                    animeMediaDetails.mapToBookmarkArgs(mediaId)
+                )
+            }
         )
     }
     if (!showTopBars.value) {

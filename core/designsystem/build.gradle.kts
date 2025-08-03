@@ -23,4 +23,5 @@ dependencies {
     api(libs.androidx.ui.text.google.fonts)
 
     api(libs.coil.compose)
+    api(libs.coil.svg)
 }

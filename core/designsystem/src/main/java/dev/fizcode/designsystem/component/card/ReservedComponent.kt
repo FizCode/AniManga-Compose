@@ -28,7 +28,7 @@ fun ReservedComponent(modifier: Modifier = Modifier) = Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 64.dp),
-        painter = painterResource(id = Constant.IMG_RESERVED),
+        painter = painterResource(id = Constant.IMG_RESERVED_PATH),
         contentDescription = Constant.IMG_RESERVED_DESC
     )
     Text(

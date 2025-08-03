@@ -1,22 +1,27 @@
 package dev.fizcode.mediadetails.domain.repository
 
-import dev.fizcode.common.base.responsehandler.UiState
-import dev.fizcode.mediadetails.domain.model.JikanAnimeDetailsDomainModel
+import dev.fizcode.common.base.callhandler.DomainNetworkState
+import dev.fizcode.mediadetails.domain.model.AnimeDetailsDomainModel
+import dev.fizcode.mediadetails.domain.model.BookmarkDomainModel
 import dev.fizcode.mediadetails.domain.model.JikanCastDomainModel
 import dev.fizcode.mediadetails.domain.model.JikanStaffDomainModel
-import dev.fizcode.mediadetails.domain.model.MalAnimeDetailsDomainModel
+import kotlinx.coroutines.flow.Flow
 
 internal interface MediaDetailsRepository {
 
-    suspend fun fetchMalAnimeDetails(
+    suspend fun fetchAnimeDetails(
         animeId: Int,
         fields: String
-    ): UiState<MalAnimeDetailsDomainModel>
+    ): DomainNetworkState<AnimeDetailsDomainModel>
 
-    suspend fun fetchJikanAnimeDetails(animeId: Int): UiState<JikanAnimeDetailsDomainModel>
+    suspend fun fetchAnimeCast(animeId: Int): DomainNetworkState<List<JikanCastDomainModel>>
 
-    suspend fun fetchAnimeCast(animeId: Int): UiState<List<JikanCastDomainModel>>
+    suspend fun fetchAnimeStaff(animeId: Int): DomainNetworkState<List<JikanStaffDomainModel>>
 
-    suspend fun fetchAnimeStaff(animeId: Int): UiState<List<JikanStaffDomainModel>>
+    fun isBookmarked(animeId: Int): Flow<Boolean>
+
+    suspend fun bookmarkMedia(bookmarkEntity: BookmarkDomainModel): Long
+
+    suspend fun deleteBookmark(mediaId: Int): Int
 
 }

@@ -21,7 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.fizcode.common.base.responsehandler.UiState
+import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.util.base.shimmerBrush
 import dev.fizcode.mediadetailheader.presentation.DetailHeaderComponent
 import dev.fizcode.mediadetailinfo.model.AnimeCastUiModel
@@ -33,11 +33,13 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 internal fun AnimeDetailsComponent(
     modifier: Modifier = Modifier,
+    isBookmarked: Boolean,
     animeDetails: UiState<AnimeDetailsUiModel>,
     animeCast: UiState<ImmutableList<AnimeCastUiModel>>,
     animeStaff: UiState<ImmutableList<AnimeStaffUiModel>>,
     headerTitle: (String) -> Unit,
-    selectedImage: (String) -> Unit
+    selectedImage: (String) -> Unit,
+    onClickBookmark: (AnimeDetailsUiModel) -> Unit
 ) = LazyColumn(
     modifier = Modifier
         .fillMaxSize()
@@ -50,8 +52,10 @@ internal fun AnimeDetailsComponent(
             item {
                 DetailHeaderComponent(
                     modifier = modifier,
+                    isBookmarked = isBookmarked,
                     header = animeDetails.data.animeDetailsHeaderUiModel,
-                    onPictureClick = selectedImage
+                    onPictureClick = selectedImage,
+                    onClickBookmark = { onClickBookmark(animeDetails.data) }
                 )
             }
             item {

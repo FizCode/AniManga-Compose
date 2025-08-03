@@ -7,6 +7,7 @@ internal object Constant {
     const val BOOKMARK_ICON = "Bookmark Icon"
     const val FAVORITES = "Favorites"
     const val RANK = "Rank"
+    const val REMOVE_BOOKMARK = "Remove"
     const val MEMBERS = "Members"
     const val POPULARITY = "Popularity"
     const val POSTER_IMAGE = "Poster Image"

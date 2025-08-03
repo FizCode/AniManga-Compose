@@ -1,7 +1,6 @@
 package dev.fizcode.mediadetails.domain.usecase
 
-import dev.fizcode.common.base.domainhandler.combineMalAndJikan
-import dev.fizcode.common.base.responsehandler.UiState
+import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.util.AnimeFieldsConstant
 import dev.fizcode.common.util.extensions.fieldsPicker
 import dev.fizcode.mediadetails.domain.model.AnimeDetailsDomainModel
@@ -10,7 +9,7 @@ import dev.fizcode.mediadetails.domain.repository.MediaDetailsRepository
 internal class FetchAnimeDetailsUseCase(
     private val mediaDetailsRepository: MediaDetailsRepository
 ) {
-    suspend operator fun invoke(animeId: Int): UiState<AnimeDetailsDomainModel> {
+    suspend operator fun invoke(animeId: Int): DomainNetworkState<AnimeDetailsDomainModel> {
         val fields = fieldsPicker(
             AnimeFieldsConstant.PICTURES,
             AnimeFieldsConstant.MEDIA_TYPE,
@@ -35,19 +34,7 @@ internal class FetchAnimeDetailsUseCase(
             AnimeFieldsConstant.RATING,
             AnimeFieldsConstant.RELATED_ANIME
         )
-        val malRequest =
-            mediaDetailsRepository.fetchMalAnimeDetails(animeId = animeId, fields = fields)
-        val jikanRequest = mediaDetailsRepository.fetchJikanAnimeDetails(animeId = animeId)
 
-        return combineMalAndJikan(
-            domain1 = { malRequest },
-            domain2 = { jikanRequest },
-            returnModel = { mal, jikan ->
-                AnimeDetailsDomainModel(
-                    malDomainModel = mal,
-                    jikanDomainModel = jikan
-                )
-            }
-        )
+        return mediaDetailsRepository.fetchAnimeDetails(animeId = animeId, fields = fields)
     }
 }

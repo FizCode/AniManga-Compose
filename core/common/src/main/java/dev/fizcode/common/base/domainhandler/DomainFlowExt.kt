@@ -1,9 +1,7 @@
 package dev.fizcode.common.base.domainhandler
 
-import dev.fizcode.common.base.responsehandler.UiState
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.plugins.RedirectResponseException
-import io.ktor.client.plugins.ServerResponseException
+import dev.fizcode.common.base.callhandler.DomainNetworkState
+import dev.fizcode.common.base.callhandler.UiState
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 
@@ -39,30 +37,21 @@ import kotlinx.coroutines.coroutineScope
  * ```
  */
 suspend fun <Req1, Req2, Result> combineMalAndJikan(
-    domain1: suspend () -> UiState<Req1>,
-    domain2: suspend () -> UiState<Req2>,
+    domain1: suspend () -> DomainNetworkState<Req1>,
+    domain2: suspend () -> DomainNetworkState<Req2>,
     returnModel: (Req1, Req2) -> Result
-): UiState<Result> = coroutineScope {
+): DomainNetworkState<Result> = coroutineScope {
     try {
         val state1 = async { domain1() }.await()
         val state2 = async { domain2() }.await()
 
-        if (state1 is UiState.Success && state2 is UiState.Success) {
-            UiState.Success(returnModel(state1.data, state2.data))
+        if (state1 is DomainNetworkState.Success && state2 is DomainNetworkState.Success) {
+            DomainNetworkState.Success(returnModel(state1.data, state2.data))
         } else {
-            UiState.Empty
+            DomainNetworkState.Empty
         }
 
-    } catch (e: RedirectResponseException) {
-        // 3xx - responses
-        UiState.ErrorRedirectResponse(error = e, message = e.message)
-    } catch (e: ClientRequestException) {
-        // 4xx - responses
-        UiState.ErrorClientRequest(error = e, message = e.message)
-    } catch (e: ServerResponseException) {
-        // 5xx - responses
-        UiState.ErrorServerResponse(error = e, message = e.message)
     } catch (e: Exception) {
-        UiState.ErrorException(error = e, message = e.message)
+        DomainNetworkState.ErrorNetwork(exception = e, message = e.message)
     }
 }
