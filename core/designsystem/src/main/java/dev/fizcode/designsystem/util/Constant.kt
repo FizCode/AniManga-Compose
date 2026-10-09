@@ -11,6 +11,7 @@ internal object Constant {
     const val IMG_RESERVED_DESC = "Reserved Site"
     const val RESERVED_TXT = "This site is reserved for construction. We’re sorry for the " +
             "inconvenience!"
+    const val CLEAR_ICON = "Clear Icon"
     const val SEARCH_ICON = "Search Icon"
 
     object Component {

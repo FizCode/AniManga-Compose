@@ -16,6 +16,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.util.Constant
 
+/**
+ * Placeholder for features that are reserved for a future release: illustration plus a short message.
+ *
+ * @param modifier modifier applied to the root column.
+ */
 @Composable
 fun ReservedComponent(modifier: Modifier = Modifier) = Column(
     modifier = modifier

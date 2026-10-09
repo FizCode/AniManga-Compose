@@ -10,6 +10,9 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import dev.fizcode.designsystem.util.Constant.Animation
 
+/**
+ * Enter transition for navigation destinations: a short delayed scale-in combined with a fade-in.
+ */
 fun navHostEnterTransition(): EnterTransition =
     scaleIn(
         animationSpec = tween(
@@ -25,6 +28,9 @@ fun navHostEnterTransition(): EnterTransition =
     )
 
 
+/**
+ * Exit transition for navigation destinations: a scale-out combined with a quick fade-out.
+ */
 fun navHostExitTransition(): ExitTransition =
     scaleOut(
         targetScale = Animation.FLOAT_0_9F,

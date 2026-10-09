@@ -18,6 +18,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.util.Constant
 
+/**
+ * Empty-state placeholder: a centered illustration with an optional description below it.
+ *
+ * @param modifier modifier applied to the root column.
+ * @param desc message shown under the illustration, nothing is rendered when empty.
+ */
 @Composable
 fun EmptyCardComponent(
     modifier: Modifier = Modifier,

@@ -17,9 +17,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import dev.fizcode.designsystem.util.Constant.Component
 
+/**
+ * Text that is entirely a clickable link, opened with the platform URI handler.
+ *
+ * @param text visible text.
+ * @param url address opened when the text is clicked.
+ * @param modifier modifier applied to the text.
+ * @param linkTextColor color of the link text.
+ * @param linkTextFontWeight font weight of the link text.
+ * @param linkTextDecoration decoration of the link text, e.g. underline.
+ * @param fontSize font size of the text.
+ * @param color base text color.
+ * @param style base text style, centered by default.
+ */
 @Composable
 fun HyperlinkText(
     text: String,
@@ -64,6 +78,23 @@ fun HyperlinkText(
 }
 
 
+/**
+ * Paragraph where selected words are clickable links.
+ *
+ * Each entry of [linkText] is located in [fullText], searching forward from the previous match,
+ * and linked to the [hyperlinks] entry at the same index.
+ *
+ * @param modifier modifier applied to the text.
+ * @param fullText whole paragraph to display.
+ * @param linkText words inside [fullText] to turn into links, in order of appearance.
+ * @param hyperlinks addresses matching [linkText] by index.
+ * @param linkTextColor color of the link text.
+ * @param linkTextFontWeight font weight of the link text.
+ * @param linkTextDecoration decoration of the link text, e.g. underline.
+ * @param fontSize font size of the text.
+ * @param color base text color.
+ * @param style base text style, centered by default.
+ */
 @Composable
 fun MultipleHyperlinkText(
     modifier: Modifier = Modifier,
@@ -122,3 +153,22 @@ fun MultipleHyperlinkText(
     )
 }
 
+
+@Preview(showBackground = true)
+@Composable
+private fun HyperlinkTextPreview() {
+    HyperlinkText(
+        text = "MyAnimeList",
+        url = "https://myanimelist.net"
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MultipleHyperlinkTextPreview() {
+    MultipleHyperlinkText(
+        fullText = "By continuing you agree to the Terms and the Privacy Policy.",
+        linkText = listOf("Terms", "Privacy Policy"),
+        hyperlinks = listOf("https://example.com/terms", "https://example.com/privacy")
+    )
+}

@@ -8,6 +8,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.component.chip.GenreChip
 
+/**
+ * Horizontally scrolling row of [GenreChip]s spaced 4dp apart.
+ *
+ * @param genre genre names, one chip per entry.
+ */
 @Composable
 fun LazyRowGenreChip(
     genre: List<String>

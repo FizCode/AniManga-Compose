@@ -23,6 +23,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.util.Constant
 
+/**
+ * Error card on an error container surface with an illustration, an error code and its description.
+ *
+ * @param modifier modifier applied to the root column.
+ * @param imgResource drawable resource id of the illustration, defaults to the 404 image.
+ * @param errorCode headline of the error, e.g. an HTTP status code.
+ * @param errorDesc supporting message explaining the error.
+ * @see ErrorCardWithButtonComponent for a variant with a retry action.
+ */
 @Composable
 fun ErrorCardComponent(
     modifier: Modifier = Modifier,
@@ -60,6 +69,15 @@ fun ErrorCardComponent(
     )
 }
 
+/**
+ * Same as [ErrorCardComponent] with a full-width "Reload" button below the description.
+ *
+ * @param modifier modifier applied to the root column.
+ * @param imgResource drawable resource id of the illustration, defaults to the empty-state image.
+ * @param errorCode headline of the error, e.g. an HTTP status code.
+ * @param errorDesc supporting message explaining the error.
+ * @param onErrorButtonClick invoked when the reload button is clicked.
+ */
 @Composable
 fun ErrorCardWithButtonComponent(
     modifier: Modifier = Modifier,
@@ -113,17 +131,17 @@ fun ErrorCardWithButtonComponent(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true)
 @Composable
-private fun ErrorComponentPreview() = Column {
-    ErrorCardComponent(
-        errorCode = "404",
-        errorDesc = "Page not found."
-    )
-    ErrorCardWithButtonComponent(
-        errorCode = "501",
-        errorDesc = "Server error.",
-        onErrorButtonClick = {}
-    )
-}
+private fun ErrorCardComponentPreview() = ErrorCardComponent(
+    errorCode = "404",
+    errorDesc = "Page not found."
+)
 
+@Preview(showBackground = true)
+@Composable
+private fun ErrorCardWithButtonComponentPreview() = ErrorCardWithButtonComponent(
+    errorCode = "501",
+    errorDesc = "Server error.",
+    onErrorButtonClick = {}
+)

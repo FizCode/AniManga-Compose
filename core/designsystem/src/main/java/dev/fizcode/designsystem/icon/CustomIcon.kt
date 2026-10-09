@@ -7,6 +7,7 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowRightAlt
 import androidx.compose.material.icons.automirrored.outlined.ShowChart
 import androidx.compose.material.icons.automirrored.rounded.ListAlt
 import androidx.compose.material.icons.automirrored.rounded.StarHalf
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
@@ -33,6 +34,7 @@ object CustomIcon {
     val FILL_LIST_ALT = Icons.AutoMirrored.Filled.ListAlt
     val FILL_MOVIE = Icons.Filled.Movie
     val FILL_SEARCH = Icons.Filled.Search
+    val FILL_CLOSE = Icons.Filled.Close
     val FILL_SHARE = Icons.Filled.Share
 
     val OUTL_ARROW_RIGHT = Icons.AutoMirrored.Outlined.ArrowRightAlt
