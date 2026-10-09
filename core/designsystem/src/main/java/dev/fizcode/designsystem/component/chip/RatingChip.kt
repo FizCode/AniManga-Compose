@@ -20,8 +20,13 @@ import dev.fizcode.designsystem.icon.CustomIcon.ROUND_STAR_RATE
 import dev.fizcode.designsystem.theme.YellowGold
 import dev.fizcode.designsystem.util.Constant.Component
 
+/**
+ * Small white pill with the rating text and a gold star, meant to overlay a poster.
+ *
+ * @param rating rating text, already formatted for display.
+ */
 @Composable
-internal fun RatingChip(
+fun RatingChip(
     rating: String
 ) {
     Row(

@@ -32,7 +32,12 @@ import dev.fizcode.designsystem.util.Constant.Component
 import dev.fizcode.designsystem.util.base.shimmerBrush
 
 /**
- * TODO: Add description
+ * Compact vertical poster card (140dp wide): poster with rating chip overlay and a two-line centered title.
+ *
+ * @param posterPath poster image url, a shimmer is shown while it loads.
+ * @param title media title, truncated after two lines.
+ * @param rating rating text shown in the [RatingChip] over the poster.
+ * @param onCardClick invoked when the card is clicked.
  */
 @Composable
 fun MovieCardSimple(
@@ -77,7 +82,16 @@ fun MovieCardSimple(
 }
 
 /**
- * TODO: Add description
+ * Horizontal list-item card: 100dp square poster with rating chip, beside title, subtitle,
+ * studio and a row of genre chips.
+ *
+ * @param posterPath poster image url, a shimmer is shown while it loads.
+ * @param rating rating text shown in the [RatingChip] over the poster.
+ * @param title media title, single line.
+ * @param subTitle secondary info such as type, episode count and status.
+ * @param studio studio name.
+ * @param genre genre names rendered through [LazyRowGenreChip].
+ * @param onCardClick invoked when the card is clicked.
  */
 @Composable
 fun MovieCardSmall(
@@ -146,7 +160,18 @@ fun MovieCardSmall(
 }
 
 /**
- * TODO: Add description
+ * Large horizontal card (328dp wide): tall poster with rating chip, beside title, subtitle,
+ * studio, a two-line synopsis and a row of genre chips.
+ *
+ * @param modifier modifier applied to the card.
+ * @param posterPath poster image url, a shimmer is shown while it loads.
+ * @param rating rating text shown in the [RatingChip] over the poster.
+ * @param title media title, truncated after two lines.
+ * @param subTitle secondary info such as type, episode count and status.
+ * @param studio studio name.
+ * @param synopsis short description, truncated after two lines.
+ * @param genre genre names rendered through [LazyRowGenreChip].
+ * @param onCardClick invoked when the card is clicked.
  */
 @Composable
 fun MovieCardLarge(
@@ -229,32 +254,40 @@ fun MovieCardLarge(
 
 @Preview(showBackground = true)
 @Composable
-private fun MovieCardPreview() {
-    Column {
-        MovieCardSimple(
-            posterPath = "",
-            title = "BLEACH: Sennen Kessen-hen",
-            rating = "5.00",
-            onCardClick = {}
-        )
-        MovieCardSmall(
-            posterPath = "",
-            title = "BLEACH: Sennen Kessen-hen",
-            subTitle = "TV | Episodes 12 | Finished",
-            studio = "Toei Animation",
-            rating = "5.00",
-            genre = listOf("Action", "Adventure", "Comedy"),
-            onCardClick = {}
-        )
-        MovieCardLarge(
-            posterPath = "",
-            title = "BLEACH: Sennen Kessen-hen",
-            subTitle = "TV | Episodes 12 | Finished",
-            studio = "Toei Animation",
-            rating = "5.00",
-            genre = listOf("Action", "Adventure", "Comedy"),
-            synopsis = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-            onCardClick = {}
-        )
-    }
+private fun MovieCardSimplePreview() {
+    MovieCardSimple(
+        posterPath = "",
+        title = "BLEACH: Sennen Kessen-hen",
+        rating = "5.00",
+        onCardClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MovieCardSmallPreview() {
+    MovieCardSmall(
+        posterPath = "",
+        title = "BLEACH: Sennen Kessen-hen",
+        subTitle = "TV | Episodes 12 | Finished",
+        studio = "Toei Animation",
+        rating = "5.00",
+        genre = listOf("Action", "Adventure", "Comedy"),
+        onCardClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MovieCardLargePreview() {
+    MovieCardLarge(
+        posterPath = "",
+        title = "BLEACH: Sennen Kessen-hen",
+        subTitle = "TV | Episodes 12 | Finished",
+        studio = "Toei Animation",
+        rating = "5.00",
+        genre = listOf("Action", "Adventure", "Comedy"),
+        synopsis = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+        onCardClick = {}
+    )
 }

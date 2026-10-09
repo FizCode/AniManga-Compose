@@ -13,6 +13,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -30,6 +32,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.mediadetails.presentation.mapper.AnimeBookmarkMapper.mapToBookmarkArgs
@@ -44,6 +47,9 @@ internal fun MediaDetailsScreen(
     mediaDetailsViewModel: MediaDetailsViewModel = koinViewModel()
 ) {
 
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val snackbarHostState = remember { SnackbarHostState() }
+
     LaunchedEffect(Unit) {
         mediaDetailsViewModel.fetchMediaId(mediaId = mediaId)
     }
@@ -53,10 +59,14 @@ internal fun MediaDetailsScreen(
     val animeCast by mediaDetailsViewModel.animeCast.collectAsStateWithLifecycle()
     val animeStaff by mediaDetailsViewModel.animeStaff.collectAsStateWithLifecycle()
 
-    println("FizCode: Screen.isBookmarked -> $isBookmarked")
-
     var headerTitle = ""
     var selectedImage by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(mediaDetailsViewModel.effect, lifecycleOwner) {
+        mediaDetailsViewModel.effect.collect { effect ->
+            snackbarHostState.showSnackbar(message = effect)
+        }
+    }
 
     val slideInAnimation = slideInVertically(initialOffsetY = { -it / 2 })
     val showTopBars = remember { mutableStateOf(false) }
@@ -67,6 +77,7 @@ internal fun MediaDetailsScreen(
     }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             AnimatedVisibility(
                 visible = showTopBars.value,

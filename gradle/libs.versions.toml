@@ -1,36 +1,36 @@
 [versions]
 accompanistPager = "0.36.0"
-appcompat = "1.7.1"
+appcompat = "1.8.0"
 # AGP and tools should be updated together
-agp = "8.11.1"
-androidTools = "31.11.1"
-androidxComposeCompiler = "1.5.11"
-activityCompose = "1.10.1"
-androidxNavigation = "2.9.2"
-androidxTracing = "1.3.0"
-chucker = "4.2.0"
-composeBom = "2025.07.00"
-coreKtx = "1.16.0"
+agp = "9.4.1"
+androidTools = "32.4.1"
+activityCompose = "1.13.0"
+androidxNavigation = "2.10.2"
+androidxTracing = "2.0.3"
+chucker = "4.3.1"
+composeBom = "2026.09.00"
+coreKtx = "1.19.1"
 coilCompose = "2.7.0"
-datastore = "1.1.7"
+datastore = "1.2.1"
 detektFormatting = "1.23.8"
-espressoCore = "3.6.1"
+espressoCore = "3.7.0"
 koinAndroidxViewmodel = "3.6.0"
-kotlinxCollectionsImmutable = "0.4.0"
-kotlinxDatetime = "0.7.1"
-ksp = "2.2.0-2.0.2"
-jetbrainsKotlinJvm = "2.2.0"
+kotlinxCollectionsImmutable = "0.5.2"
+kotlinxCoroutines = "1.11.0"
+kotlinxDatetime = "0.8.0"
+ksp = "2.3.12"
+jetbrainsKotlinJvm = "2.4.21"
 junit = "4.13.2"
-junitVersion = "1.2.1"
-koin-bom = "4.1.0"
-kotlin = "2.2.0"
-kotlinxSerializationJson = "1.9.0"
-ktor = "3.2.2"
-lifecycleRuntimeKtx = "2.9.2"
-material = "1.12.0"
+junitVersion = "1.3.0"
+koin-bom = "4.2.2"
+kotlin = "2.4.21"
+kotlinxSerializationJson = "1.11.0"
+ktor = "3.6.0"
+lifecycleRuntimeKtx = "2.11.0"
+material = "1.14.0"
 materialIcons = "1.7.8"
-room = "2.7.2"
-uiTextGoogleFonts = "1.8.3"
+room = "2.8.5"
+uiTextGoogleFonts = "1.12.1"
 
 [libraries]
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
@@ -71,6 +71,7 @@ koin-compose = { module = "io.insert-koin:koin-androidx-compose" }
 koin-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navigation" }
 koin-core = { module = "io.insert-koin:koin-core" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
@@ -94,7 +95,6 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detektFormatting" }
-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

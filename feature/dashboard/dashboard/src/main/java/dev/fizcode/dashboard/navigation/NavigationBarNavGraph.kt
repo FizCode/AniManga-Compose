@@ -22,7 +22,8 @@ import kotlinx.serialization.Serializable
 fun NavigationBarNavGraph(
     navHostController: NavHostController,
     innerPadding: PaddingValues,
-    onCardClick: (mediaType: String, mediaId: Int) -> Unit
+    onCardClick: (mediaType: String, mediaId: Int) -> Unit,
+    onSearchClick: () -> Unit
 ) {
     NavHost(
         modifier = Modifier.padding(innerPadding),
@@ -32,7 +33,8 @@ fun NavigationBarNavGraph(
         popExitTransition = { navHostExitTransition() }
     ) {
         animeNavGraph(
-            onCardClick = onCardClick
+            onCardClick = onCardClick,
+            onSearchClick = onSearchClick
         )
         seasonalNavGraph()
         composable<MangaRoute> {

@@ -10,11 +10,13 @@ import dev.fizcode.navigation.route.DashboardRoute
 import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.animeNavGraph(
-    onCardClick: (mediaType: String, mediaId: Int) -> Unit
+    onCardClick: (mediaType: String, mediaId: Int) -> Unit,
+    onSearchClick: () -> Unit
 ) = navigation<AnimeBaseRoute>(startDestination = AnimeRoute) {
     composable<AnimeRoute> {
         AnimeScreen(
-            onCardClick = onCardClick
+            onCardClick = onCardClick,
+            onSearchClick = onSearchClick
         )
     }
 }

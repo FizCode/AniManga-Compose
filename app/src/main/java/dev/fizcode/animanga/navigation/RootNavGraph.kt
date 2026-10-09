@@ -13,6 +13,8 @@ import dev.fizcode.mediadetails.navigation.mediaDetailsNavGraph
 import dev.fizcode.mediadetails.navigation.navigateToMediaDetailsScreen
 import dev.fizcode.navigation.route.RootRoute
 import dev.fizcode.onboarding.navigation.onBoardingNavGraph
+import dev.fizcode.search.navigation.navigateToSearchScreen
+import dev.fizcode.search.navigation.searchNavGraph
 
 @Suppress("FunctionNaming")
 @Composable
@@ -53,10 +55,14 @@ fun RootNavGraph(
             }
         )
         dashboardNavGraph(
-            onCardClick = navHostController::navigateToMediaDetailsScreen
+            onCardClick = navHostController::navigateToMediaDetailsScreen,
+            onSearchClick = navHostController::navigateToSearchScreen
         )
         mediaDetailsNavGraph(
             onBackPressed = navHostController::popBackStack
+        )
+        searchNavGraph(
+            onCardClick = navHostController::navigateToMediaDetailsScreen
         )
     }
 }

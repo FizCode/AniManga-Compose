@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.util.base.shimmerBrush
 
 /**
- * TODO: Add description
+ * Loading skeleton matching the layout of [MovieCardSimple].
  */
 @Composable
 fun MovieCardSimpleShimmer() {
@@ -51,7 +51,7 @@ fun MovieCardSimpleShimmer() {
 }
 
 /**
- * TODO: Add description
+ * Loading skeleton matching the layout of [MovieCardSmall].
  */
 @Composable
 fun MovieCardSmallShimmer() {
@@ -107,7 +107,9 @@ fun MovieCardSmallShimmer() {
 }
 
 /**
- * TODO: Add description
+ * Loading skeleton matching the layout of [MovieCardLarge].
+ *
+ * @param modifier modifier applied to the root row.
  */
 @Composable
 fun MovieCardLargeShimmer(
@@ -174,10 +176,12 @@ fun MovieCardLargeShimmer(
 
 @Preview(showBackground = true)
 @Composable
-private fun MovieCardShimmerPreview() {
-    Column {
-        MovieCardSimpleShimmer()
-        MovieCardSmallShimmer()
-        MovieCardLargeShimmer()
-    }
-}
+private fun MovieCardSimpleShimmerPreview() = MovieCardSimpleShimmer()
+
+@Preview(showBackground = true)
+@Composable
+private fun MovieCardSmallShimmerPreview() = MovieCardSmallShimmer()
+
+@Preview(showBackground = true)
+@Composable
+private fun MovieCardLargeShimmerPreview() = MovieCardLargeShimmer()

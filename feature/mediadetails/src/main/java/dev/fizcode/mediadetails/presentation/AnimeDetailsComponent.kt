@@ -23,10 +23,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.util.base.shimmerBrush
-import dev.fizcode.mediadetailheader.presentation.DetailHeaderComponent
-import dev.fizcode.mediadetailinfo.model.AnimeCastUiModel
-import dev.fizcode.mediadetailinfo.model.AnimeStaffUiModel
-import dev.fizcode.mediadetailinfo.presentation.DetailInfoComponent
+import dev.fizcode.mediadetails.presentation.header.DetailHeaderComponent
+import dev.fizcode.mediadetails.presentation.info.model.AnimeCastUiModel
+import dev.fizcode.mediadetails.presentation.info.model.AnimeStaffUiModel
+import dev.fizcode.mediadetails.presentation.info.DetailInfoComponent
 import dev.fizcode.mediadetails.presentation.model.AnimeDetailsUiModel
 import kotlinx.collections.immutable.ImmutableList
 

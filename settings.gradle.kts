@@ -12,6 +12,9 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -27,10 +30,9 @@ include(":app")
 include(":feature:dashboard:anime")
 include(":feature:dashboard:bookmark")
 include(":feature:dashboard:dashboard")
-include(":feature:mediadetailheader")
-include(":feature:mediadetailinfo")
 include(":feature:mediadetails")
 include(":feature:onboarding")
+include(":feature:search")
 
 include(":core:common")
 include(":core:datasource")
