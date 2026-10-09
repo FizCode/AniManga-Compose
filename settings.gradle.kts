@@ -30,8 +30,6 @@ include(":app")
 include(":feature:dashboard:anime")
 include(":feature:dashboard:bookmark")
 include(":feature:dashboard:dashboard")
-include(":feature:mediadetailheader")
-include(":feature:mediadetailinfo")
 include(":feature:mediadetails")
 include(":feature:onboarding")
 
