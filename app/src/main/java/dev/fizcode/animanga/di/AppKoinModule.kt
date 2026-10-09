@@ -6,6 +6,7 @@ import dev.fizcode.datasource.local.di.localDataSourceKoinModule
 import dev.fizcode.datasource.remote.di.remoteDataSourceKoinModule
 import dev.fizcode.mediadetails.di.mediaDetailsKoinModule
 import dev.fizcode.network.di.networkModule
+import dev.fizcode.search.di.searchKoinModule
 import org.koin.dsl.module
 
 internal fun appModule() = module {
@@ -19,7 +20,8 @@ internal fun featureModule() = module {
     includes(
         dashboardKoinModule(),
         mediaDetailsKoinModule(),
-        bookmarkKoinModule()
+        bookmarkKoinModule(),
+        searchKoinModule()
     )
 }
 

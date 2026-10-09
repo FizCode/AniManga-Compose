@@ -9,7 +9,8 @@ import dev.fizcode.dashboard.navigation.NavigationBarNavGraph
 @Composable
 fun DashboardScreen(
     navHostController: NavHostController,
-    onCardClick: (mediaType: String, mediaId: Int) -> Unit
+    onCardClick: (mediaType: String, mediaId: Int) -> Unit,
+    onSearchClick: () -> Unit
 ) {
     Scaffold(
         bottomBar = { NavigationBarComponent(navHostController = navHostController) },
@@ -18,7 +19,8 @@ fun DashboardScreen(
         NavigationBarNavGraph(
             navHostController = navHostController,
             innerPadding = innerPadding,
-            onCardClick = onCardClick
+            onCardClick = onCardClick,
+            onSearchClick = onSearchClick
         )
     }
 }

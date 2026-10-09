@@ -2,6 +2,7 @@ package dev.fizcode.datasource.remote.service
 
 import dev.fizcode.common.util.CommonConstant
 import dev.fizcode.datasource.remote.response.CurrentSeasonAnimeResponse
+import dev.fizcode.datasource.remote.response.SearchAnimeResponse
 import dev.fizcode.datasource.remote.response.TopAiringAnimeResponse
 import dev.fizcode.datasource.remote.response.TopRankingResponse
 import io.ktor.client.HttpClient
@@ -42,6 +43,17 @@ class DashboardAnimeService(private val malClient: HttpClient) {
     ): TopRankingResponse =
         malClient.get("anime/ranking") {
             parameter(CommonConstant.RANKING_TYPE, rankingType)
+            parameter(CommonConstant.LIMIT, limit)
+            parameter(CommonConstant.FIELDS, fields)
+        }.body()
+
+    suspend fun searchAnime(
+        query: String,
+        limit: Int,
+        fields: String
+    ): SearchAnimeResponse =
+        malClient.get("anime") {
+            parameter(CommonConstant.QUERY, query)
             parameter(CommonConstant.LIMIT, limit)
             parameter(CommonConstant.FIELDS, fields)
         }.body()

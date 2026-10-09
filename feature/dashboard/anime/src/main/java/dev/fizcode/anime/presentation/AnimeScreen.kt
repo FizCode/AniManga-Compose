@@ -33,10 +33,10 @@ import dev.fizcode.anime.util.Constant
 import dev.fizcode.common.base.callhandler.UiState
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AnimeScreen(
     onCardClick: (mediaType: String, mediaId: Int) -> Unit,
+    onSearchClick: () -> Unit,
     animeViewModel: AnimeViewModel = koinViewModel()
 ) {
 
@@ -63,7 +63,8 @@ internal fun AnimeScreen(
         topRanking = topRanking,
         isRefreshing = isRefreshing,
         onRefreshClick = animeViewModel::refresh,
-        onCardClick = onCardClick
+        onCardClick = onCardClick,
+        onSearchClick = onSearchClick
     )
 
 }
@@ -76,7 +77,8 @@ private fun AnimeScreenContent(
     topRanking: UiState<List<TopRankingUiModel>>,
     isRefreshing: Boolean = false,
     onRefreshClick: () -> Unit = {},
-    onCardClick: (mediaType: String, mediaId: Int) -> Unit
+    onCardClick: (mediaType: String, mediaId: Int) -> Unit,
+    onSearchClick: () -> Unit = {}
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val listState = rememberLazyListState()
@@ -89,7 +91,7 @@ private fun AnimeScreenContent(
                 scrollBehavior = scrollBehavior,
                 value = Constant.SEARCH,
                 onClickSettings = {},
-                onClickSearch = {}
+                onClickSearch = onSearchClick
             )
         }
     ) { innerPadding ->
@@ -133,7 +135,6 @@ private fun AnimeScreenContent(
 }
 
 @Preview(showBackground = true)
-@PreviewScreenSizes
 @Composable
 private fun AnimeScreenPreview() {
     AnimeScreenContent(

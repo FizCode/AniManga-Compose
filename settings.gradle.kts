@@ -32,6 +32,7 @@ include(":feature:dashboard:bookmark")
 include(":feature:dashboard:dashboard")
 include(":feature:mediadetails")
 include(":feature:onboarding")
+include(":feature:search")
 
 include(":core:common")
 include(":core:datasource")

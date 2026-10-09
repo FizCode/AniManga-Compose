@@ -10,12 +10,14 @@ import dev.fizcode.navigation.route.RootRoute
 import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.dashboardNavGraph(
-    onCardClick: (mediaType: String, mediaId: Int) -> Unit
+    onCardClick: (mediaType: String, mediaId: Int) -> Unit,
+    onSearchClick: () -> Unit
 ) {
     composable<DashboardRoute> {
         DashboardScreen(
             navHostController = rememberNavController(),
-            onCardClick = onCardClick
+            onCardClick = onCardClick,
+            onSearchClick = onSearchClick
         )
     }
 }

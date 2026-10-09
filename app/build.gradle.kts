@@ -48,6 +48,7 @@ dependencies {
     implementation(projects.feature.dashboard.dashboard)
     implementation(projects.feature.mediadetails)
     implementation(projects.feature.onboarding)
+    implementation(projects.feature.search)
 
     implementation(projects.core.designsystem)
     implementation(projects.core.datasource)
