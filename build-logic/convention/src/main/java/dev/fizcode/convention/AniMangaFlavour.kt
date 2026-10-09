@@ -4,6 +4,7 @@ import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.ApplicationProductFlavor
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.ProductFlavor
+import org.gradle.api.NamedDomainObjectContainer
 
 @Suppress("EnumEntryName")
 enum class FlavorDimension {
@@ -20,20 +21,20 @@ enum class AniManga(val dimension: FlavorDimension, val applicationIdSuffix: Str
 }
 
 fun configureFlavors(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
+    commonExtension: CommonExtension,
     flavorConfigurationBlock: ProductFlavor.(flavor: AniManga) -> Unit = {}
 ) {
     commonExtension.apply {
         flavorDimensions += FlavorDimension.contentType.name
-        productFlavors {
-            AniManga.values().forEach {
-                create(it.name) {
-                    dimension = it.dimension.name
-                    flavorConfigurationBlock(this, it)
-                    if (this@apply is ApplicationExtension && this is ApplicationProductFlavor) {
-                        if (it.applicationIdSuffix != null) {
-                            applicationIdSuffix = it.applicationIdSuffix
-                        }
+        @Suppress("UNCHECKED_CAST")
+        val flavors = productFlavors as NamedDomainObjectContainer<ProductFlavor>
+        AniManga.values().forEach {
+            flavors.create(it.name) {
+                dimension = it.dimension.name
+                flavorConfigurationBlock(this, it)
+                if (this@apply is ApplicationExtension && this is ApplicationProductFlavor) {
+                    if (it.applicationIdSuffix != null) {
+                        applicationIdSuffix = it.applicationIdSuffix
                     }
                 }
             }

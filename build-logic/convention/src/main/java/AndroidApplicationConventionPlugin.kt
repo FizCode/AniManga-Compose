@@ -1,6 +1,7 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import dev.fizcode.convention.configureGradleManagedDevices
+import dev.fizcode.convention.AndroidSdk
 import dev.fizcode.convention.configureKotlinAndroid
 import dev.fizcode.convention.configurePrintApksTask
 import org.gradle.api.Plugin
@@ -12,13 +13,12 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
         with(target) {
             with(pluginManager) {
                 apply("com.android.application")
-                apply("org.jetbrains.kotlin.android")
                 apply("animanga.koin")
             }
 
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = 35
+                defaultConfig.targetSdk = AndroidSdk.TARGET
                 @Suppress("UnstableApiUsage")
                 testOptions.animationsDisabled = true
                 configureGradleManagedDevices(this)

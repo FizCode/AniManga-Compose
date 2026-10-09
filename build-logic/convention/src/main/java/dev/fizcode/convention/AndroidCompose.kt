@@ -5,19 +5,16 @@ import org.gradle.api.Project
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 
 /**
  * Configure Compose-specific options
  */
 internal fun Project.configureAndroidCompose(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
+    commonExtension: CommonExtension,
 ) {
     commonExtension.apply {
-        buildFeatures {
-            compose = true
-        }
+        buildFeatures.compose = true
 
         dependencies {
             val bom = libs.findLibrary("androidx-compose-bom").get()
@@ -27,12 +24,8 @@ internal fun Project.configureAndroidCompose(
             add("debugImplementation", libs.findLibrary("androidx-compose-ui-tooling").get())
         }
 
-        testOptions {
-            unitTests {
-                // For Robolectric
-                isIncludeAndroidResources = true
-            }
-        }
+        // For Robolectric
+        testOptions.unitTests.isIncludeAndroidResources = true
     }
 
     extensions.configure<ComposeCompilerGradlePluginExtension> {
@@ -48,12 +41,5 @@ internal fun Project.configureAndroidCompose(
         project.providers.gradleProperty("enableComposeCompilerReports").onlyIfTrue()
             .relativeToRootProject("compose-reports")
             .let(reportsDestination::set)
-
-        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>() {
-            compilerOptions.freeCompilerArgs.addAll(
-                "-P",
-                "plugin:androidx.compose.compiler.plugins.kotlin:featureFlag=StrongSkipping",
-            )
-        }
     }
 }

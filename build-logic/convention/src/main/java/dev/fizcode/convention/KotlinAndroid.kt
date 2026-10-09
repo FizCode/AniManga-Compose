@@ -5,29 +5,33 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.provideDelegate
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
 /**
+ * Single source of truth for the SDK levels used by every convention plugin.
+ */
+internal object AndroidSdk {
+    const val COMPILE = 37
+    const val MIN = 24
+    const val TARGET = COMPILE
+}
+
+/**
  * Configure base Kotlin with Android options
  */
 internal fun Project.configureKotlinAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *, *>
+    commonExtension: CommonExtension
 ) {
     commonExtension.apply {
-        compileSdk = 35
+        compileSdk = AndroidSdk.COMPILE
 
-        defaultConfig {
-            minSdk = 24
-        }
+        defaultConfig.minSdk = AndroidSdk.MIN
 
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_1_8
-            targetCompatibility = JavaVersion.VERSION_1_8
-        }
+        compileOptions.sourceCompatibility = JavaVersion.VERSION_11
+        compileOptions.targetCompatibility = JavaVersion.VERSION_11
     }
 
     configureKotlin<KotlinAndroidProjectExtension>()
@@ -38,8 +42,8 @@ internal fun Project.configureKotlinAndroid(
  */
 internal fun Project.configureKotlinJvm() {
     extensions.configure<JavaPluginExtension> {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     configureKotlin<KotlinJvmProjectExtension>()
@@ -48,7 +52,9 @@ internal fun Project.configureKotlinJvm() {
 private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() = configure<T> {
     // Treat all Kotlin warnings as errors (disabled by default)
     // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
-    val warningsAsErrors: String? by project
+    val warningsAsErrors = providers.gradleProperty("warningsAsErrors")
+        .map { it.toBoolean() }
+        .orElse(false)
     when (this) {
         is KotlinAndroidProjectExtension -> compilerOptions
         is KotlinJvmProjectExtension -> compilerOptions
@@ -57,8 +63,8 @@ private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
                     "Please add support in configureKotlin()."
         )
     }.apply {
-        jvmTarget.set(JvmTarget.JVM_1_8)
-        allWarningsAsErrors.set(warningsAsErrors.toBoolean())
+        jvmTarget.set(JvmTarget.JVM_11)
+        allWarningsAsErrors.set(warningsAsErrors)
         freeCompilerArgs.add(
             // Enable experimental coroutines APIs, including Flow
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",

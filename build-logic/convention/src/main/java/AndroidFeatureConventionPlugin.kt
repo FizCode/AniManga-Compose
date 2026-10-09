@@ -1,4 +1,4 @@
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.LibraryExtension
 import dev.fizcode.convention.configureGradleManagedDevices
 import dev.fizcode.convention.libs
 import org.gradle.api.Plugin
@@ -29,6 +29,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 "implementation"(libs.findLibrary("kotlinx.serialization.json").get())
 
                 "testImplementation"(libs.findLibrary("junit").get())
+                "testImplementation"(libs.findLibrary("kotlinx.coroutines.test").get())
                 "androidTestImplementation"(libs.findLibrary("androidx.lifecycle.runtime.testing").get())
                 "androidTestImplementation"(libs.findLibrary("androidx.junit").get())
                 "androidTestImplementation"(libs.findLibrary("androidx.espresso.core").get())
