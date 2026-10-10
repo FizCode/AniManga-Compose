@@ -10,6 +10,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.dashboard.bookmark.api)
+    implementation(projects.feature.mediadetails.api)
 
     implementation(projects.core.common)
     implementation(projects.core.designsystem)

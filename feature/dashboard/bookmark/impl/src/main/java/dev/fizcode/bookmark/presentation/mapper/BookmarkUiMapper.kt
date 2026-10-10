@@ -27,6 +27,8 @@ internal class BookmarkUiMapper {
         mediaType: String,
         episodes: String,
         status: String
-    ): String = "$mediaType | $episodes | $status"
+    ): String = listOf(mediaType, episodes, status)
+        .filter { it.isNotBlank() }
+        .joinToString(" | ")
 
 }
