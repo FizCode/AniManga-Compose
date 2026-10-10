@@ -44,11 +44,16 @@ android {
 
 dependencies {
 
-    implementation(projects.feature.dashboard.bookmark)
+    implementation(projects.feature.dashboard.anime.api)
+    implementation(projects.feature.dashboard.anime.impl)
+    implementation(projects.feature.dashboard.bookmark.api)
+    implementation(projects.feature.dashboard.bookmark.impl)
     implementation(projects.feature.dashboard.dashboard)
-    implementation(projects.feature.mediadetails)
-    implementation(projects.feature.onboarding)
-    implementation(projects.feature.search)
+    implementation(projects.feature.mediadetails.api)
+    implementation(projects.feature.mediadetails.impl)
+    implementation(projects.feature.onboarding.api)
+    implementation(projects.feature.onboarding.impl)
+    implementation(projects.feature.search.impl)
 
     implementation(projects.core.designsystem)
     implementation(projects.core.datasource)
@@ -58,6 +63,8 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.ui)
-    implementation(libs.androidx.navigation.compose)
 
+    testImplementation(platform(libs.koin.bom))
+    testImplementation(libs.koin.test)
+    testImplementation(libs.junit)
 }

@@ -1,16 +1,16 @@
 package dev.fizcode.dashboard.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import dev.fizcode.anime.navigation.AnimeRoute
-import dev.fizcode.bookmark.navigation.BookmarkRoute
+import androidx.navigation3.runtime.NavKey
+import dev.fizcode.anime.api.AnimeRoute
+import dev.fizcode.bookmark.api.BookmarkRoute
 import dev.fizcode.dashboard.navigation.MangaRoute
 import dev.fizcode.dashboard.navigation.SeasonalRoute
 import dev.fizcode.dashboard.util.Constant
 import dev.fizcode.designsystem.icon.CustomIcon
-import dev.fizcode.navigation.route.DashboardRoute
 
 internal sealed class DashboardDestinationItems(
-    val route: DashboardRoute,
+    val route: NavKey,
     val title: String,
     val icon: ImageVector,
     val selectedIcon: ImageVector

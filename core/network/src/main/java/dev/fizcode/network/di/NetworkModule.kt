@@ -10,4 +10,5 @@ fun networkModule() = module {
     singleOf(::provideChuckerOkHttpClient)
     single(named(Constant.NAMED_MAL)) { provideMalKtorHttpClientModule(get()) }
     single(named(Constant.NAMED_JIKAN)) { provideJikanKtorHttpClient(get()) }
+    single(named(Constant.NAMED_ANILIST)) { provideAniListKtorHttpClient(get()) }
 }

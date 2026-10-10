@@ -13,6 +13,7 @@ internal object Constant {
             "inconvenience!"
     const val CLEAR_ICON = "Clear Icon"
     const val SEARCH_ICON = "Search Icon"
+    const val RETRY = "Retry"
 
     object Component {
         const val CARD_IMAGE = "Card Image"

@@ -6,6 +6,10 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -62,5 +66,32 @@ fun shimmerBrush(showShimmer: Boolean = true, targetValue: Float = 1000f): Brush
             start = Offset.Zero,
             end = Offset.Zero
         )
+    }
+}
+
+/**
+ * Draws the same shimmer as [shimmerBrush] but reads the animation in the draw phase only,
+ * so the animation never triggers recomposition. Prefer this over `background(shimmerBrush())`
+ * inside list items.
+ *
+ * @param targetValue The target offset value for the shimmer animation. Defaults to 1000f.
+ */
+fun Modifier.shimmerBackground(targetValue: Float = 1000f): Modifier = composed {
+    val colors = remember {
+        listOf(
+            Color.LightGray.copy(alpha = 0.6f),
+            Color.LightGray.copy(alpha = 0.2f),
+            Color.LightGray.copy(alpha = 0.6f),
+        )
+    }
+    val translate = rememberInfiniteTransition(label = "Transition").animateFloat(
+        initialValue = 0f,
+        targetValue = targetValue,
+        animationSpec = infiniteRepeatable(animation = tween(800), repeatMode = RepeatMode.Reverse),
+        label = "Translate Animation"
+    )
+    drawBehind {
+        val offset = translate.value
+        drawRect(Brush.linearGradient(colors, start = Offset.Zero, end = Offset(offset, offset)))
     }
 }
