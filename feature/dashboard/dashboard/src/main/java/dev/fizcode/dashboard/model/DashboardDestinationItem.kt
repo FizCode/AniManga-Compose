@@ -5,9 +5,9 @@ import androidx.navigation3.runtime.NavKey
 import dev.fizcode.anime.api.AnimeRoute
 import dev.fizcode.bookmark.api.BookmarkRoute
 import dev.fizcode.dashboard.navigation.MangaRoute
-import dev.fizcode.dashboard.navigation.SeasonalRoute
 import dev.fizcode.dashboard.util.Constant
 import dev.fizcode.designsystem.icon.CustomIcon
+import dev.fizcode.seasonal.api.SeasonalRoute
 
 internal sealed class DashboardDestinationItems(
     val route: NavKey,

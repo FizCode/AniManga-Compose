@@ -7,11 +7,8 @@ import androidx.navigation3.runtime.NavKey
 import dev.fizcode.designsystem.component.card.ReservedComponent
 import dev.fizcode.navigation.topLevelEntryMetadata
 
-/** Placeholder entries for the dashboard tabs that don't have their own feature yet. */
+/** Placeholder entry for the dashboard tab that doesn't have its own feature yet. */
 fun EntryProviderScope<NavKey>.dashboardEntry() {
-    entry<SeasonalRoute>(metadata = topLevelEntryMetadata()) {
-        ReservedComponent(modifier = Modifier.fillMaxSize())
-    }
     entry<MangaRoute>(metadata = topLevelEntryMetadata()) {
         ReservedComponent(modifier = Modifier.fillMaxSize())
     }
