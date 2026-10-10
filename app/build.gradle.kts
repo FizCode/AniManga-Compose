@@ -48,6 +48,8 @@ dependencies {
     implementation(projects.feature.dashboard.anime.impl)
     implementation(projects.feature.dashboard.bookmark.api)
     implementation(projects.feature.dashboard.bookmark.impl)
+    implementation(projects.feature.dashboard.seasonal.api)
+    implementation(projects.feature.dashboard.seasonal.impl)
     implementation(projects.feature.dashboard.dashboard)
     implementation(projects.feature.mediadetails.api)
     implementation(projects.feature.mediadetails.impl)

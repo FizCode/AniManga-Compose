@@ -12,6 +12,7 @@ dependencies {
 
     implementation(projects.feature.dashboard.anime.api)
     implementation(projects.feature.dashboard.bookmark.api)
+    implementation(projects.feature.dashboard.seasonal.api)
 
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
