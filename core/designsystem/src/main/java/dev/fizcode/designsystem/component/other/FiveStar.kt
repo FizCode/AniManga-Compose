@@ -1,8 +1,8 @@
 package dev.fizcode.designsystem.component.other
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,8 +29,8 @@ fun FiveStarReview(
     val hasHalfStar = starRating - fullStars in 0.25..<0.75
     val emptyStars = 5 - fullStars - if (hasHalfStar) 1 else 0
 
-    LazyRow {
-        items(fullStars) {
+    Row {
+        repeat(fullStars) {
             Icon(
                 modifier = Modifier.size(16.dp),
                 tint = YellowGold,
@@ -40,17 +40,15 @@ fun FiveStarReview(
         }
 
         if (hasHalfStar) {
-            item {
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    tint = YellowGold,
-                    imageVector = CustomIcon.ROUND_STAR_HALF,
-                    contentDescription = Component.HALF_STAR
-                )
-            }
+            Icon(
+                modifier = Modifier.size(16.dp),
+                tint = YellowGold,
+                imageVector = CustomIcon.ROUND_STAR_HALF,
+                contentDescription = Component.HALF_STAR
+            )
         }
 
-        items(emptyStars) {
+        repeat(emptyStars) {
             Icon(
                 modifier = Modifier.size(16.dp),
                 tint = YellowGold,
