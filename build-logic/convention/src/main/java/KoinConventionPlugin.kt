@@ -13,7 +13,6 @@ class KoinConventionPlugin : Plugin<Project> {
                 "implementation"(platform(bom).get())
                 "implementation"(libs.findLibrary("koin.compose").get())
 //                "implementation"(libs.findLibrary("koin.androidx.viewmodel").get())
-                "implementation"(libs.findLibrary("koin.compose.navigation").get())
                 "implementation"(libs.findLibrary("koin.core").get())
             }
         }

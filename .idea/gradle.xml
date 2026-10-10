@@ -18,7 +18,7 @@
         </compositeConfiguration>
         <option name="testRunner" value="CHOOSE_PER_TEST" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="gradleJvm" value="jbr-21" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -36,12 +36,21 @@
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/dashboard" />
             <option value="$PROJECT_DIR$/feature/dashboard/anime" />
+            <option value="$PROJECT_DIR$/feature/dashboard/anime/api" />
+            <option value="$PROJECT_DIR$/feature/dashboard/anime/impl" />
             <option value="$PROJECT_DIR$/feature/dashboard/bookmark" />
+            <option value="$PROJECT_DIR$/feature/dashboard/bookmark/api" />
+            <option value="$PROJECT_DIR$/feature/dashboard/bookmark/impl" />
             <option value="$PROJECT_DIR$/feature/dashboard/dashboard" />
-            <option value="$PROJECT_DIR$/feature/mediadetailheader" />
-            <option value="$PROJECT_DIR$/feature/mediadetailinfo" />
             <option value="$PROJECT_DIR$/feature/mediadetails" />
+            <option value="$PROJECT_DIR$/feature/mediadetails/api" />
+            <option value="$PROJECT_DIR$/feature/mediadetails/impl" />
             <option value="$PROJECT_DIR$/feature/onboarding" />
+            <option value="$PROJECT_DIR$/feature/onboarding/api" />
+            <option value="$PROJECT_DIR$/feature/onboarding/impl" />
+            <option value="$PROJECT_DIR$/feature/search" />
+            <option value="$PROJECT_DIR$/feature/search/api" />
+            <option value="$PROJECT_DIR$/feature/search/impl" />
           </set>
         </option>
       </GradleProjectSettings>

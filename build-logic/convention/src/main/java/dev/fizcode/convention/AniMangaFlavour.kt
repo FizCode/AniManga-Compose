@@ -28,7 +28,7 @@ fun configureFlavors(
         flavorDimensions += FlavorDimension.contentType.name
         @Suppress("UNCHECKED_CAST")
         val flavors = productFlavors as NamedDomainObjectContainer<ProductFlavor>
-        AniManga.values().forEach {
+        AniManga.entries.forEach {
             flavors.create(it.name) {
                 dimension = it.dimension.name
                 flavorConfigurationBlock(this, it)
