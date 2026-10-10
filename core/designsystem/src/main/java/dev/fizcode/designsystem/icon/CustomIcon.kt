@@ -23,6 +23,7 @@ import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.ArrowDropUp
 import androidx.compose.material.icons.rounded.Book
 import androidx.compose.material.icons.rounded.Download
+import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.StarBorder
 import androidx.compose.material.icons.rounded.StarRate
@@ -52,6 +53,7 @@ object CustomIcon {
     val ROUND_ARROW_DROP_UP = Icons.Rounded.ArrowDropDown
     val ROUND_BOOK = Icons.Rounded.Book
     val ROUND_DOWNLOAD = Icons.Rounded.Download
+    val ROUND_FILTER_LIST = Icons.Rounded.FilterList
     val ROUND_LIST_ALT = Icons.AutoMirrored.Rounded.ListAlt
     val ROUND_SETTINGS = Icons.Rounded.Settings
     val ROUND_STAR_BORDER = Icons.Rounded.StarBorder
