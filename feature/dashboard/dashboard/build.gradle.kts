@@ -10,8 +10,8 @@ android {
 
 dependencies {
 
-    implementation(projects.feature.dashboard.anime)
-    implementation(projects.feature.dashboard.bookmark)
+    implementation(projects.feature.dashboard.anime.api)
+    implementation(projects.feature.dashboard.bookmark.api)
 
     implementation(projects.core.common)
     implementation(projects.core.designsystem)

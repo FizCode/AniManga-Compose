@@ -1,9 +1,7 @@
 plugins {
     alias(libs.plugins.animanga.android.library)
-    alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.animanga.koin)
+    alias(libs.plugins.animanga.android.library.compose)
 }
-
 
 android {
     namespace = "dev.fizcode.navigation"
@@ -14,5 +12,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.serialization.json)
+    api(libs.androidx.navigation3.runtime)
+    api(libs.androidx.navigation3.ui)
+    api(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.ui)
 }

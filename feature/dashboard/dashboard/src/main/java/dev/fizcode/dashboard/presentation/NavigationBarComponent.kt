@@ -9,20 +9,23 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import dev.fizcode.anime.navigation.AnimeRoute
+import androidx.navigation3.runtime.NavKey
 import dev.fizcode.dashboard.model.DashboardDestinationItems
 
+/**
+ * Bottom bar of the dashboard.
+ *
+ * @param selectedRoute the currently selected top-level route.
+ * @param onItemClick called with the route of the tapped item.
+ */
 @Composable
-fun NavigationBarComponent(navHostController: NavHostController) {
+fun NavigationBarComponent(
+    selectedRoute: NavKey,
+    onItemClick: (NavKey) -> Unit
+) {
 
     val screen = listOf(
         DashboardDestinationItems.Anime,
@@ -31,10 +34,6 @@ fun NavigationBarComponent(navHostController: NavHostController) {
         DashboardDestinationItems.Bookmark
     )
 
-    val navBackStackEntry by navHostController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination?.route
-        ?: AnimeRoute::class.qualifiedName.orEmpty()
-
     NavigationBar(
         modifier = Modifier.graphicsLayer {
             shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
@@ -42,10 +41,6 @@ fun NavigationBarComponent(navHostController: NavHostController) {
         }
     ) {
         screen.forEach { item ->
-
-            val isSelected by remember(currentDestination) {
-                derivedStateOf { currentDestination == item.route::class.qualifiedName }
-            }
 
             AddItem(
                 icon = {
@@ -57,13 +52,8 @@ fun NavigationBarComponent(navHostController: NavHostController) {
                 label = {
                     Text(text = item.title)
                 },
-                selected = isSelected,
-                onClick = {
-                    navHostController.navigate(item.route) {
-                        popUpTo(navHostController.graph.findStartDestination().id)
-                        launchSingleTop = true
-                    }
-                }
+                selected = item.route == selectedRoute,
+                onClick = { onItemClick(item.route) }
             )
         }
     }
