@@ -144,7 +144,7 @@ class TopRankingAnimeUiMapperTest {
         val status = airingStatus("finished_airing")
 
         assertEquals(
-            "$type |  $status",
+            "$type | $status",
             mapper.mapToTopRankingAnimeUiModel(domain(0)).single().subTitle
         )
         assertEquals(

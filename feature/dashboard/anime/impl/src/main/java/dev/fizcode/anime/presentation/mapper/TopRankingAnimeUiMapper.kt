@@ -33,10 +33,12 @@ internal class TopRankingAnimeUiMapper {
         val airingStatus = airingStatus(status = status)
         val episode = when (numEpisodes) {
             0 -> ""
-            1 -> "$numEpisodes ${Constant.EPISODE} |"
-            else -> "$numEpisodes ${Constant.EPISODES} |"
+            1 -> "$numEpisodes ${Constant.EPISODE}"
+            else -> "$numEpisodes ${Constant.EPISODES}"
         }
 
-        return "$animeMediaType | $episode $airingStatus"
+        return listOf(animeMediaType, episode, airingStatus)
+            .filter { it.isNotBlank() }
+            .joinToString(" | ")
     }
 }
