@@ -3,12 +3,10 @@ package dev.fizcode.dashboard.navigation
 import androidx.navigation3.runtime.NavKey
 import dev.fizcode.anime.api.AnimeRoute
 import dev.fizcode.bookmark.api.BookmarkRoute
+import dev.fizcode.seasonal.api.SeasonalRoute
 import kotlinx.serialization.Serializable
 
-// TODO: Delete Seasonal and Manga after there is a screen on each feature
-@Serializable
-data object SeasonalRoute : NavKey
-
+// TODO: Delete Manga after it has its own feature
 @Serializable
 data object MangaRoute : NavKey
 

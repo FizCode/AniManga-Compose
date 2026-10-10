@@ -28,6 +28,7 @@ import dev.fizcode.navigation.rememberNavigationState
 import dev.fizcode.navigation.toEntries
 import dev.fizcode.onboarding.navigation.onBoardingEntry
 import dev.fizcode.search.navigation.searchEntry
+import dev.fizcode.seasonal.navigation.seasonalEntry
 
 /**
  * Hosts every destination of the app and the dashboard bottom bar.
@@ -57,6 +58,7 @@ fun AppNavDisplay(
         entryProvider<NavKey> {
             animeEntry(navigator)
             dashboardEntry()
+            seasonalEntry(navigator)
             bookmarkEntry(navigator)
             searchEntry(navigator)
             mediaDetailsEntry(navigator)
