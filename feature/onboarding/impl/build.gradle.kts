@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.onboarding.api)
 
     implementation(projects.core.designsystem)
     implementation(projects.core.navigation)
