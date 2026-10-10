@@ -65,6 +65,6 @@ class SearchUiMapperTest {
     @Test
     fun `subtitle omits episode count when zero`() {
         val ui = mapper.mapToSearchResultUiModel(SearchAnimeDomainModel(listOf(node(numEpisodes = 0)))).single()
-        assertEquals("${animeMediaType("tv")} |  ${airingStatus("finished_airing")}", ui.subTitle)
+        assertEquals("${animeMediaType("tv")} | ${airingStatus("finished_airing")}", ui.subTitle)
     }
 }

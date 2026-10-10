@@ -1,7 +1,7 @@
 package dev.fizcode.search.presentation
 
 import androidx.compose.ui.graphics.Color
-import dev.fizcode.search.presentation.util.highlightQuery
+import dev.fizcode.designsystem.util.highlightQuery
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

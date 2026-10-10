@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.EmptyCardComponent
 import dev.fizcode.designsystem.component.card.ErrorCardComponent
+import dev.fizcode.designsystem.component.card.MovieCardMedium
 import dev.fizcode.designsystem.component.shimmer.MovieCardSmallShimmer
 import dev.fizcode.search.presentation.model.SearchResultUiModel
 import dev.fizcode.search.presentation.model.dummySearchResultUiModel
@@ -38,9 +39,13 @@ internal fun SearchResultComponent(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(items = result.data, key = { it.id }) { item ->
-            SearchResultItemComponent(
-                item = item,
+            MovieCardMedium(
+                posterPath = item.posterPath,
+                title = item.title,
                 query = query,
+                rating = item.rating,
+                subTitle = item.subTitle,
+                genre = item.genre,
                 onCardClick = { onCardClick(item.mediaType, item.id) }
             )
         }
