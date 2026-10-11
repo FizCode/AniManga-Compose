@@ -19,6 +19,7 @@ import dev.fizcode.designsystem.component.shimmer.MovieCardLargeShimmer
 import dev.fizcode.seasonal.presentation.model.SeasonalUiModel
 import dev.fizcode.seasonal.presentation.model.dummySeasonalUiModel
 import dev.fizcode.seasonal.util.Constant
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 
 @Composable
 internal fun SeasonalListComponent(
@@ -78,13 +79,40 @@ private fun SeasonalError(
     onErrorButtonClick = onRetry
 )
 
+@Composable
+private fun SeasonalListPreviewContent(
+    result: UiState<List<SeasonalUiModel>>,
+    isFiltering: Boolean = false
+) {
+    AniMangaAnimeAndMangaInfoTheme {
+        SeasonalListComponent(
+            result = result,
+            isFiltering = isFiltering,
+            onCardClick = { _, _ -> },
+            onRetry = {}
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
-private fun SeasonalListComponentPreview() {
-    SeasonalListComponent(
-        result = UiState.Success(listOf(dummySeasonalUiModel, dummySeasonalUiModel.copy(id = 1, rank = 2))),
-        isFiltering = false,
-        onCardClick = { _, _ -> },
-        onRetry = {}
-    )
-}
+private fun SeasonalListComponentPreview() = SeasonalListPreviewContent(
+    UiState.Success(listOf(dummySeasonalUiModel, dummySeasonalUiModel.copy(id = 1, rank = 2)))
+)
+
+@Preview(showBackground = true)
+@Composable
+private fun SeasonalListComponentLoadingPreview() = SeasonalListPreviewContent(UiState.Loading)
+
+@Preview(showBackground = true)
+@Composable
+private fun SeasonalListComponentEmptyPreview() = SeasonalListPreviewContent(UiState.Empty)
+
+@Preview(showBackground = true)
+@Composable
+private fun SeasonalListComponentEmptyFilterPreview() =
+    SeasonalListPreviewContent(UiState.Empty, isFiltering = true)
+
+@Preview(showBackground = true)
+@Composable
+private fun SeasonalListComponentErrorPreview() = SeasonalListPreviewContent(UiState.ErrorException(message = "Something went wrong. Please try again."))

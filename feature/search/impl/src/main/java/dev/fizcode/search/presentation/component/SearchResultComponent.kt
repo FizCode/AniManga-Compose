@@ -18,6 +18,7 @@ import dev.fizcode.designsystem.component.shimmer.MovieCardSmallShimmer
 import dev.fizcode.search.presentation.model.SearchResultUiModel
 import dev.fizcode.search.presentation.model.dummySearchResultUiModel
 import dev.fizcode.search.util.Constant
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 
 @Composable
 internal fun SearchResultComponent(
@@ -78,12 +79,35 @@ private fun SearchErrorComponent(
 
 private const val SHIMMER_COUNT = 5
 
+@Composable
+private fun SearchResultPreviewContent(
+    result: UiState<List<SearchResultUiModel>>,
+    query: String = "Ble"
+) {
+    AniMangaAnimeAndMangaInfoTheme {
+        SearchResultComponent(
+            result = result,
+            query = query,
+            onCardClick = { _, _ -> }
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
-private fun SearchResultComponentPreview() {
-    SearchResultComponent(
-        result = UiState.Success(listOf(dummySearchResultUiModel)),
-        query = "Ble",
-        onCardClick = { _, _ -> }
-    )
-}
+private fun SearchResultComponentPreview() = SearchResultPreviewContent(
+    UiState.Success(listOf(dummySearchResultUiModel, dummySearchResultUiModel.copy(id = 1)))
+)
+
+@Preview(showBackground = true)
+@Composable
+private fun SearchResultComponentLoadingPreview() = SearchResultPreviewContent(UiState.Loading)
+
+@Preview(showBackground = true)
+@Composable
+private fun SearchResultComponentEmptyPreview() =
+    SearchResultPreviewContent(UiState.Empty, query = "Zzz")
+
+@Preview(showBackground = true)
+@Composable
+private fun SearchResultComponentErrorPreview() = SearchResultPreviewContent(UiState.ErrorException(message = "Something went wrong. Please try again."))

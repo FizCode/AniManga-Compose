@@ -32,13 +32,14 @@ import dev.fizcode.anime.presentation.model.dummyTopRankingUiModel
 import dev.fizcode.anime.util.Constant
 import dev.fizcode.common.base.callhandler.UiState
 import org.koin.androidx.compose.koinViewModel
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 
 @Composable
 internal fun AnimeScreen(
     onCardClick: (mediaType: String, mediaId: Int) -> Unit,
-    onSearchClick: () -> Unit,
-    animeViewModel: AnimeViewModel = koinViewModel()
+    onSearchClick: () -> Unit
 ) {
+    val animeViewModel: AnimeViewModel = koinViewModel()
 
     val currentSeason by animeViewModel.currentSeason.collectAsStateWithLifecycle()
     val topAiring by animeViewModel.topAiring.collectAsStateWithLifecycle()
@@ -136,36 +137,52 @@ private fun AnimeScreenContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun AnimeScreenPreview() {
-    AnimeScreenContent(
-        currentSeason = UiState.Success(
-            listOf(
-                dummySeasonalUiModel,
-                dummySeasonalUiModel,
-                dummySeasonalUiModel,
-                dummySeasonalUiModel,
-                dummySeasonalUiModel,
-                dummySeasonalUiModel
-            )
-        ),
-        topAiring = UiState.Success(
-            listOf(
-                dummyTopAiringUiModel,
-                dummyTopAiringUiModel,
-                dummyTopAiringUiModel,
-                dummyTopAiringUiModel,
-                dummyTopAiringUiModel
-            )
-        ),
-        topRanking = UiState.Success(
-            listOf(
-                dummyTopRankingUiModel,
-                dummyTopRankingUiModel,
-                dummyTopRankingUiModel,
-                dummyTopRankingUiModel,
-                dummyTopRankingUiModel
-            )
-        ),
-        onCardClick = { _, _ -> }
-    )
+private fun AnimeScreenSuccessPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        AnimeScreenContent(
+            currentSeason = UiState.Success(List(6) { dummySeasonalUiModel }),
+            topAiring = UiState.Success(List(5) { dummyTopAiringUiModel }),
+            topRanking = UiState.Success(List(5) { dummyTopRankingUiModel }),
+            onCardClick = { _, _ -> }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AnimeScreenLoadingPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        AnimeScreenContent(
+            currentSeason = UiState.Loading,
+            topAiring = UiState.Loading,
+            topRanking = UiState.Loading,
+            onCardClick = { _, _ -> }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AnimeScreenEmptyPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        AnimeScreenContent(
+            currentSeason = UiState.Empty,
+            topAiring = UiState.Empty,
+            topRanking = UiState.Empty,
+            onCardClick = { _, _ -> }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AnimeScreenErrorPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        AnimeScreenContent(
+            currentSeason = UiState.ErrorException(message = "Something went wrong. Please try again."),
+            topAiring = UiState.ErrorException(message = "Something went wrong. Please try again."),
+            topRanking = UiState.ErrorException(message = "Something went wrong. Please try again."),
+            onCardClick = { _, _ -> }
+        )
+    }
 }

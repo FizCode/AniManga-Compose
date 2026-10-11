@@ -27,12 +27,13 @@ import dev.fizcode.search.presentation.model.SearchResultUiModel
 import dev.fizcode.search.presentation.model.dummySearchResultUiModel
 import dev.fizcode.search.util.Constant
 import org.koin.androidx.compose.koinViewModel
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 
 @Composable
 internal fun SearchScreen(
-    onCardClick: (mediaType: String, mediaId: Int) -> Unit,
-    searchViewModel: SearchViewModel = koinViewModel()
+    onCardClick: (mediaType: String, mediaId: Int) -> Unit
 ) {
+    val searchViewModel: SearchViewModel = koinViewModel()
     val searchResult by searchViewModel.searchResult.collectAsStateWithLifecycle()
 
     SearchScreenContent(
@@ -85,15 +86,53 @@ private fun SearchScreenContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun SearchScreenPreview() {
-    SearchScreenContent(
-        queryState = rememberTextFieldState(initialText = "Ble"),
-        searchResult = UiState.Success(
-            listOf(
-                dummySearchResultUiModel,
-                dummySearchResultUiModel.copy(id = 1, title = "Baybled")
-            )
-        ),
-        onCardClick = { _, _ -> }
-    )
+private fun SearchScreenSuccessPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        SearchScreenContent(
+            queryState = rememberTextFieldState(initialText = "Ble"),
+            searchResult = UiState.Success(
+                listOf(
+                    dummySearchResultUiModel,
+                    dummySearchResultUiModel.copy(id = 1, title = "Baybled")
+                )
+            ),
+            onCardClick = { _, _ -> }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SearchScreenLoadingPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        SearchScreenContent(
+            queryState = rememberTextFieldState(initialText = "Ble"),
+            searchResult = UiState.Loading,
+            onCardClick = { _, _ -> }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SearchScreenEmptyPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        SearchScreenContent(
+            queryState = rememberTextFieldState(initialText = "Zzz"),
+            searchResult = UiState.Empty,
+            onCardClick = { _, _ -> }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SearchScreenErrorPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        SearchScreenContent(
+            queryState = rememberTextFieldState(initialText = "Ble"),
+            searchResult = UiState.ErrorException(message = "Something went wrong. Please try again."),
+            onCardClick = { _, _ -> }
+        )
+    }
 }

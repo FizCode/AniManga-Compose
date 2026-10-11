@@ -16,6 +16,7 @@ import dev.fizcode.anime.presentation.model.dummyTopAiringUiModel
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.MovieCardSimple
 import dev.fizcode.designsystem.component.shimmer.MovieCardSimpleShimmer
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 
 @Composable
 internal fun TopAiring(
@@ -64,22 +65,25 @@ internal fun TopAiring(
     else -> {}
 }
 
+@Composable
+private fun TopAiringPreviewContent(cardItem: UiState<List<TopAiringUiModel>>) {
+    AniMangaAnimeAndMangaInfoTheme {
+        TopAiring(
+            headerTitle = "Top Airing ✨",
+            cardItem = cardItem,
+            onHeaderClick = {},
+            onCardClick = { _, _ -> }
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @PreviewScreenSizes
 @Composable
-private fun TopAiringPreview() {
-    TopAiring(
-        headerTitle = "Top Airing ✨",
-        cardItem = UiState.Success(
-            listOf(
-                dummyTopAiringUiModel,
-                dummyTopAiringUiModel,
-                dummyTopAiringUiModel,
-                dummyTopAiringUiModel,
-                dummyTopAiringUiModel
-            )
-        ),
-        onHeaderClick = {},
-        onCardClick = { _, _ -> }
-    )
-}
+private fun TopAiringPreview() = TopAiringPreviewContent(
+    UiState.Success(List(5) { dummyTopAiringUiModel })
+)
+
+@Preview(showBackground = true)
+@Composable
+private fun TopAiringLoadingPreview() = TopAiringPreviewContent(UiState.Loading)

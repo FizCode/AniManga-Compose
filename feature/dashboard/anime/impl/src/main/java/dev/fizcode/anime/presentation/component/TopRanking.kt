@@ -13,6 +13,8 @@ import dev.fizcode.anime.presentation.model.dummyTopRankingUiModel
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.MovieCardSmall
 import dev.fizcode.designsystem.component.shimmer.MovieCardSmallShimmer
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 
 @Composable
 internal fun TopRanking(
@@ -70,18 +72,25 @@ internal fun TopRanking(
     else -> {}
 }
 
+@Composable
+private fun TopRankingPreviewContent(cardItem: UiState<List<TopRankingUiModel>>) {
+    AniMangaAnimeAndMangaInfoTheme {
+        TopRanking(
+            headerTitle = "Top Ranking 🏆",
+            cardItem = cardItem,
+            onHeaderClick = {},
+            onCardClick = { _, _ -> }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@PreviewScreenSizes
+@Composable
+private fun TopRankingPreview() = TopRankingPreviewContent(
+    UiState.Success(List(5) { dummyTopRankingUiModel })
+)
+
 @Preview(showBackground = true)
 @Composable
-private fun TopRankingPreview() {
-    TopRanking(
-        headerTitle = "Top Ranking 🏆",
-        cardItem = UiState.Success(listOf(
-            dummyTopRankingUiModel,
-            dummyTopRankingUiModel,
-            dummyTopRankingUiModel,
-            dummyTopRankingUiModel,
-        )),
-        onHeaderClick = {},
-        onCardClick = { _, _ -> }
-    )
-}
+private fun TopRankingLoadingPreview() = TopRankingPreviewContent(UiState.Loading)
