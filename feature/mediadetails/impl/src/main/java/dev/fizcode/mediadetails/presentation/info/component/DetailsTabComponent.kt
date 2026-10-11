@@ -32,6 +32,8 @@ import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.mediadetails.presentation.info.model.AnimeDetails
 import dev.fizcode.mediadetails.presentation.info.util.Constant
 import kotlinx.collections.immutable.persistentListOf
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 
 @Composable
 internal fun DetailsTabComponent(
@@ -183,5 +185,18 @@ private fun ExpandableItem(title: String, description: String) = Column(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun DetailsTabComponentPreview() {
-    DetailsTabComponent(animeDetails = AnimeDetails(), onClickShare = {})
+    AniMangaAnimeAndMangaInfoTheme {
+        DetailsTabComponent(
+            animeDetails = MediaDetailsPreviewData.anime.animeDetailsInfoUiModel.animeDetails,
+            onClickShare = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun DetailsTabComponentEmptyPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        DetailsTabComponent(animeDetails = AnimeDetails(), onClickShare = {})
+    }
 }

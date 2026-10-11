@@ -23,6 +23,9 @@ import dev.fizcode.designsystem.util.base.shimmerBrush
 import dev.fizcode.designsystem.util.base.shimmerBackground
 import dev.fizcode.mediadetails.presentation.info.model.AnimeStaffUiModel
 import dev.fizcode.mediadetails.presentation.info.util.Constant
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun Staffs(
@@ -90,5 +93,24 @@ internal fun StaffShimmer() {
                     .background(shimmer),
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun StaffsPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        Staffs(
+            staffData = MediaDetailsPreviewData.animeStaff.first(),
+            onCastImageClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun StaffShimmerPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        StaffShimmer()
     }
 }

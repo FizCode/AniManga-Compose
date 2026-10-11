@@ -19,14 +19,16 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import dev.fizcode.designsystem.util.base.shimmerBackground
 import dev.fizcode.mediadetails.presentation.header.util.Constant
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-internal fun DetailAnimeTitle(
+internal fun DetailMediaTitle(
     posterPath: String,
     title: String,
-    mediaType: String,
-    releaseSeason: String,
-    studios: String
+    subtitle: String,
+    caption: String
 ) = Row(
     modifier = Modifier.padding(horizontal = 16.dp),
     horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -53,12 +55,25 @@ internal fun DetailAnimeTitle(
         Text(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.outline,
-            text = listOf(mediaType, releaseSeason).filter { it.isNotBlank() }.joinToString(" | ")
+            text = subtitle
         )
         Text(
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.outline,
-            text = studios
+            text = caption
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DetailMediaTitlePreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        DetailMediaTitle(
+            posterPath = "",
+            title = "Sample Anime Title",
+            subtitle = "TV | Spring 2024",
+            caption = "Sample Studio"
         )
     }
 }

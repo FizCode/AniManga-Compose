@@ -29,11 +29,16 @@ import dev.fizcode.designsystem.component.other.HyperlinkText
 import dev.fizcode.designsystem.component.other.MultipleHyperlinkText
 import dev.fizcode.mediadetails.presentation.info.model.AnimeInfo
 import dev.fizcode.mediadetails.presentation.info.model.AnimeRelatedUiModel
+import dev.fizcode.mediadetails.presentation.info.model.MangaInfo
 import dev.fizcode.mediadetails.presentation.info.model.TextTableData
 import dev.fizcode.mediadetails.presentation.info.util.buildInformationList
+import dev.fizcode.mediadetails.presentation.info.util.buildMangaInformationList
+import dev.fizcode.mediadetails.presentation.info.util.buildMangaStatisticsList
 import dev.fizcode.mediadetails.presentation.info.util.buildStatisticsList
 import dev.fizcode.mediadetails.presentation.info.util.Constant
 import kotlinx.collections.immutable.ImmutableList
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 
 @Composable
 internal fun InformationTabComponent(
@@ -43,18 +48,51 @@ internal fun InformationTabComponent(
     val informationList = remember(animeInfo) { buildInformationList(animeInfo) }
     val statisticsList = remember(animeInfo) { buildStatisticsList(animeInfo) }
 
+    InformationTabContent(
+        informationList = informationList,
+        statisticsList = statisticsList,
+        relatedEntries = animeInfo.relatedAnime,
+        unavailableMessage = MediaDetailsConstant.EXTENDED_INFO_UNAVAILABLE
+            .takeUnless { isExtendedInfoAvailable }
+    )
+}
+
+@Composable
+internal fun MangaInformationTabComponent(
+    mangaInfo: MangaInfo,
+    isExtendedInfoAvailable: Boolean = true
+) {
+    val informationList = remember(mangaInfo) { buildMangaInformationList(mangaInfo) }
+    val statisticsList = remember(mangaInfo) { buildMangaStatisticsList(mangaInfo) }
+
+    InformationTabContent(
+        informationList = informationList,
+        statisticsList = statisticsList,
+        relatedEntries = mangaInfo.relatedManga,
+        unavailableMessage = MediaDetailsConstant.MANGA_EXTENDED_INFO_UNAVAILABLE
+            .takeUnless { isExtendedInfoAvailable }
+    )
+}
+
+@Composable
+private fun InformationTabContent(
+    informationList: List<TextTableData>,
+    statisticsList: List<TextTableData>,
+    relatedEntries: ImmutableList<AnimeRelatedUiModel>,
+    unavailableMessage: String?
+) {
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        if (!isExtendedInfoAvailable) {
-            UnavailableNotice(message = MediaDetailsConstant.EXTENDED_INFO_UNAVAILABLE)
+        if (unavailableMessage != null) {
+            UnavailableNotice(message = unavailableMessage)
         }
         InfoTable(Constant.INFORMATION, informationList)
         InfoTable(Constant.STATISTICS, statisticsList)
-        if (animeInfo.relatedAnime.isNotEmpty()) {
+        if (relatedEntries.isNotEmpty()) {
             RelatedAnimeList(
-                relatedAnime = animeInfo.relatedAnime,
+                relatedAnime = relatedEntries,
                 onClickRelated = { _ -> }
             )
         }
@@ -182,5 +220,20 @@ private fun RelatedAnimeList(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun InformationTabPreview() {
-    InformationTabComponent(animeInfo = AnimeInfo())
+    AniMangaAnimeAndMangaInfoTheme {
+        InformationTabComponent(
+            animeInfo = MediaDetailsPreviewData.anime.animeDetailsInfoUiModel.animeInfo
+        )
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun InformationTabExtendedInfoUnavailablePreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        InformationTabComponent(
+            animeInfo = MediaDetailsPreviewData.anime.animeDetailsInfoUiModel.animeInfo,
+            isExtendedInfoAvailable = false
+        )
+    }
 }

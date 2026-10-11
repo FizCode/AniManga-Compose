@@ -33,8 +33,9 @@ import dev.fizcode.mediadetails.presentation.info.component.InformationTabCompon
 import dev.fizcode.mediadetails.presentation.info.component.SongsTabComponent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailInfoComponent(
     infoUiModel: AnimeDetailsInfoUiModel,
@@ -109,15 +110,27 @@ fun DetailInfoComponent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun DetailInfoComponentPreview() {
-    DetailInfoComponent(
-        infoUiModel = AnimeDetailsInfoUiModel(
-            AnimeDetails(),
-            AnimeInfo(),
-            AnimeThemes()
-        ),
-        cast = UiState.Loading,
-        staff = UiState.Loading,
-        onRetryCastAndStaff = {},
-        onClickShare = {}
-    )
+    AniMangaAnimeAndMangaInfoTheme {
+        DetailInfoComponent(
+            infoUiModel = MediaDetailsPreviewData.anime.animeDetailsInfoUiModel,
+            cast = UiState.Success(MediaDetailsPreviewData.animeCast),
+            staff = UiState.Success(MediaDetailsPreviewData.animeStaff),
+            onRetryCastAndStaff = {},
+            onClickShare = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun DetailInfoComponentLoadingPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        DetailInfoComponent(
+            infoUiModel = MediaDetailsPreviewData.anime.animeDetailsInfoUiModel,
+            cast = UiState.Loading,
+            staff = UiState.Loading,
+            onRetryCastAndStaff = {},
+            onClickShare = {}
+        )
+    }
 }

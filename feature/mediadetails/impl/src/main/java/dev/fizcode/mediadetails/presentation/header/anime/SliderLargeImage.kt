@@ -17,6 +17,10 @@ import coil.compose.AsyncImage
 import dev.fizcode.designsystem.util.base.shimmerBackground
 import dev.fizcode.mediadetails.presentation.header.util.Constant
 import kotlinx.collections.immutable.ImmutableList
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
+import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,4 +67,16 @@ internal fun SliderLargeImage(
     }
 
     else -> {}
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SliderLargeImagePreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        SliderLargeImage(
+            pictures = persistentListOf("https://example.com/1.jpg", "https://example.com/2.jpg"),
+            largePictures = persistentListOf("https://example.com/1l.jpg"),
+            onPictureClick = {}
+        )
+    }
 }

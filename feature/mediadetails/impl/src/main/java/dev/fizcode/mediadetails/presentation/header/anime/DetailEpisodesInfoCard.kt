@@ -10,6 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun DetailEpisodesInfoCard(
@@ -44,4 +47,12 @@ internal fun DetailEpisodesInfoCard(
         textAlign = TextAlign.Center,
         text = duration
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DetailEpisodesInfoCardPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        DetailEpisodesInfoCard(releaseInfo = "12 eps | Finished", duration = "24 min")
+    }
 }

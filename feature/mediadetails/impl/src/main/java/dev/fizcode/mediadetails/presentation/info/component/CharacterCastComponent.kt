@@ -23,6 +23,9 @@ import coil.compose.AsyncImage
 import dev.fizcode.designsystem.util.base.shimmerBrush
 import dev.fizcode.mediadetails.presentation.info.model.AnimeCastUiModel
 import dev.fizcode.mediadetails.presentation.info.util.Constant
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun CharacterCast(
@@ -137,5 +140,24 @@ internal fun CastShimmer() {
                 .width(50.dp)
                 .height(72.dp)
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CharacterCastPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        CharacterCast(
+            characterData = MediaDetailsPreviewData.animeCast.first(),
+            onCastImageClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CastShimmerPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        CastShimmer()
     }
 }
