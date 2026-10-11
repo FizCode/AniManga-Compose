@@ -1,4 +1,4 @@
-package dev.fizcode.onboarding.presentation.presentation
+package dev.fizcode.onboarding.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,9 +12,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,122 +19,115 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.component.button.SimpleTextButton
 import dev.fizcode.designsystem.component.pager.PagerPositionDotIndicator
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.onboarding.presentation.component.OnBoardingPage
 import dev.fizcode.onboarding.presentation.component.OnBoardingPagerScreen
 import dev.fizcode.onboarding.presentation.util.Constant
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
+/**
+ * Introduction pages shown on first launch.
+ *
+ * Skipping it or finishing its last page remembers that it was seen, so it only shows once.
+ *
+ * @param onFinished called once the onboarding is saved as seen and the screen can be left.
+ */
 @Composable
 internal fun OnBoardingScreen(
-    onClickSkip: () -> Unit
+    onFinished: () -> Unit
 ) {
-
-    val page = remember {
-        listOf(OnBoardingPage.First, OnBoardingPage.Second, OnBoardingPage.Third)
-    }
+    val viewModel: OnBoardingViewModel = koinViewModel()
+    val scope = rememberCoroutineScope()
 
     OnBoardingScreenContent(
-        onClickSkip = onClickSkip,
-        page = page
+        pages = OnBoardingPage.all,
+        onClickSkip = {
+            scope.launch {
+                viewModel.completeOnBoarding()
+                onFinished()
+            }
+        }
     )
 }
 
 @Composable
 private fun OnBoardingScreenContent(
-    onClickSkip: () -> Unit,
-    page: List<OnBoardingPage>
+    pages: List<OnBoardingPage>,
+    onClickSkip: () -> Unit
 ) {
-
-    val pagerState = rememberPagerState(pageCount = { page.size })
-    val currentPage by remember { derivedStateOf { pagerState.currentPage } }
-
+    val pagerState = rememberPagerState(pageCount = { pages.size })
     val scope = rememberCoroutineScope()
-    val onPreviousClick = remember(scope, currentPage) { {
-            if (currentPage > 0) {
-                scope.launch {
-                    pagerState.scrollToPage(currentPage - 1)
-                }
-            }
-        } }
 
-    val onNextClick = remember(scope, currentPage) { {
-        if (currentPage < 3) {
-            scope.launch {
-                pagerState.scrollToPage(currentPage + 1)
-            }
-        }
-    } }
+    val currentPage = pagerState.currentPage
+    val isFirstPage = currentPage == 0
+    val isLastPage = currentPage == pages.lastIndex
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    fun scrollTo(page: Int) {
+        scope.launch { pagerState.scrollToPage(page) }
+    }
+
+    Column(modifier = Modifier.fillMaxSize()) {
         HorizontalPager(
             modifier = Modifier.weight(1f),
             verticalAlignment = Alignment.CenterVertically,
             state = pagerState
         ) { position ->
-            // Pager Screen
-            OnBoardingPagerScreen(onBoardingPage = page[position])
+            OnBoardingPagerScreen(onBoardingPage = pages[position])
         }
 
-        // Dot Indicator showing Pager position
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
             PagerPositionDotIndicator(pagerState = pagerState)
         }
+
         Column(
-            modifier = Modifier
-                .padding(vertical = 16.dp),
+            modifier = Modifier.padding(vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom
         ) {
-
-            // Navigate to Sign In and set onboarding as already opened
+            // Goes to the next page, on the last page it finishes the onboarding.
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                onClick = onClickSkip
+                onClick = if (isLastPage) onClickSkip else { { scrollTo(currentPage + 1) } }
             ) {
-                Text(text = Constant.SKIP)
+                Text(text = if (isLastPage) Constant.CATCH_THE_ANIME else Constant.NEXT)
             }
+
             Row(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-
-                // Scroll to the previous pager position
-                if (currentPage != 0) {
-                    SimpleTextButton(text = Constant.PREVIOUS, onClickButton = onPreviousClick)
-                } else {
+                if (isFirstPage) {
                     Spacer(modifier = Modifier.weight(1f))
+                } else {
+                    SimpleTextButton(
+                        text = Constant.PREVIOUS,
+                        onClickButton = { scrollTo(currentPage - 1) }
+                    )
                 }
 
-                // Scroll to the next pager position
-                if (currentPage == 2) {
+                // Nothing left to skip on the last page.
+                if (isLastPage) {
                     Spacer(modifier = Modifier.weight(1f))
                 } else {
-                    SimpleTextButton(text = Constant.NEXT, onClickButton = onNextClick)
+                    SimpleTextButton(text = Constant.SKIP, onClickButton = onClickSkip)
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun OnBoardingPreview() {
-
-    val page = remember {
-        listOf(OnBoardingPage.First, OnBoardingPage.Second, OnBoardingPage.Third)
+private fun OnBoardingScreenPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        OnBoardingScreenContent(pages = OnBoardingPage.all, onClickSkip = {})
     }
-
-    OnBoardingScreenContent(
-        onClickSkip = {},
-        page = page
-    )
 }
