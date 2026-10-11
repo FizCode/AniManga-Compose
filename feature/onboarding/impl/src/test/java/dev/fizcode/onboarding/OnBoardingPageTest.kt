@@ -7,7 +7,20 @@ import org.junit.Test
 
 class OnBoardingPageTest {
 
-    private val pages = listOf(OnBoardingPage.First, OnBoardingPage.Second, OnBoardingPage.Third)
+    private val pages = OnBoardingPage.all
+
+    @Test
+    fun `pages are shown in order`() {
+        assertEquals(
+            listOf(
+                OnBoardingPage.First,
+                OnBoardingPage.Second,
+                OnBoardingPage.Third,
+                OnBoardingPage.Fourth
+            ),
+            pages
+        )
+    }
 
     @Test
     fun `every page has a title and description`() {
@@ -16,7 +29,7 @@ class OnBoardingPageTest {
 
     @Test
     fun `pages are distinct`() {
-        assertEquals(3, pages.map { it.title }.toSet().size)
-        assertEquals(3, pages.map { it.image }.toSet().size)
+        assertEquals(pages.size, pages.map { it.title }.toSet().size)
+        assertEquals(pages.size, pages.map { it.image }.toSet().size)
     }
 }
