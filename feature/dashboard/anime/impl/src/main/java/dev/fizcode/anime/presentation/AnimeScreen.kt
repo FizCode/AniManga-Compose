@@ -38,7 +38,9 @@ import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 internal fun AnimeScreen(
     onCardClick: (mediaType: String, mediaId: Int) -> Unit,
     onSearchClick: () -> Unit,
-    onCurrentSeasonClick: () -> Unit
+    onCurrentSeasonClick: () -> Unit,
+    onTopAiringClick: () -> Unit,
+    onTopRankingClick: () -> Unit
 ) {
     val animeViewModel: AnimeViewModel = koinViewModel()
 
@@ -67,7 +69,9 @@ internal fun AnimeScreen(
         onRefreshClick = animeViewModel::refresh,
         onCardClick = onCardClick,
         onSearchClick = onSearchClick,
-        onCurrentSeasonClick = onCurrentSeasonClick
+        onCurrentSeasonClick = onCurrentSeasonClick,
+        onTopAiringClick = onTopAiringClick,
+        onTopRankingClick = onTopRankingClick
     )
 
 }
@@ -82,7 +86,9 @@ private fun AnimeScreenContent(
     onRefreshClick: () -> Unit = {},
     onCardClick: (mediaType: String, mediaId: Int) -> Unit,
     onSearchClick: () -> Unit = {},
-    onCurrentSeasonClick: () -> Unit = {}
+    onCurrentSeasonClick: () -> Unit = {},
+    onTopAiringClick: () -> Unit = {},
+    onTopRankingClick: () -> Unit = {}
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val listState = rememberLazyListState()
@@ -121,7 +127,7 @@ private fun AnimeScreenContent(
                     TopAiring(
                         headerTitle = Constant.TOP_AIRING,
                         cardItem = topAiring,
-                        onHeaderClick = {},
+                        onHeaderClick = onTopAiringClick,
                         onCardClick = onCardClick
                     )
                 }
@@ -129,7 +135,7 @@ private fun AnimeScreenContent(
                     TopRanking(
                         headerTitle = Constant.TOP_RANKING,
                         cardItem = topRanking,
-                        onHeaderClick = {},
+                        onHeaderClick = onTopRankingClick,
                         onCardClick = onCardClick
                     )
                 }
