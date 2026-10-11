@@ -18,9 +18,9 @@ import dev.fizcode.mediadetails.presentation.info.model.AnimeRelatedUiModel
 import dev.fizcode.mediadetails.presentation.info.model.AnimeStaffUiModel
 import dev.fizcode.mediadetails.presentation.info.model.AnimeThemes
 import dev.fizcode.mediadetails.domain.model.AnimeDetailsDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanAnimeDetailsDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanCastDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanStaffDomainModel
+import dev.fizcode.mediadetails.domain.model.AniListAnimeDetailsDomainModel
+import dev.fizcode.mediadetails.domain.model.CastDomainModel
+import dev.fizcode.mediadetails.domain.model.StaffDomainModel
 import dev.fizcode.mediadetails.domain.model.MalAnimeDetailsDomainModel
 import dev.fizcode.mediadetails.domain.model.RelatedAnime
 import dev.fizcode.mediadetails.presentation.model.AnimeDetailsUiModel
@@ -51,8 +51,7 @@ internal class AnimeDetailsUiMapper {
         rank = "#${malDomainModel.rank.toCompactNumber()}",
         popularity = "#${malDomainModel.popularity.toCompactNumber()}",
         members = malDomainModel.numListUsers.toCompactNumber(),
-        favorites = (jikanDomainModel?.favorites ?: malDomainModel.numFavorites)
-            .toCompactNumber(zeroIsNa = true),
+        favorites = malDomainModel.numFavorites.toCompactNumber(zeroIsNa = true),
         score = malDomainModel.mean.toStringOrNa(),
         stars = malDomainModel.mean,
         totalVote = malDomainModel.numScoringUsers.toCompactNumber(),
@@ -61,30 +60,27 @@ internal class AnimeDetailsUiMapper {
 
     private fun AnimeDetailsDomainModel.toInfoUiModel(): AnimeDetailsInfoUiModel =
         AnimeDetailsInfoUiModel(
-            animeDetails = mapToAnimeDetails(jikan = jikanDomainModel, mal = malDomainModel),
-            animeInfo = mapToAnimeInfo(jikan = jikanDomainModel, mal = malDomainModel),
+            animeDetails = mapToAnimeDetails(mal = malDomainModel),
+            animeInfo = mapToAnimeInfo(aniList = aniListDomainModel, mal = malDomainModel),
             animeThemes = AnimeThemes(
-                openingTheme = (jikanDomainModel?.theme?.openings ?: malDomainModel.openingThemes)
-                    .toImmutableList(),
-                endingTheme = (jikanDomainModel?.theme?.endings ?: malDomainModel.endingThemes)
-                    .toImmutableList()
+                openingTheme = malDomainModel.openingThemes.toImmutableList(),
+                endingTheme = malDomainModel.endingThemes.toImmutableList()
             ),
-            isExtendedInfoAvailable = jikanDomainModel != null
+            isExtendedInfoAvailable = aniListDomainModel != null
         )
 
     private fun mapToAnimeDetails(
-        jikan: JikanAnimeDetailsDomainModel?,
         mal: MalAnimeDetailsDomainModel
     ) = AnimeDetails(
-        synonym = (jikan?.titleSynonyms ?: mal.alternativeTitles.synonyms).toStringWithComma(),
-        japanese = jikan?.titleJapanese ?: mal.alternativeTitles.ja,
-        english = jikan?.titleEnglish ?: mal.alternativeTitles.en,
+        synonym = mal.alternativeTitles.synonyms.toStringWithComma(),
+        japanese = mal.alternativeTitles.ja,
+        english = mal.alternativeTitles.en,
         synopsis = mal.synopsis,
         background = mal.background
     )
 
     private fun mapToAnimeInfo(
-        jikan: JikanAnimeDetailsDomainModel?,
+        aniList: AniListAnimeDetailsDomainModel?,
         mal: MalAnimeDetailsDomainModel
     ): AnimeInfo {
         val premiered = "${mal.startSeason.season.toCapitalFirstChar()} ${mal.startSeason.year}"
@@ -100,60 +96,38 @@ internal class AnimeDetailsUiMapper {
             type = animeMediaType(mal.mediaType),
             episodes = episodeInfo(mal.numEpisodes),
             status = airingStatus(mal.status),
-            aired = jikan?.aired?.string ?: airedFromMalDates(mal.startDate, mal.endDate),
+            aired = MalDateFormatter.range(mal.startDate, mal.endDate),
             premiered = premiered,
             premieredUrl = "https://google.com",
-            producers = jikan?.producers.orEmpty().map {
-                AnimeDataWithLink(
-                    name = it.name,
-                    link = it.url
-                )
+            producers = aniList?.producers.orEmpty().map {
+                AnimeDataWithLink(name = it.name, link = it.url)
             }.toImmutableList(),
-            licensors = jikan?.licensors.orEmpty().map {
-                AnimeDataWithLink(
-                    name = it.name,
-                    link = it.url
-                )
-            }.toImmutableList(),
-            studios = jikan?.studios?.map {
-                AnimeDataWithLink(
-                    name = it.name,
-                    link = it.url
-                )
-            }?.toImmutableList() ?: mal.studios.map {
+            studios = mal.studios.map {
                 AnimeDataWithLink(
                     name = it.name,
                     link = "${Constant.MAL_PRODUCER_URL}${it.id}"
                 )
             }.toImmutableList(),
             source = AnimeDataWithLink(
-                name = jikan?.source ?: mal.source.replace('_', ' ').toCapitalFirstChar(),
+                name = mal.source.replace('_', ' ').toCapitalFirstChar(),
                 link = "https://google.com"
             ),
-            genre = jikan?.genres?.map {
-                AnimeDataWithLink(
-                    name = it.name,
-                    link = it.url
-                )
-            }?.toImmutableList() ?: mal.genres.map {
+            genre = mal.genres.map {
                 AnimeDataWithLink(
                     name = it.name,
                     link = "${Constant.MAL_GENRE_URL}${it.id}"
                 )
             }.toImmutableList(),
-            themes = jikan?.themes.orEmpty().map {
-                AnimeDataWithLink(
-                    name = it.name,
-                    link = it.url
-                )
+            themes = aniList?.themes.orEmpty().map {
+                AnimeDataWithLink(name = it.name, link = it.url)
             }.toImmutableList(),
             duration = duration,
-            rating = jikan?.rating ?: malRatingLabel(mal.rating),
+            rating = malRatingLabel(mal.rating),
             score = score,
             ranked = ranked,
             popularity = popularity,
-            members = (jikan?.members ?: mal.numListUsers).toCommaSeparators(),
-            favorites = (jikan?.favorites ?: mal.numFavorites).toCommaSeparators(zeroIsNa = true),
+            members = mal.numListUsers.toCommaSeparators(),
+            favorites = mal.numFavorites.toCommaSeparators(zeroIsNa = true),
             relatedAnime = mapToRelatedAnime(relatedAnime = relatedAnime)
         )
     }
@@ -171,20 +145,20 @@ internal class AnimeDetailsUiMapper {
 
 
     internal fun mapToAnimeCastUiModel(
-        voiceActors: List<JikanCastDomainModel>
+        voiceActors: List<CastDomainModel>
     ): ImmutableList<AnimeCastUiModel> = voiceActors.sortedWith(
         compareBy(
             { it.role.lowercase() != Constant.SORT_MAIN },
-            { it.character.malId }
+            { it.character.id }
         )
     ).take(10).map {
         AnimeCastUiModel(
-            characterId = it.character.malId,
+            characterId = it.character.id,
             character = it.character.name,
             characterImage = it.character.images.jpg.imageUrl,
             characterRole = it.role,
             characterUrl = it.character.url,
-            voiceActorId = it.voiceActors.person.malId,
+            voiceActorId = it.voiceActors.person.id,
             voiceActorName = it.voiceActors.person.name,
             voiceActorImage = it.voiceActors.person.images.jpg.imageUrl,
             voiceActorLang = it.voiceActors.language,
@@ -193,37 +167,16 @@ internal class AnimeDetailsUiMapper {
     }.toImmutableList()
 
     internal fun mapToStaffUiModel(
-        jiaknStaffData: List<JikanStaffDomainModel>
-    ): ImmutableList<AnimeStaffUiModel> = jiaknStaffData.map {
+        staffData: List<StaffDomainModel>
+    ): ImmutableList<AnimeStaffUiModel> = staffData.map {
         AnimeStaffUiModel(
-            staffId = it.person.malId,
+            staffId = it.person.id,
             name = it.person.name,
             role = it.positions.toStringWithComma(),
             image = it.person.images.jpg.imageUrl,
             url = it.person.url
         )
     }.take(10).toImmutableList()
-
-    /** Formats MAL's `yyyy-MM-dd` dates (month and day may be missing) like Jikan's aired text. */
-    private fun airedFromMalDates(startDate: String, endDate: String): String {
-        val start = malDateLabel(startDate)
-        val end = malDateLabel(endDate)
-        return when {
-            start.isEmpty() -> Constant.NOT_AVAILABLE
-            end.isEmpty() -> "$start to ?"
-            start == end -> start
-            else -> "$start to $end"
-        }
-    }
-
-    private fun malDateLabel(date: String): String {
-        val parts = date.split("-")
-        val year = parts.getOrNull(0)?.takeIf { it.isNotBlank() } ?: return ""
-        val month = parts.getOrNull(1)?.toIntOrNull()?.let { MONTHS.getOrNull(it - 1) }
-            ?: return year
-        val day = parts.getOrNull(2)?.toIntOrNull() ?: return "$month $year"
-        return "$month $day, $year"
-    }
 
     private fun malRatingLabel(rating: String): String = MAL_RATINGS[rating] ?: rating
 
@@ -234,10 +187,6 @@ internal class AnimeDetailsUiMapper {
     }
 
     private companion object {
-        val MONTHS = listOf(
-            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-        )
         val MAL_RATINGS = mapOf(
             "g" to "G - All Ages",
             "pg" to "PG - Children",

@@ -33,6 +33,8 @@ import dev.fizcode.mediadetails.presentation.info.model.AnimeCastUiModel
 import dev.fizcode.mediadetails.presentation.info.model.AnimeStaffUiModel
 import dev.fizcode.mediadetails.presentation.info.util.Constant
 import kotlinx.collections.immutable.ImmutableList
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 
 @Composable
 internal fun CastTabComponent(
@@ -102,7 +104,7 @@ internal fun CastTabComponent(
 }
 
 @Composable
-private fun SectionContainer(
+internal fun SectionContainer(
     title: String,
     onMoreClick: () -> Unit,
     content: @Composable ColumnScope.() -> Unit
@@ -141,7 +143,7 @@ private fun SectionContainer(
 }
 
 @Composable
-private fun SectionContainerShimmer(
+internal fun SectionContainerShimmer(
     content: @Composable ColumnScope.() -> Unit
 ) {
     val shimmer = shimmerBrush()
@@ -170,15 +172,39 @@ private fun SectionContainerShimmer(
     }
 }
 
+@Composable
+private fun CastTabPreviewContent(
+    cast: UiState<ImmutableList<AnimeCastUiModel>>,
+    staff: UiState<ImmutableList<AnimeStaffUiModel>>
+) {
+    AniMangaAnimeAndMangaInfoTheme {
+        CastTabComponent(
+            castUiModel = cast,
+            staffUiModel = staff,
+            onRetry = {},
+            onMoreClick = {},
+            onCastImageClick = {}
+        )
+    }
+}
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun CastTabPreview() {
+private fun CastTabPreview() = CastTabPreviewContent(
+    cast = UiState.Success(MediaDetailsPreviewData.animeCast),
+    staff = UiState.Success(MediaDetailsPreviewData.animeStaff)
+)
 
-    CastTabComponent(
-        castUiModel = UiState.Loading,
-        staffUiModel = UiState.Loading,
-        onRetry = {},
-        onMoreClick = {},
-        onCastImageClick = {}
-    )
-}
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun CastTabLoadingPreview() = CastTabPreviewContent(
+    cast = UiState.Loading,
+    staff = UiState.Loading
+)
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun CastTabErrorPreview() = CastTabPreviewContent(
+    cast = UiState.ErrorException(message = "Something went wrong. Please try again."),
+    staff = UiState.ErrorException(message = "Something went wrong. Please try again.")
+)

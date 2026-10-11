@@ -46,7 +46,7 @@ import kotlinx.coroutines.flow.stateIn
  *
  * @return A cold [StateFlow] emitting [UiState] values, starting from [UiState.Empty].
  */
-inline fun <Domain, UiModel> asStateFlow(
+inline fun <Domain, UiModel> asUiStateFlow(
     scope: CoroutineScope,
     crossinline domain: suspend () -> DomainNetworkState<Domain>,
     noinline mapper: (Domain) -> UiModel,
@@ -129,7 +129,7 @@ fun <T, R> DomainNetworkState<T>.toUiState(mapper: (T) -> R): UiState<R> = when 
  *
  * @return A [StateFlow] emitting [UiState] based on the database state.
  */
-inline fun <Domain, UiModel> asStateFlowDbCall(
+inline fun <Domain, UiModel> asUiStateFlowDbCall(
     scope: CoroutineScope,
     crossinline domain: suspend () -> Flow<DomainLocalState<Domain>>,
     crossinline mapper: (Domain) -> UiModel,

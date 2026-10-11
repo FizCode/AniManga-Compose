@@ -20,6 +20,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.mediadetails.presentation.header.util.Constant
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun LittleInfoCard(
@@ -94,5 +97,13 @@ private fun HighlightedBadge(
             style = MaterialTheme.typography.titleMedium,
             text = value
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LittleInfoCardPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        LittleInfoCard(rank = "#12", popularity = "#34", members = "1.2M", favorites = "56K")
     }
 }

@@ -18,9 +18,9 @@ import dev.fizcode.anime.api.AnimeRoute
 import dev.fizcode.anime.navigation.animeEntry
 import dev.fizcode.animanga.util.Constant
 import dev.fizcode.bookmark.navigation.bookmarkEntry
-import dev.fizcode.dashboard.navigation.dashboardEntry
 import dev.fizcode.dashboard.navigation.dashboardTopLevelRoutes
 import dev.fizcode.dashboard.presentation.NavigationBarComponent
+import dev.fizcode.manga.navigation.mangaEntry
 import dev.fizcode.mediadetails.api.MediaDetailsRoute
 import dev.fizcode.mediadetails.navigation.mediaDetailsEntry
 import dev.fizcode.navigation.Navigator
@@ -57,7 +57,7 @@ fun AppNavDisplay(
     val entryProvider = remember(navigator) {
         entryProvider<NavKey> {
             animeEntry(navigator)
-            dashboardEntry()
+            mangaEntry(navigator)
             seasonalEntry(navigator)
             bookmarkEntry(navigator)
             searchEntry(navigator)

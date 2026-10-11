@@ -1,6 +1,7 @@
 package dev.fizcode.mediadetails.data.service
 
 import dev.fizcode.mediadetails.data.response.AniListCastResponse
+import dev.fizcode.mediadetails.data.response.AniListDetailsResponse
 import dev.fizcode.mediadetails.data.response.AniListStaffResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -11,12 +12,20 @@ import io.ktor.http.contentType
 import kotlinx.serialization.Serializable
 
 /**
- * AniList GraphQL API, used as a fallback for the data Jikan provides.
+ * AniList GraphQL API: cast, staff and the extra details MyAnimeList does not provide.
  * Media are looked up by their MyAnimeList id, so the same id works for every source.
  */
 internal class AniListService(
     private val client: HttpClient
 ) {
+
+    suspend fun fetchDetails(malId: Int): AniListDetailsResponse = query(DETAILS_QUERY, malId)
+
+    suspend fun fetchMangaDetails(malId: Int): AniListDetailsResponse =
+        query(MANGA_DETAILS_QUERY, malId)
+
+    suspend fun fetchMangaCharacters(malId: Int): AniListCastResponse =
+        query(MANGA_CHARACTERS_QUERY, malId)
 
     suspend fun fetchCast(malId: Int): AniListCastResponse = query(CAST_QUERY, malId)
 
@@ -43,6 +52,37 @@ internal class AniListService(
         const val GRAPHQL_PATH = "/"
 
         const val PERSON_FIELDS = "id siteUrl name { full } image { medium }"
+
+        const val DETAILS_QUERY = """
+            query(${'$'}idMal: Int) {
+              Media(idMal: ${'$'}idMal, type: ANIME) {
+                studios { nodes { name siteUrl isAnimationStudio } }
+                tags { name isMediaSpoiler }
+              }
+            }
+        """
+
+        const val MANGA_DETAILS_QUERY = """
+            query(${'$'}idMal: Int) {
+              Media(idMal: ${'$'}idMal, type: MANGA) {
+                favourites
+                tags { name isMediaSpoiler }
+              }
+            }
+        """
+
+        const val MANGA_CHARACTERS_QUERY = """
+            query(${'$'}idMal: Int) {
+              Media(idMal: ${'$'}idMal, type: MANGA) {
+                characters(perPage: 25, sort: [ROLE, RELEVANCE]) {
+                  edges {
+                    role
+                    node { $PERSON_FIELDS }
+                  }
+                }
+              }
+            }
+        """
 
         const val CAST_QUERY = """
             query(${'$'}idMal: Int) {

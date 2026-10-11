@@ -9,13 +9,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.mediadetails.presentation.header.model.AnimeDetailsHeaderUiModel
-import dev.fizcode.mediadetails.presentation.header.anime.DetailAnimeTitle
+import dev.fizcode.mediadetails.presentation.header.anime.DetailMediaTitle
 import dev.fizcode.mediadetails.presentation.header.anime.DetailEpisodesInfoCard
 import dev.fizcode.mediadetails.presentation.header.anime.GenreChips
 import dev.fizcode.mediadetails.presentation.header.anime.LittleInfoCard
 import dev.fizcode.mediadetails.presentation.header.anime.ScoresAndBookmark
 import dev.fizcode.mediadetails.presentation.header.anime.SliderLargeImage
 import kotlinx.collections.immutable.persistentListOf
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 
 @Composable
 fun DetailHeaderComponent(
@@ -34,12 +36,13 @@ fun DetailHeaderComponent(
             onPictureClick = onPictureClick
         )
         Spacer(modifier = Modifier.height(8.dp))
-        DetailAnimeTitle(
+        DetailMediaTitle(
             posterPath = header.posterPath,
             title = header.title,
-            mediaType = header.mediaType,
-            releaseSeason = header.releaseSeason,
-            studios = header.studio
+            subtitle = listOf(header.mediaType, header.releaseSeason)
+                .filter { it.isNotBlank() }
+                .joinToString(" | "),
+            caption = header.studio
         )
         DetailEpisodesInfoCard(
             modifier = modifier,
@@ -66,29 +69,12 @@ fun DetailHeaderComponent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun DetailHeaderComponentPreview() {
-    val dummyHeaderData = AnimeDetailsHeaderUiModel(
-        pictures = persistentListOf(),
-        largePicture = persistentListOf(),
-        posterPath = "",
-        title = "Lorem Ipsum",
-        mediaType = "Media Type",
-        releaseSeason = "Spring 2025",
-        studio = "Studio Name",
-        releaseInfo = "Ep. 1 of 12, currently airing",
-        duration = "24 mins. per ep.",
-        rank = "#10",
-        popularity = "#10",
-        members = "1,234",
-        favorites = "1,234",
-        score = "5.00",
-        stars = 5.0,
-        totalVote = "1,000",
-        genre = persistentListOf()
-    )
-    DetailHeaderComponent(
-        isBookmarked = true,
-        header = dummyHeaderData,
-        onClickBookmark = {},
-        onPictureClick = { _ -> }
-    )
+    AniMangaAnimeAndMangaInfoTheme {
+        DetailHeaderComponent(
+            isBookmarked = true,
+            header = MediaDetailsPreviewData.anime.animeDetailsHeaderUiModel,
+            onClickBookmark = {},
+            onPictureClick = { _ -> }
+        )
+    }
 }

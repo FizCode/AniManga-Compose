@@ -28,6 +28,9 @@ import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.seasonal.util.Constant
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import dev.fizcode.designsystem.util.DashboardTopBarHeight
+import androidx.compose.foundation.layout.height
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 
 /**
  * Search field on the left, the selected [year] and a filter button on the right.
@@ -44,7 +47,9 @@ internal fun SeasonalHeader(
     var expanded by remember { mutableStateOf(false) }
 
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(DashboardTopBarHeight),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -90,10 +95,25 @@ internal fun SeasonalHeader(
 @Preview(showBackground = true)
 @Composable
 private fun SeasonalHeaderPreview() {
-    SeasonalHeader(
-        queryState = rememberTextFieldState(),
-        year = 2026,
-        years = persistentListOf(2027, 2026, 2025),
-        onYearSelect = {}
-    )
+    AniMangaAnimeAndMangaInfoTheme {
+        SeasonalHeader(
+            queryState = rememberTextFieldState(),
+            year = 2026,
+            years = persistentListOf(2027, 2026, 2025),
+            onYearSelect = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SeasonalHeaderWithQueryPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        SeasonalHeader(
+            queryState = rememberTextFieldState(initialText = "One Piece"),
+            year = 2026,
+            years = persistentListOf(2027, 2026, 2025),
+            onYearSelect = {}
+        )
+    }
 }

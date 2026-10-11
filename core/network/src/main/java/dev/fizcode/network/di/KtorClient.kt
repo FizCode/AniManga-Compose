@@ -37,30 +37,6 @@ fun provideMalKtorHttpClientModule(okHttpClient: OkHttpClient): HttpClient =
         }
     }
 
-fun provideJikanKtorHttpClient(okHttpClient: OkHttpClient): HttpClient =
-    HttpClient(OkHttp) {
-        engine {
-            preconfigured = okHttpClient
-        }
-        expectSuccess = false
-
-        install(ContentNegotiation) {
-            json(
-                Json {
-                    coerceInputValues = true
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                }
-            )
-        }
-
-        install(HttpCache)
-
-        install(DefaultRequest) {
-            url(Constant.BASE_JIKAN_URL)
-        }
-    }
-
 fun provideAniListKtorHttpClient(okHttpClient: OkHttpClient): HttpClient =
     HttpClient(OkHttp) {
         engine {

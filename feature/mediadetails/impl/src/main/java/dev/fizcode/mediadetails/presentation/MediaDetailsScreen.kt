@@ -1,5 +1,6 @@
 package dev.fizcode.mediadetails.presentation
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -28,39 +29,57 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.icon.CustomIcon
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.mediadetails.presentation.mapper.AnimeBookmarkMapper.mapToBookmarkArgs
+import dev.fizcode.mediadetails.presentation.mapper.MangaBookmarkMapper.mapToBookmarkArgs
 import dev.fizcode.mediadetails.util.Constant
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 internal fun MediaDetailsScreen(
     mediaId: Int,
-    mediaType: String, // to determine what's details ui should be ex: Anime, Manga, VA, etc.
-    onBackPressed: () -> Unit,
-    mediaDetailsViewModel: MediaDetailsViewModel = koinViewModel()
+    mediaType: String, // decides which details ui is shown: anime or manga
+    onBackPressed: () -> Unit
 ) {
+    val mediaDetailsViewModel: MediaDetailsViewModel = koinViewModel(key = "$mediaId") {
+        parametersOf(mediaId)
+    }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(Unit) {
-        mediaDetailsViewModel.fetchMediaId(mediaId = mediaId)
-    }
-
+    val mediaKind = remember(mediaType) { MediaKind.from(mediaType) }
     val isBookmarked by mediaDetailsViewModel.isBookmarked.collectAsStateWithLifecycle()
-    val animeDetails by mediaDetailsViewModel.animeDetails.collectAsStateWithLifecycle()
-    val animeCast by mediaDetailsViewModel.animeCast.collectAsStateWithLifecycle()
-    val animeStaff by mediaDetailsViewModel.animeStaff.collectAsStateWithLifecycle()
 
     var headerTitle = ""
     var selectedImage by remember { mutableStateOf<String?>(null) }
+
+    val context = LocalContext.current
+    // Opens the share sheet with the shared text and a link that opens this media in the app.
+    val onClickShare: (String) -> Unit = { content ->
+        val text = buildShareText(
+            title = headerTitle,
+            content = content,
+            mediaType = mediaType,
+            mediaId = mediaId
+        )
+        val sendIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+            if (headerTitle.isNotBlank()) putExtra(Intent.EXTRA_SUBJECT, headerTitle)
+        }
+        context.startActivity(Intent.createChooser(sendIntent, Constant.SHARE_CHOOSER_TITLE))
+    }
 
     LaunchedEffect(mediaDetailsViewModel.effect, lifecycleOwner) {
         mediaDetailsViewModel.effect.collect { effect ->
@@ -68,6 +87,73 @@ internal fun MediaDetailsScreen(
         }
     }
 
+    MediaDetailsLayout(
+        headerTitle = { headerTitle },
+        snackbarHostState = snackbarHostState,
+        selectedImage = selectedImage,
+        onDismissImage = { selectedImage = null },
+        onBackPressed = onBackPressed
+    ) { observerModifier ->
+        when (mediaKind) {
+            MediaKind.ANIME -> {
+                val animeDetails by mediaDetailsViewModel.animeDetails.collectAsStateWithLifecycle()
+                val animeCast by mediaDetailsViewModel.animeCast.collectAsStateWithLifecycle()
+                val animeStaff by mediaDetailsViewModel.animeStaff.collectAsStateWithLifecycle()
+
+                AnimeDetailsComponent(
+                    modifier = observerModifier,
+                    isBookmarked = isBookmarked,
+                    animeDetails = animeDetails,
+                    animeCast = animeCast,
+                    animeStaff = animeStaff,
+                    headerTitle = { headerTitle = it },
+                    selectedImage = { selectedImage = it },
+                    onRetryDetails = mediaDetailsViewModel::retryDetails,
+                    onRetryCastAndStaff = mediaDetailsViewModel::retryCastAndStaff,
+                    onClickShare = onClickShare,
+                    onClickBookmark = { animeMediaDetails ->
+                        mediaDetailsViewModel.bookmarkMedia(
+                            animeMediaDetails.mapToBookmarkArgs(mediaId)
+                        )
+                    }
+                )
+            }
+
+            MediaKind.MANGA -> {
+                val mangaDetails by mediaDetailsViewModel.mangaDetails.collectAsStateWithLifecycle()
+                val mangaCharacters by mediaDetailsViewModel.mangaCharacters.collectAsStateWithLifecycle()
+
+                MangaDetailsComponent(
+                    modifier = observerModifier,
+                    isBookmarked = isBookmarked,
+                    mangaDetails = mangaDetails,
+                    characters = mangaCharacters,
+                    headerTitle = { headerTitle = it },
+                    selectedImage = { selectedImage = it },
+                    onRetryDetails = mediaDetailsViewModel::retryMangaDetails,
+                    onRetryCharacters = mediaDetailsViewModel::retryMangaCharacters,
+                    onClickShare = onClickShare,
+                    onClickBookmark = { mangaMediaDetails ->
+                        mediaDetailsViewModel.bookmarkMedia(
+                            mangaMediaDetails.mapToBookmarkArgs(mediaId)
+                        )
+                    }
+                )
+            }
+        }
+    }
+}
+
+/** Stateless frame of the screen (top bar, back button, image popup); the media body is slotted in. */
+@Composable
+private fun MediaDetailsLayout(
+    headerTitle: () -> String,
+    snackbarHostState: SnackbarHostState,
+    selectedImage: String?,
+    onDismissImage: () -> Unit,
+    onBackPressed: () -> Unit,
+    content: @Composable (observerModifier: Modifier) -> Unit
+) {
     val slideInAnimation = slideInVertically(initialOffsetY = { -it / 2 })
     val showTopBars = remember { mutableStateOf(false) }
     val density = LocalDensity.current
@@ -85,7 +171,7 @@ internal fun MediaDetailsScreen(
                 exit = fadeOut()
             ) {
                 TitleBar(
-                    headerTitle = headerTitle,
+                    headerTitle = headerTitle(),
                     onBackPressed = onBackPressed
                 )
             }
@@ -94,28 +180,13 @@ internal fun MediaDetailsScreen(
     ) { innerPadding ->
         // Inner padding not used to avoid bumping bug.
         innerPadding.calculateTopPadding()
-        AnimeDetailsComponent(
-            modifier = observerModifier,
-            isBookmarked = isBookmarked,
-            animeDetails = animeDetails,
-            animeCast = animeCast,
-            animeStaff = animeStaff,
-            headerTitle = { headerTitle = it },
-            selectedImage = { selectedImage = it },
-            onRetryDetails = mediaDetailsViewModel::retryDetails,
-            onRetryCastAndStaff = mediaDetailsViewModel::retryCastAndStaff,
-            onClickBookmark = { animeMediaDetails ->
-                mediaDetailsViewModel.bookmarkMedia(
-                    animeMediaDetails.mapToBookmarkArgs(mediaId)
-                )
-            }
-        )
+        content(observerModifier)
     }
     if (!showTopBars.value) {
         FloatingBackButton(onBackPressed = onBackPressed)
     }
     selectedImage?.let { imageUrl ->
-        PopUpImage(imageUrl = imageUrl, onDismiss = { selectedImage = null })
+        PopUpImage(imageUrl = imageUrl, onDismiss = onDismissImage)
     }
 }
 
@@ -166,6 +237,110 @@ private fun FloatingBackButton(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun MediaDetailScreenPreview() {
-    MediaDetailsScreen(mediaId = 1, mediaType = "Lorem", onBackPressed = {})
+private fun AnimeDetailsScreenPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        MediaDetailsLayout(
+            headerTitle = { MediaDetailsPreviewData.anime.animeDetailsHeaderUiModel.title },
+            snackbarHostState = remember { SnackbarHostState() },
+            selectedImage = null,
+            onDismissImage = {},
+            onBackPressed = {}
+        ) { observerModifier ->
+            AnimeDetailsComponent(
+                modifier = observerModifier,
+                isBookmarked = false,
+                animeDetails = UiState.Success(MediaDetailsPreviewData.anime),
+                animeCast = UiState.Success(MediaDetailsPreviewData.animeCast),
+                animeStaff = UiState.Success(MediaDetailsPreviewData.animeStaff),
+                headerTitle = {},
+                selectedImage = {},
+                onRetryDetails = {},
+                onRetryCastAndStaff = {},
+                onClickBookmark = {},
+                onClickShare = {}
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun MangaDetailsScreenPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        MediaDetailsLayout(
+            headerTitle = { MediaDetailsPreviewData.manga.mangaDetailsHeaderUiModel.title },
+            snackbarHostState = remember { SnackbarHostState() },
+            selectedImage = null,
+            onDismissImage = {},
+            onBackPressed = {}
+        ) { observerModifier ->
+            MangaDetailsComponent(
+                modifier = observerModifier,
+                isBookmarked = false,
+                mangaDetails = UiState.Success(MediaDetailsPreviewData.manga),
+                characters = UiState.Success(MediaDetailsPreviewData.mangaCharacters),
+                headerTitle = {},
+                selectedImage = {},
+                onRetryDetails = {},
+                onRetryCharacters = {},
+                onClickBookmark = {},
+                onClickShare = {}
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun AnimeDetailsScreenLoadingPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        MediaDetailsLayout(
+            headerTitle = { "" },
+            snackbarHostState = remember { SnackbarHostState() },
+            selectedImage = null,
+            onDismissImage = {},
+            onBackPressed = {}
+        ) { observerModifier ->
+            AnimeDetailsComponent(
+                modifier = observerModifier,
+                isBookmarked = false,
+                animeDetails = UiState.Loading,
+                animeCast = UiState.Loading,
+                animeStaff = UiState.Loading,
+                headerTitle = {},
+                selectedImage = {},
+                onRetryDetails = {},
+                onRetryCastAndStaff = {},
+                onClickBookmark = {},
+                onClickShare = {}
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun MangaDetailsScreenLoadingPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        MediaDetailsLayout(
+            headerTitle = { "" },
+            snackbarHostState = remember { SnackbarHostState() },
+            selectedImage = null,
+            onDismissImage = {},
+            onBackPressed = {}
+        ) { observerModifier ->
+            MangaDetailsComponent(
+                modifier = observerModifier,
+                isBookmarked = false,
+                mangaDetails = UiState.Loading,
+                characters = UiState.Loading,
+                headerTitle = {},
+                selectedImage = {},
+                onRetryDetails = {},
+                onRetryCharacters = {},
+                onClickBookmark = {},
+                onClickShare = {}
+            )
+        }
+    }
 }

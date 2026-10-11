@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import dev.fizcode.anime.util.Constant
 import dev.fizcode.designsystem.component.other.SearchSimpleRowComponent
 import dev.fizcode.designsystem.icon.CustomIcon
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,10 +58,12 @@ internal fun AnimeScreenHeader(
 @Preview(showBackground = true)
 @Composable
 private fun AnimeScreenHeaderPreview() {
-    AnimeScreenHeader(
-        scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(),
-        value = "Search",
-        onClickSettings = {},
-        onClickSearch = {}
-    )
+    AniMangaAnimeAndMangaInfoTheme {
+        AnimeScreenHeader(
+            scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(),
+            value = "Search",
+            onClickSettings = {},
+            onClickSearch = {}
+        )
+    }
 }

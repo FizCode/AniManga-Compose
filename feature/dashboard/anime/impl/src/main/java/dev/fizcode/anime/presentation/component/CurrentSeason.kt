@@ -16,6 +16,7 @@ import dev.fizcode.anime.presentation.model.dummySeasonalUiModel
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.MovieCardLarge
 import dev.fizcode.designsystem.component.shimmer.MovieCardLargeShimmer
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 
 @Composable
 internal fun CurrentSeason(
@@ -68,22 +69,25 @@ internal fun CurrentSeason(
     else -> {}
 }
 
+@Composable
+private fun CurrentSeasonPreviewContent(cardItem: UiState<List<SeasonalUiModel>>) {
+    AniMangaAnimeAndMangaInfoTheme {
+        CurrentSeason(
+            headerTitle = "Current Season ☀️",
+            cardItem = cardItem,
+            onHeaderClick = {},
+            onCardClick = { _, _ -> }
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @PreviewScreenSizes
 @Composable
-private fun CurrentSeasonPreview() {
-    CurrentSeason(
-        headerTitle = "Current Season ☀️",
-        cardItem = UiState.Success(
-            listOf(
-                dummySeasonalUiModel,
-                dummySeasonalUiModel,
-                dummySeasonalUiModel,
-                dummySeasonalUiModel,
-                dummySeasonalUiModel
-            )
-        ),
-        onHeaderClick = {},
-        onCardClick = { _, _ -> }
-    )
-}
+private fun CurrentSeasonPreview() = CurrentSeasonPreviewContent(
+    UiState.Success(List(5) { dummySeasonalUiModel })
+)
+
+@Preview(showBackground = true)
+@Composable
+private fun CurrentSeasonLoadingPreview() = CurrentSeasonPreviewContent(UiState.Loading)

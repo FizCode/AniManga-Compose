@@ -6,9 +6,13 @@ import dev.fizcode.mediadetails.MainDispatcherRule
 import dev.fizcode.mediadetails.awaitValue
 import dev.fizcode.mediadetails.domain.model.AnimeDetailsDomainModel
 import dev.fizcode.mediadetails.domain.model.BookmarkDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanCastDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanStaffDomainModel
+import dev.fizcode.mediadetails.domain.model.CastDomainModel
+import dev.fizcode.mediadetails.domain.model.StaffDomainModel
+import dev.fizcode.mediadetails.domain.model.MangaDetailsDomainModel
+import dev.fizcode.mediadetails.domain.repository.MangaDetailsRepository
 import dev.fizcode.mediadetails.domain.repository.MediaDetailsRepository
+import dev.fizcode.mediadetails.domain.usecase.FetchMangaDetailsUseCase
+import dev.fizcode.mediadetails.presentation.mapper.MangaDetailsUiMapper
 import dev.fizcode.mediadetails.domain.usecase.FetchAnimeDetailsUseCase
 import dev.fizcode.mediadetails.presentation.mapper.AnimeBookmarkUiMapper
 import dev.fizcode.mediadetails.presentation.mapper.AnimeDetailsUiMapper
@@ -41,8 +45,8 @@ class MediaDetailsViewModelTest {
         val deleted = mutableListOf<Int>()
 
         var detailsResult: DomainNetworkState<AnimeDetailsDomainModel> = DomainNetworkState.Empty
-        var castResult: DomainNetworkState<List<JikanCastDomainModel>> = DomainNetworkState.Empty
-        var staffResult: DomainNetworkState<List<JikanStaffDomainModel>> = DomainNetworkState.Empty
+        var castResult: DomainNetworkState<List<CastDomainModel>> = DomainNetworkState.Empty
+        var staffResult: DomainNetworkState<List<StaffDomainModel>> = DomainNetworkState.Empty
 
         var detailsCalls = 0
         var castCalls = 0
@@ -52,7 +56,7 @@ class MediaDetailsViewModelTest {
             return detailsResult
         }
 
-        override suspend fun fetchAnimeCast(animeId: Int): DomainNetworkState<List<JikanCastDomainModel>> {
+        override suspend fun fetchAnimeCast(animeId: Int): DomainNetworkState<List<CastDomainModel>> {
             requestedCastIds += animeId
             castCalls++
             return castResult
@@ -75,13 +79,31 @@ class MediaDetailsViewModelTest {
         }
     }
 
-    private val repository = FakeMediaDetailsRepository()
+    private class FakeMangaDetailsRepository : MangaDetailsRepository {
+        var detailsResult: DomainNetworkState<MangaDetailsDomainModel> = DomainNetworkState.Empty
+        var charactersResult: DomainNetworkState<List<CastDomainModel>> = DomainNetworkState.Empty
+        val requestedMangaIds = mutableListOf<Int>()
 
-    private fun viewModel() = MediaDetailsViewModel(
+        override suspend fun fetchMangaDetails(mangaId: Int, fields: String): DomainNetworkState<MangaDetailsDomainModel> {
+            requestedMangaIds += mangaId
+            return detailsResult
+        }
+
+        override suspend fun fetchMangaCharacters(mangaId: Int) = charactersResult
+    }
+
+    private val repository = FakeMediaDetailsRepository()
+    private val mangaRepository = FakeMangaDetailsRepository()
+
+    private fun viewModel(mediaId: Int = 7) = MediaDetailsViewModel(
+        mediaId = mediaId,
         animeDetailsUseCase = FetchAnimeDetailsUseCase(repository),
         animeRepository = repository,
         animeDetailsUiMapper = AnimeDetailsUiMapper(),
-        animeBookmarkUiMapper = AnimeBookmarkUiMapper()
+        animeBookmarkUiMapper = AnimeBookmarkUiMapper(),
+        mangaDetailsUseCase = FetchMangaDetailsUseCase(mangaRepository),
+        mangaRepository = mangaRepository,
+        mangaDetailsUiMapper = MangaDetailsUiMapper()
     )
 
     private val argument = BookmarkArgument(
@@ -99,10 +121,9 @@ class MediaDetailsViewModelTest {
     @Test
     fun `cast is fetched with the media id and mapped`() = runBlocking {
         repository.castResult = DomainNetworkState.Success(
-            listOf(JikanCastDomainModel(role = "Main", character = JikanCastDomainModel.Character(name = "Ichigo")))
+            listOf(CastDomainModel(role = "Main", character = CastDomainModel.Character(name = "Ichigo")))
         )
         val vm = viewModel()
-        vm.fetchMediaId(7)
         val job = vm.animeCast.onEach { }.launchIn(this)
 
         val state = vm.animeCast.awaitValue { it is UiState.Success }
@@ -152,7 +173,6 @@ class MediaDetailsViewModelTest {
     @Test
     fun `bookmarking an unbookmarked media saves it and emits a message`() = runBlocking {
         val vm = viewModel()
-        vm.fetchMediaId(7)
         val job = vm.isBookmarked.onEach { }.launchIn(this)
         val message = async(start = CoroutineStart.UNDISPATCHED) { withTimeout(5_000) { vm.effect.first() } }
 
@@ -169,7 +189,6 @@ class MediaDetailsViewModelTest {
     fun `bookmarking a bookmarked media removes it and emits a message`() = runBlocking {
         repository.bookmarked.value = true
         val vm = viewModel()
-        vm.fetchMediaId(7)
         val job = vm.isBookmarked.onEach { }.launchIn(this)
         vm.isBookmarked.awaitValue { it }
         val message = async(start = CoroutineStart.UNDISPATCHED) { withTimeout(5_000) { vm.effect.first() } }

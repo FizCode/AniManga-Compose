@@ -15,6 +15,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.mediadetails.presentation.info.model.AnimeRelatedUiModel
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 
 @Composable
 internal fun RelatedAnime(
@@ -57,16 +59,16 @@ internal fun RelatedAnime(
 @Preview(showBackground = true)
 @Composable
 private fun RelatedAnimePreview() {
-    val dummyData = AnimeRelatedUiModel(
-        relatedId = 0,
-        name = "Dummy Season 2",
-        relationType = "Manga",
-        url = ""
-    )
-    RelatedAnime(
-        index = 1,
-        relatedData = dummyData,
-        onClickRelated = {}
-    )
+    AniMangaAnimeAndMangaInfoTheme {
+        RelatedAnime(
+            index = 1,
+            relatedData = AnimeRelatedUiModel(
+                relatedId = 0,
+                name = "Dummy Season 2",
+                relationType = "Sequel",
+                url = ""
+            ),
+            onClickRelated = {}
+        )
+    }
 }
-

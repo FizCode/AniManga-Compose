@@ -4,6 +4,7 @@ import dev.fizcode.anime.di.animeKoinModule
 import dev.fizcode.bookmark.di.bookmarkKoinModule
 import dev.fizcode.datasource.local.di.localDataSourceKoinModule
 import dev.fizcode.datasource.remote.di.remoteDataSourceKoinModule
+import dev.fizcode.manga.di.mangaKoinModule
 import dev.fizcode.mediadetails.di.mediaDetailsKoinModule
 import dev.fizcode.network.di.networkModule
 import dev.fizcode.search.di.searchKoinModule
@@ -23,6 +24,7 @@ internal fun featureModule() = module {
         mediaDetailsKoinModule(),
         bookmarkKoinModule(),
         seasonalKoinModule(),
+        mangaKoinModule(),
         searchKoinModule()
     )
 }

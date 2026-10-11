@@ -12,6 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.component.chip.GenreChip
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun GenreChips(genre: List<String>) = Box(
@@ -26,5 +29,13 @@ internal fun GenreChips(genre: List<String>) = Box(
         itemsIndexed(items = genre) { _, item ->
             GenreChip(item)
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun GenreChipsPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        GenreChips(genre = listOf("Action", "Adventure", "Fantasy"))
     }
 }

@@ -16,6 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.mediadetails.presentation.info.model.AnimeThemes
 import kotlinx.collections.immutable.persistentListOf
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 
 @Composable
 internal fun SongsTabComponent(
@@ -66,18 +68,9 @@ private fun SongContent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun SongsTabPreview() {
-
-    val singleContent =
-        persistentListOf("\"Scar (スカー)\" by Tatsuya Kitani (キタニタツヤ) (eps 2-13)")
-    val multipleContents = persistentListOf(
-        "\"Rapport\" by Tatsuya Kitani (キタニタツヤ) (eps 1)",
-        "\"Saihate (最果て)\" by SennaRin (eps 2-12)",
-        "\"Number One - Bankai\" by Hazel Fernandes (eps 13)"
-    )
-    SongsTabComponent(
-        songThemes = AnimeThemes(
-            openingTheme = singleContent,
-            endingTheme = multipleContents
+    AniMangaAnimeAndMangaInfoTheme {
+        SongsTabComponent(
+            songThemes = MediaDetailsPreviewData.anime.animeDetailsInfoUiModel.animeThemes
         )
-    )
+    }
 }

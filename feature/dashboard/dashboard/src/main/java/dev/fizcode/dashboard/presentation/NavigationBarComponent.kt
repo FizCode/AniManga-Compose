@@ -14,6 +14,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import dev.fizcode.dashboard.model.DashboardDestinationItems
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import androidx.compose.ui.tooling.preview.Preview
+import dev.fizcode.anime.api.AnimeRoute
+import dev.fizcode.bookmark.api.BookmarkRoute
 
 /**
  * Bottom bar of the dashboard.
@@ -84,4 +88,20 @@ private fun RowScope.AddItem(
             indicatorColor = MaterialTheme.colorScheme.primary,
         )
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun NavigationBarComponentPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        NavigationBarComponent(selectedRoute = AnimeRoute, onItemClick = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun NavigationBarComponentBookmarkSelectedPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        NavigationBarComponent(selectedRoute = BookmarkRoute, onItemClick = {})
+    }
 }

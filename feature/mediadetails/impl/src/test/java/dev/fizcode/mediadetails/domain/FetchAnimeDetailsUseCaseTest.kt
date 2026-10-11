@@ -3,8 +3,8 @@ package dev.fizcode.mediadetails.domain
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.mediadetails.domain.model.AnimeDetailsDomainModel
 import dev.fizcode.mediadetails.domain.model.BookmarkDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanCastDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanStaffDomainModel
+import dev.fizcode.mediadetails.domain.model.CastDomainModel
+import dev.fizcode.mediadetails.domain.model.StaffDomainModel
 import dev.fizcode.mediadetails.domain.repository.MediaDetailsRepository
 import dev.fizcode.mediadetails.domain.usecase.FetchAnimeDetailsUseCase
 import kotlinx.coroutines.flow.Flow
@@ -31,10 +31,10 @@ class FetchAnimeDetailsUseCaseTest {
         }
 
         override suspend fun fetchAnimeCast(animeId: Int) =
-            DomainNetworkState.Empty as DomainNetworkState<List<JikanCastDomainModel>>
+            DomainNetworkState.Empty as DomainNetworkState<List<CastDomainModel>>
 
         override suspend fun fetchAnimeStaff(animeId: Int) =
-            DomainNetworkState.Empty as DomainNetworkState<List<JikanStaffDomainModel>>
+            DomainNetworkState.Empty as DomainNetworkState<List<StaffDomainModel>>
 
         override fun isBookmarked(animeId: Int): Flow<Boolean> = flowOf(false)
         override suspend fun bookmarkMedia(bookmarkEntity: BookmarkDomainModel): Long = 0L

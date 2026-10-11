@@ -10,9 +10,9 @@ import dev.fizcode.mediadetails.data.service.AniListService
 import dev.fizcode.mediadetails.data.service.MediaDetailsService
 import dev.fizcode.mediadetails.domain.model.AnimeDetailsDomainModel
 import dev.fizcode.mediadetails.domain.model.BookmarkDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanAnimeDetailsDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanCastDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanStaffDomainModel
+import dev.fizcode.mediadetails.domain.model.AniListAnimeDetailsDomainModel
+import dev.fizcode.mediadetails.domain.model.CastDomainModel
+import dev.fizcode.mediadetails.domain.model.StaffDomainModel
 import dev.fizcode.mediadetails.domain.model.MalAnimeDetailsDomainModel
 import dev.fizcode.mediadetails.domain.repository.MediaDetailsRepository
 import kotlinx.coroutines.async
@@ -33,9 +33,9 @@ internal class MediaDetailsRepositoryImpl(
         fields: String
     ): DomainNetworkState<AnimeDetailsDomainModel> = coroutineScope {
         val malRequest = async { fetchMalAnimeDetails(animeId = animeId, fields = fields) }
-        val jikanRequest = async { fetchJikanAnimeDetails(animeId = animeId) }
+        val aniListRequest = async { fetchAniListDetails(animeId = animeId) }
 
-        mergeMalWithOptionalJikan(mal = malRequest.await(), jikan = jikanRequest.await())
+        mergeMalWithOptionalAniList(mal = malRequest.await(), aniList = aniListRequest.await())
     }
 
     private suspend fun fetchMalAnimeDetails(
@@ -47,49 +47,21 @@ internal class MediaDetailsRepositoryImpl(
         )
     }
 
-    private suspend fun fetchJikanAnimeDetails(
+    private suspend fun fetchAniListDetails(
         animeId: Int
-    ): DomainNetworkState<JikanAnimeDetailsDomainModel> = processResponse {
-        animeDetailsDomainMapper.mapToJikanAnimeDetailsModel(
-            detailsResponse = animeDetailsService.fetchJikanAnimeDetail(animeId = animeId)
-        )
+    ): DomainNetworkState<AniListAnimeDetailsDomainModel> = processResponse {
+        aniListDomainMapper.mapToDetailsDomainModel(aniListService.fetchDetails(malId = animeId))
     }
 
     override suspend fun fetchAnimeCast(
         animeId: Int
-    ): DomainNetworkState<List<JikanCastDomainModel>> =
-        fetchJikanCast(animeId).orFallback { fetchAniListCast(animeId) }
-
-    override suspend fun fetchAnimeStaff(
-        animeId: Int
-    ): DomainNetworkState<List<JikanStaffDomainModel>> =
-        fetchJikanStaff(animeId).orFallback { fetchAniListStaff(animeId) }
-
-    private suspend fun fetchJikanCast(
-        animeId: Int
-    ): DomainNetworkState<List<JikanCastDomainModel>> = processResponse {
-        animeDetailsDomainMapper.mapToCastDomainModel(
-            cast = animeDetailsService.fetchJikanVoiceActors(animeId = animeId)
-        )
-    }
-
-    private suspend fun fetchJikanStaff(
-        animeId: Int
-    ): DomainNetworkState<List<JikanStaffDomainModel>> = processResponse {
-        animeDetailsDomainMapper.mapToStaffDomainModel(
-            staff = animeDetailsService.fetchJikanStaff(animeId = animeId)
-        )
-    }
-
-    private suspend fun fetchAniListCast(
-        animeId: Int
-    ): DomainNetworkState<List<JikanCastDomainModel>> = processResponse {
+    ): DomainNetworkState<List<CastDomainModel>> = processResponse {
         aniListDomainMapper.mapToCastDomainModel(aniListService.fetchCast(malId = animeId))
     }
 
-    private suspend fun fetchAniListStaff(
+    override suspend fun fetchAnimeStaff(
         animeId: Int
-    ): DomainNetworkState<List<JikanStaffDomainModel>> = processResponse {
+    ): DomainNetworkState<List<StaffDomainModel>> = processResponse {
         aniListDomainMapper.mapToStaffDomainModel(aniListService.fetchStaff(malId = animeId))
     }
 
@@ -107,36 +79,22 @@ internal class MediaDetailsRepositoryImpl(
 }
 
 /**
- * Builds the details model from MAL, treating Jikan as optional.
+ * Builds the details model from MAL, treating AniList as optional.
  *
- * MAL carries everything needed to show the screen, so a Jikan failure only drops the Jikan-only
- * extras. A MAL failure is returned as is, so the caller sees the real error.
+ * MAL carries everything needed to show the screen, so an AniList failure only drops the AniList-only
+ * extras (producers and themes). A MAL failure is returned as is, so the caller sees the real error.
  */
-internal fun mergeMalWithOptionalJikan(
+internal fun mergeMalWithOptionalAniList(
     mal: DomainNetworkState<MalAnimeDetailsDomainModel>,
-    jikan: DomainNetworkState<JikanAnimeDetailsDomainModel>
+    aniList: DomainNetworkState<AniListAnimeDetailsDomainModel>
 ): DomainNetworkState<AnimeDetailsDomainModel> = when (mal) {
     is DomainNetworkState.Success -> DomainNetworkState.Success(
         AnimeDetailsDomainModel(
             malDomainModel = mal.data,
-            jikanDomainModel = (jikan as? DomainNetworkState.Success)?.data
+            aniListDomainModel = (aniList as? DomainNetworkState.Success)?.data
         )
     )
 
     is DomainNetworkState.Empty -> DomainNetworkState.Empty
     is DomainNetworkState.ErrorNetwork -> mal
-}
-
-/**
- * Returns this result when it succeeded, otherwise the [fallback] result if that succeeded.
- *
- * When both fail, this (the primary source's) result is returned, so the caller sees the original
- * error or empty state instead of the fallback's.
- */
-internal suspend fun <T> DomainNetworkState<T>.orFallback(
-    fallback: suspend () -> DomainNetworkState<T>
-): DomainNetworkState<T> {
-    if (this is DomainNetworkState.Success) return this
-    val fallbackResult = fallback()
-    return if (fallbackResult is DomainNetworkState.Success) fallbackResult else this
 }

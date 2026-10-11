@@ -19,6 +19,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.seasonal.presentation.model.Season
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 
 /**
  * Pill-shaped tab row with one tab per [Season]. The [selected] tab gets a highlighted pill.
@@ -70,5 +71,15 @@ internal fun SeasonTabs(
 @Preview(showBackground = true)
 @Composable
 private fun SeasonTabsPreview() {
-    SeasonTabs(selected = Season.WINTER, onSelect = {})
+    AniMangaAnimeAndMangaInfoTheme {
+        SeasonTabs(selected = Season.WINTER, onSelect = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SeasonTabsFallSelectedPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        SeasonTabs(selected = Season.FALL, onSelect = {})
+    }
 }

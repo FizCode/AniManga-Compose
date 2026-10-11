@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import dev.fizcode.anime.util.Constant
 import dev.fizcode.designsystem.component.card.MovieCardSmall
 import dev.fizcode.designsystem.icon.CustomIcon
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 
 @Composable
 internal fun AnimeContent(
@@ -54,18 +55,20 @@ internal fun AnimeContent(
 @Preview(showBackground = true)
 @Composable
 private fun AnimeContentPreview() {
-    AnimeContent(
-        headerTitle = "Current Season ☀️",
-        onHeaderClick = {}
-    ) {
-        MovieCardSmall(
-            posterPath = "",
-            title = "BLEACH: Sennen Kessen-hen",
-            subTitle = "TV | Episodes 12 | Finished",
-            studio = "Toei Animation",
-            rating = "5.00",
-            genre = listOf("Action", "Adventure", "Comedy"),
-            onCardClick = {}
-        )
+    AniMangaAnimeAndMangaInfoTheme {
+        AnimeContent(
+            headerTitle = "Current Season ☀️",
+            onHeaderClick = {}
+        ) {
+            MovieCardSmall(
+                posterPath = "",
+                title = "BLEACH: Sennen Kessen-hen",
+                subTitle = "TV | Episodes 12 | Finished",
+                studio = "Toei Animation",
+                rating = "5.00",
+                genre = listOf("Action", "Adventure", "Comedy"),
+                onCardClick = {}
+            )
+        }
     }
 }

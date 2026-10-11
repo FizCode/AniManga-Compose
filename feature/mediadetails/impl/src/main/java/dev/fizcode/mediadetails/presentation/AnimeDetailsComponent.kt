@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.other.ErrorWithRetry
+import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.designsystem.util.base.shimmerBrush
 import dev.fizcode.mediadetails.presentation.header.DetailHeaderComponent
 import dev.fizcode.mediadetails.presentation.info.model.AnimeCastUiModel
@@ -43,7 +44,8 @@ internal fun AnimeDetailsComponent(
     selectedImage: (String) -> Unit,
     onRetryDetails: () -> Unit,
     onRetryCastAndStaff: () -> Unit,
-    onClickBookmark: (AnimeDetailsUiModel) -> Unit
+    onClickBookmark: (AnimeDetailsUiModel) -> Unit,
+    onClickShare: (String) -> Unit
 ) = LazyColumn(
     modifier = Modifier
         .fillMaxSize()
@@ -68,7 +70,7 @@ internal fun AnimeDetailsComponent(
                     cast = animeCast,
                     staff = animeStaff,
                     onRetryCastAndStaff = onRetryCastAndStaff,
-                    onClickShare = {}
+                    onClickShare = onClickShare
                 )
             }
         }
@@ -77,13 +79,16 @@ internal fun AnimeDetailsComponent(
         is UiState.Loading, is UiState.Empty -> item { AnimeDetailsShimmer() }
 
         else -> item {
-            ErrorWithRetry(onRetry = onRetryDetails)
+            ErrorWithRetry(
+                modifier = Modifier.fillParentMaxSize(),
+                onRetry = onRetryDetails
+            )
         }
     }
 }
 
 @Composable
-private fun AnimeDetailsShimmer() {
+internal fun AnimeDetailsShimmer() {
     val roundedCorner8 = RoundedCornerShape(8.dp)
     val shimmer = shimmerBrush()
 
@@ -253,7 +258,58 @@ private fun DetailInfoComponentShimmer(
 }
 
 @Composable
-@Preview(showBackground = true)
-private fun AnimeDetailsComponentPreview() {
-    AnimeDetailsShimmer()
+private fun AnimeDetailsComponentPreview(
+    animeDetails: UiState<AnimeDetailsUiModel>,
+    animeCast: UiState<ImmutableList<AnimeCastUiModel>>,
+    animeStaff: UiState<ImmutableList<AnimeStaffUiModel>>
+) {
+    AniMangaAnimeAndMangaInfoTheme {
+        AnimeDetailsComponent(
+            isBookmarked = false,
+            animeDetails = animeDetails,
+            animeCast = animeCast,
+            animeStaff = animeStaff,
+            headerTitle = {},
+            selectedImage = {},
+            onRetryDetails = {},
+            onRetryCastAndStaff = {},
+            onClickBookmark = {},
+            onClickShare = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun AnimeDetailsComponentSuccessPreview() = AnimeDetailsComponentPreview(
+    animeDetails = UiState.Success(MediaDetailsPreviewData.anime),
+    animeCast = UiState.Success(MediaDetailsPreviewData.animeCast),
+    animeStaff = UiState.Success(MediaDetailsPreviewData.animeStaff)
+)
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun AnimeDetailsComponentLoadingPreview() = AnimeDetailsComponentPreview(
+    animeDetails = UiState.Loading,
+    animeCast = UiState.Loading,
+    animeStaff = UiState.Loading
+)
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun AnimeDetailsComponentErrorPreview() = AnimeDetailsComponentPreview(
+    animeDetails = UiState.ErrorException(message = "Something went wrong. Please try again."),
+    animeCast = UiState.Loading,
+    animeStaff = UiState.Loading
+)
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun AnimeDetailsComponentCastErrorPreview() {
+    val error = UiState.ErrorException(message = "Couldn't load the cast.")
+    AnimeDetailsComponentPreview(
+        animeDetails = UiState.Success(MediaDetailsPreviewData.anime),
+        animeCast = error,
+        animeStaff = error
+    )
 }

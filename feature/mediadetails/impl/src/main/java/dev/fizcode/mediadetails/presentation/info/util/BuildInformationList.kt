@@ -23,10 +23,6 @@ internal fun buildInformationList(info: AnimeInfo): PersistentList<TextTableData
             listDesc = info.producers.map { it.name },
             link = info.producers.map { it.link }),
         TextTableData(
-            title = Constant.LICENSORS,
-            listDesc = info.licensors.map { it.name },
-            link = info.licensors.map { it.link }),
-        TextTableData(
             title = Constant.STUDIOS,
             listDesc = info.studios.map { it.name },
             link = info.studios.map { it.link }),

@@ -11,7 +11,7 @@ import dev.fizcode.anime.presentation.model.TopAiringUiModel
 import dev.fizcode.anime.presentation.model.TopRankingUiModel
 import dev.fizcode.anime.util.Constant
 import dev.fizcode.common.base.callhandler.UiState
-import dev.fizcode.common.base.presentationhandler.asStateFlow
+import dev.fizcode.common.base.presentationhandler.asUiStateFlow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -37,7 +37,7 @@ internal class AnimeViewModel(
         _refreshing.emit(false)
     }
 
-    val currentSeason: StateFlow<UiState<List<SeasonalUiModel>>> = asStateFlow(
+    val currentSeason: StateFlow<UiState<List<SeasonalUiModel>>> = asUiStateFlow(
         scope = viewModelScope,
         domain = { animeUseCaseGroup.fetchSeasonAnimeUseCase(Constant.LIMIT_5) },
         mapper = { data -> seasonalUiMapper.mapToSeasonalAnimeUiModel(data) },
@@ -45,7 +45,7 @@ internal class AnimeViewModel(
         started = SharingStarted.Lazily
     )
 
-    val topAiring: StateFlow<UiState<List<TopAiringUiModel>>> = asStateFlow(
+    val topAiring: StateFlow<UiState<List<TopAiringUiModel>>> = asUiStateFlow(
         scope = viewModelScope,
         domain = { animeUseCaseGroup.fetchTopAiringAnimeUseCase(Constant.LIMIT_5) },
         mapper = { data -> topAiringUiMapper.mapToAiringAnimeUiModel(data) },
@@ -53,7 +53,7 @@ internal class AnimeViewModel(
         started = SharingStarted.Lazily
     )
 
-    val topRanking: StateFlow<UiState<List<TopRankingUiModel>>> = asStateFlow(
+    val topRanking: StateFlow<UiState<List<TopRankingUiModel>>> = asUiStateFlow(
         scope = viewModelScope,
         domain = { animeUseCaseGroup.fetchTopRankingAnimeUseCase(Constant.LIMIT_10) },
         mapper = { data -> topRankingUiMapper.mapToTopRankingAnimeUiModel(data) },
