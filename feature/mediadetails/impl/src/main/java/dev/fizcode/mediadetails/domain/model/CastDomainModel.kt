@@ -1,6 +1,6 @@
 package dev.fizcode.mediadetails.domain.model
 
-internal data class JikanCastDomainModel(
+internal data class CastDomainModel(
     val character: Character = Character(),
     val favorites: Int = 0,
     val role: String = "",
@@ -8,7 +8,7 @@ internal data class JikanCastDomainModel(
 ) {
     data class Character(
         val images: Images = Images(),
-        val malId: Int = 0,
+        val id: Int = 0,
         val name: String = "",
         val url: String = ""
     )
@@ -34,7 +34,7 @@ internal data class JikanCastDomainModel(
 
     data class Person(
         val images: PersonImages = PersonImages(),
-        val malId: Int = 0,
+        val id: Int = 0,
         val name: String = "",
         val url: String = ""
     )

@@ -95,3 +95,50 @@ internal data class AniListStaffResponse(
         val node: AniListPerson? = null
     )
 }
+
+/** Producers, tags and favorites of an AniList media, from `Media.studios`, `Media.tags` and `Media.favourites`. */
+@Serializable
+internal data class AniListDetailsResponse(
+    @SerialName("data")
+    val data: Data? = null
+) {
+    @Serializable
+    data class Data(
+        @SerialName("Media")
+        val media: Media? = null
+    )
+
+    @Serializable
+    data class Media(
+        @SerialName("favourites")
+        val favourites: Int? = null,
+        @SerialName("studios")
+        val studios: Studios? = null,
+        @SerialName("tags")
+        val tags: List<Tag>? = null
+    )
+
+    @Serializable
+    data class Studios(
+        @SerialName("nodes")
+        val nodes: List<Studio>? = null
+    )
+
+    @Serializable
+    data class Studio(
+        @SerialName("name")
+        val name: String? = null,
+        @SerialName("siteUrl")
+        val siteUrl: String? = null,
+        @SerialName("isAnimationStudio")
+        val isAnimationStudio: Boolean? = null
+    )
+
+    @Serializable
+    data class Tag(
+        @SerialName("name")
+        val name: String? = null,
+        @SerialName("isMediaSpoiler")
+        val isMediaSpoiler: Boolean? = null
+    )
+}

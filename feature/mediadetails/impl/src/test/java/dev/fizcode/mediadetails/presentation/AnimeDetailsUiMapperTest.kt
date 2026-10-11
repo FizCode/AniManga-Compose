@@ -4,13 +4,13 @@ import dev.fizcode.mediadetails.domain.model.AlternativeTitles
 import dev.fizcode.mediadetails.domain.model.AnimeDetailsDomainModel
 import dev.fizcode.mediadetails.domain.model.Broadcast
 import dev.fizcode.mediadetails.domain.model.Genre
-import dev.fizcode.mediadetails.domain.model.JikanAnimeDetailsDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanCastDomainModel
+import dev.fizcode.mediadetails.domain.model.AniListAnimeDetailsDomainModel
+import dev.fizcode.mediadetails.domain.model.CastDomainModel
 import dev.fizcode.mediadetails.domain.model.MainPicture
 import dev.fizcode.mediadetails.domain.model.MalAnimeDetailsDomainModel
 import dev.fizcode.mediadetails.domain.model.StartSeason
 import dev.fizcode.mediadetails.domain.model.Studio
-import dev.fizcode.mediadetails.domain.model.JikanStaffDomainModel
+import dev.fizcode.mediadetails.domain.model.StaffDomainModel
 import dev.fizcode.mediadetails.presentation.mapper.AnimeDetailsUiMapper
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -20,21 +20,21 @@ class AnimeDetailsUiMapperTest {
 
     private val mapper = AnimeDetailsUiMapper()
 
-    private fun cast(characterId: Int, role: String) = JikanCastDomainModel(
-        character = JikanCastDomainModel.Character(
-            images = JikanCastDomainModel.Images(jpg = JikanCastDomainModel.Jpg("char-img")),
-            malId = characterId,
+    private fun cast(characterId: Int, role: String) = CastDomainModel(
+        character = CastDomainModel.Character(
+            images = CastDomainModel.Images(jpg = CastDomainModel.Jpg("char-img")),
+            id = characterId,
             name = "Character $characterId",
             url = "char-url"
         ),
         role = role,
-        voiceActors = JikanCastDomainModel.VoiceActor(
+        voiceActors = CastDomainModel.VoiceActor(
             language = "Japanese",
-            person = JikanCastDomainModel.Person(
-                images = JikanCastDomainModel.PersonImages(
-                    JikanCastDomainModel.PersonImagesJpg("va-img")
+            person = CastDomainModel.Person(
+                images = CastDomainModel.PersonImages(
+                    CastDomainModel.PersonImagesJpg("va-img")
                 ),
-                malId = characterId * 100,
+                id = characterId * 100,
                 name = "VA $characterId",
                 url = "va-url"
             )
@@ -87,8 +87,8 @@ class AnimeDetailsUiMapperTest {
     @Test
     fun `staff joins positions and keeps first ten`() {
         val staff = List(12) {
-            JikanStaffDomainModel(
-                person = JikanStaffDomainModel.Person(malId = it, name = "Staff $it"),
+            StaffDomainModel(
+                person = StaffDomainModel.Person(id = it, name = "Staff $it"),
                 positions = listOf("Director", "Script")
             )
         }
@@ -123,8 +123,8 @@ class AnimeDetailsUiMapperTest {
     )
 
     @Test
-    fun `without jikan the info falls back to mal data`() {
-        val ui = mapper.mapToAnimeDetailsUiModel(AnimeDetailsDomainModel(mal, jikanDomainModel = null))
+    fun `without anilist the info falls back to mal data`() {
+        val ui = mapper.mapToAnimeDetailsUiModel(AnimeDetailsDomainModel(mal, aniListDomainModel = null))
 
         val info = ui.animeDetailsInfoUiModel.animeInfo
         assertEquals("Oct 5, 2004 to Mar 27, 2012", info.aired)
@@ -138,19 +138,18 @@ class AnimeDetailsUiMapperTest {
     }
 
     @Test
-    fun `without jikan the jikan only data is empty and flagged unavailable`() {
-        val ui = mapper.mapToAnimeDetailsUiModel(AnimeDetailsDomainModel(mal, jikanDomainModel = null))
+    fun `without anilist the anilist only data is empty and flagged unavailable`() {
+        val ui = mapper.mapToAnimeDetailsUiModel(AnimeDetailsDomainModel(mal, aniListDomainModel = null))
 
         val info = ui.animeDetailsInfoUiModel
         assertTrue(info.animeInfo.producers.isEmpty())
-        assertTrue(info.animeInfo.licensors.isEmpty())
         assertTrue(info.animeInfo.themes.isEmpty())
         assertEquals(false, info.isExtendedInfoAvailable)
     }
 
     @Test
-    fun `without jikan favorites and songs come from mal`() {
-        val ui = mapper.mapToAnimeDetailsUiModel(AnimeDetailsDomainModel(mal, jikanDomainModel = null))
+    fun `without anilist favorites and songs come from mal`() {
+        val ui = mapper.mapToAnimeDetailsUiModel(AnimeDetailsDomainModel(mal, aniListDomainModel = null))
 
         assertEquals("4,321", ui.animeDetailsHeaderUiModel.favorites)
         assertEquals(listOf("#1: \"Opening\" by Artist (eps 1-10)"), ui.animeDetailsInfoUiModel.animeThemes.openingTheme)
@@ -158,9 +157,9 @@ class AnimeDetailsUiMapperTest {
     }
 
     @Test
-    fun `without jikan or mal favorites they read as not available`() {
+    fun `without mal favorites they read as not available`() {
         val ui = mapper.mapToAnimeDetailsUiModel(
-            AnimeDetailsDomainModel(mal.copy(numFavorites = 0), jikanDomainModel = null)
+            AnimeDetailsDomainModel(mal.copy(numFavorites = 0), aniListDomainModel = null)
         )
 
         assertEquals("N/A", ui.animeDetailsHeaderUiModel.favorites)
@@ -168,20 +167,8 @@ class AnimeDetailsUiMapperTest {
     }
 
     @Test
-    fun `jikan songs win over mal songs`() {
-        val jikan = JikanAnimeDetailsDomainModel(
-            theme = JikanAnimeDetailsDomainModel.Theme(openings = listOf("jikan opening"))
-        )
-
-        val ui = mapper.mapToAnimeDetailsUiModel(AnimeDetailsDomainModel(mal, jikan))
-
-        assertEquals(listOf("jikan opening"), ui.animeDetailsInfoUiModel.animeThemes.openingTheme)
-        assertTrue(ui.animeDetailsInfoUiModel.animeThemes.endingTheme.isEmpty())
-    }
-
-    @Test
-    fun `without jikan the titles come from mal`() {
-        val ui = mapper.mapToAnimeDetailsUiModel(AnimeDetailsDomainModel(mal, jikanDomainModel = null))
+    fun `without anilist the titles come from mal`() {
+        val ui = mapper.mapToAnimeDetailsUiModel(AnimeDetailsDomainModel(mal, aniListDomainModel = null))
 
         val details = ui.animeDetailsInfoUiModel.animeDetails
         assertEquals("Bleach EN", details.english)
@@ -190,32 +177,28 @@ class AnimeDetailsUiMapperTest {
     }
 
     @Test
-    fun `with jikan its data is preferred and flagged available`() {
-        val jikan = JikanAnimeDetailsDomainModel(
-            favorites = 42,
-            members = 99,
-            rating = "R - 17+",
-            source = "Manga",
-            titleEnglish = "Jikan EN",
-            aired = JikanAnimeDetailsDomainModel.Aired(string = "Jikan aired")
+    fun `with anilist producers and themes are shown and flagged available`() {
+        val aniList = AniListAnimeDetailsDomainModel(
+            producers = listOf(AniListAnimeDetailsDomainModel.Link("Aniplex", "https://anilist.co/studio/1")),
+            themes = listOf(AniListAnimeDetailsDomainModel.Link("Shounen", "https://anilist.co/search/anime?includedTags=Shounen"))
         )
 
-        val ui = mapper.mapToAnimeDetailsUiModel(AnimeDetailsDomainModel(mal, jikan))
+        val ui = mapper.mapToAnimeDetailsUiModel(AnimeDetailsDomainModel(mal, aniList))
 
         val info = ui.animeDetailsInfoUiModel.animeInfo
-        assertEquals("Jikan aired", info.aired)
-        assertEquals("Manga", info.source.name)
-        assertEquals("R - 17+", info.rating)
-        assertEquals("99", info.members)
-        assertEquals("42", info.favorites)
-        assertEquals("Jikan EN", ui.animeDetailsInfoUiModel.animeDetails.english)
+        assertEquals(listOf("Aniplex"), info.producers.map { it.name })
+        assertEquals("https://anilist.co/studio/1", info.producers.single().link)
+        assertEquals(listOf("Shounen"), info.themes.map { it.name })
         assertEquals(true, ui.animeDetailsInfoUiModel.isExtendedInfoAvailable)
+        // Everything else still comes from MAL.
+        assertEquals("1,234", info.members)
+        assertEquals("Oct 5, 2004 to Mar 27, 2012", info.aired)
     }
 
     @Test
     fun `missing mal dates read as not available`() {
         val ui = mapper.mapToAnimeDetailsUiModel(
-            AnimeDetailsDomainModel(mal.copy(startDate = "", endDate = ""), jikanDomainModel = null)
+            AnimeDetailsDomainModel(mal.copy(startDate = "", endDate = ""), aniListDomainModel = null)
         )
 
         assertEquals("N/A", ui.animeDetailsInfoUiModel.animeInfo.aired)

@@ -2,51 +2,90 @@ package dev.fizcode.mediadetails.data.mapper
 
 import dev.fizcode.common.util.extensions.orZero
 import dev.fizcode.mediadetails.data.response.AniListCastResponse
+import dev.fizcode.mediadetails.data.response.AniListDetailsResponse
 import dev.fizcode.mediadetails.data.response.AniListPerson
 import dev.fizcode.mediadetails.data.response.AniListStaffResponse
-import dev.fizcode.mediadetails.domain.model.JikanCastDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanStaffDomainModel
+import dev.fizcode.mediadetails.domain.model.AniListAnimeDetailsDomainModel
+import dev.fizcode.mediadetails.domain.model.AniListMangaDetailsDomainModel
+import dev.fizcode.mediadetails.domain.model.CastDomainModel
+import dev.fizcode.mediadetails.domain.model.StaffDomainModel
 import dev.fizcode.mediadetails.util.Constant
+import java.net.URLEncoder
 
 /**
- * Maps AniList responses to the cast and staff domain models shared with Jikan.
+ * Maps AniList responses to the details, cast and staff domain models.
  *
- * The ids in the resulting models are AniList ids, not MyAnimeList ids, and the urls point to
- * AniList.
+ * The ids in the cast and staff models are AniList ids, and their urls point to AniList.
  */
 internal class AniListDomainMapper {
 
+    fun mapToDetailsDomainModel(response: AniListDetailsResponse): AniListAnimeDetailsDomainModel {
+        val media = response.data?.media
+        return AniListAnimeDetailsDomainModel(
+            producers = media?.studios?.nodes.orEmpty()
+                .filter { it.isAnimationStudio == false && !it.name.isNullOrBlank() }
+                .map { AniListAnimeDetailsDomainModel.Link(name = it.name.orEmpty(), url = it.siteUrl.orEmpty()) },
+            themes = media?.tags.orEmpty()
+                .filter { it.isMediaSpoiler != true && !it.name.isNullOrBlank() }
+                .take(Constant.MAX_THEMES)
+                .map {
+                    val name = it.name.orEmpty()
+                    AniListAnimeDetailsDomainModel.Link(
+                        name = name,
+                        url = "${Constant.ANILIST_TAG_URL}${URLEncoder.encode(name, "UTF-8")}"
+                    )
+                }
+        )
+    }
+
+    fun mapToMangaDetailsDomainModel(response: AniListDetailsResponse): AniListMangaDetailsDomainModel {
+        val media = response.data?.media
+        return AniListMangaDetailsDomainModel(
+            favorites = media?.favourites.orZero(),
+            themes = media?.tags.orEmpty()
+                .filter { it.isMediaSpoiler != true && !it.name.isNullOrBlank() }
+                .take(Constant.MAX_THEMES)
+                .map {
+                    val name = it.name.orEmpty()
+                    AniListAnimeDetailsDomainModel.Link(
+                        name = name,
+                        url = "${Constant.ANILIST_MANGA_TAG_URL}${URLEncoder.encode(name, "UTF-8")}"
+                    )
+                }
+        )
+    }
+
     fun mapToCastDomainModel(
         response: AniListCastResponse
-    ): List<JikanCastDomainModel> = response.data?.media?.characters?.edges.orEmpty()
+    ): List<CastDomainModel> = response.data?.media?.characters?.edges.orEmpty()
         .mapNotNull { edge ->
             val character = edge.node ?: return@mapNotNull null
-            JikanCastDomainModel(
-                character = JikanCastDomainModel.Character(
-                    images = JikanCastDomainModel.Images(
-                        jpg = JikanCastDomainModel.Jpg(imageUrl = character.image?.medium.orEmpty())
+            CastDomainModel(
+                character = CastDomainModel.Character(
+                    images = CastDomainModel.Images(
+                        jpg = CastDomainModel.Jpg(imageUrl = character.image?.medium.orEmpty())
                     ),
-                    malId = character.id.orZero(),
+                    id = character.id.orZero(),
                     name = character.name?.full.orEmpty(),
                     url = character.siteUrl.orEmpty()
                 ),
                 role = edge.role.toRoleLabel(),
                 voiceActors = edge.voiceActors.orEmpty().firstOrNull()?.toVoiceActor()
-                    ?: JikanCastDomainModel.VoiceActor()
+                    ?: CastDomainModel.VoiceActor()
             )
         }
 
     fun mapToStaffDomainModel(
         response: AniListStaffResponse
-    ): List<JikanStaffDomainModel> = response.data?.media?.staff?.edges.orEmpty()
+    ): List<StaffDomainModel> = response.data?.media?.staff?.edges.orEmpty()
         .mapNotNull { edge ->
             val person = edge.node ?: return@mapNotNull null
-            JikanStaffDomainModel(
-                person = JikanStaffDomainModel.Person(
-                    images = JikanStaffDomainModel.Images(
-                        jpg = JikanStaffDomainModel.Jpg(imageUrl = person.image?.medium.orEmpty())
+            StaffDomainModel(
+                person = StaffDomainModel.Person(
+                    images = StaffDomainModel.Images(
+                        jpg = StaffDomainModel.Jpg(imageUrl = person.image?.medium.orEmpty())
                     ),
-                    malId = person.id.orZero(),
+                    id = person.id.orZero(),
                     name = person.name?.full.orEmpty(),
                     url = person.siteUrl.orEmpty()
                 ),
@@ -54,19 +93,19 @@ internal class AniListDomainMapper {
             )
         }
 
-    private fun AniListPerson.toVoiceActor() = JikanCastDomainModel.VoiceActor(
+    private fun AniListPerson.toVoiceActor() = CastDomainModel.VoiceActor(
         language = Constant.JAPANESE,
-        person = JikanCastDomainModel.Person(
-            images = JikanCastDomainModel.PersonImages(
-                jpg = JikanCastDomainModel.PersonImagesJpg(imageUrl = image?.medium.orEmpty())
+        person = CastDomainModel.Person(
+            images = CastDomainModel.PersonImages(
+                jpg = CastDomainModel.PersonImagesJpg(imageUrl = image?.medium.orEmpty())
             ),
-            malId = id.orZero(),
+            id = id.orZero(),
             name = name?.full.orEmpty(),
             url = siteUrl.orEmpty()
         )
     )
 
-    /** AniList roles are upper case (`MAIN`); Jikan's are capitalized (`Main`). */
+    /** AniList roles are upper case (`MAIN`); the UI expects them capitalized (`Main`). */
     private fun String?.toRoleLabel(): String =
         orEmpty().lowercase().replaceFirstChar { it.titlecase() }
 }

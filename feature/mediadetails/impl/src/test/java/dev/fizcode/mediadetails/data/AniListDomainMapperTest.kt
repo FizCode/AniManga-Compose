@@ -2,6 +2,7 @@ package dev.fizcode.mediadetails.data
 
 import dev.fizcode.mediadetails.data.mapper.AniListDomainMapper
 import dev.fizcode.mediadetails.data.response.AniListCastResponse
+import dev.fizcode.mediadetails.data.response.AniListDetailsResponse
 import dev.fizcode.mediadetails.data.response.AniListPerson
 import dev.fizcode.mediadetails.data.response.AniListStaffResponse
 import org.junit.Assert.assertEquals
@@ -47,19 +48,19 @@ class AniListDomainMapperTest {
 
         val cast = mapper.mapToCastDomainModel(response).single()
 
-        assertEquals(1, cast.character.malId)
+        assertEquals(1, cast.character.id)
         assertEquals("Frieren", cast.character.name)
         assertEquals("img-1", cast.character.images.jpg.imageUrl)
         assertEquals("https://anilist.co/1", cast.character.url)
         assertEquals("Japanese", cast.voiceActors.language)
-        assertEquals(10, cast.voiceActors.person.malId)
+        assertEquals(10, cast.voiceActors.person.id)
         assertEquals("Atsumi Tanezaki", cast.voiceActors.person.name)
         assertEquals("img-10", cast.voiceActors.person.images.jpg.imageUrl)
         assertEquals("https://anilist.co/10", cast.voiceActors.person.url)
     }
 
     @Test
-    fun `roles are capitalized like jikan so main roles sort first`() {
+    fun `roles are capitalized so main roles sort first`() {
         val response = castResponse(
             AniListCastResponse.Edge(role = "MAIN", node = person(1, "A")),
             AniListCastResponse.Edge(role = "SUPPORTING", node = person(2, "B")),
@@ -113,7 +114,7 @@ class AniListDomainMapperTest {
 
         val staff = mapper.mapToStaffDomainModel(response)
 
-        assertEquals(5, staff[0].person.malId)
+        assertEquals(5, staff[0].person.id)
         assertEquals("Keiichirou Saitou", staff[0].person.name)
         assertEquals("img-5", staff[0].person.images.jpg.imageUrl)
         assertEquals("https://anilist.co/5", staff[0].person.url)
@@ -129,5 +130,59 @@ class AniListDomainMapperTest {
         )
 
         assertEquals(listOf("Composer"), mapper.mapToStaffDomainModel(response).map { it.person.name })
+    }
+
+    private fun detailsResponse(
+        studios: List<AniListDetailsResponse.Studio>? = null,
+        tags: List<AniListDetailsResponse.Tag>? = null
+    ) = AniListDetailsResponse(
+        data = AniListDetailsResponse.Data(
+            media = AniListDetailsResponse.Media(
+                studios = AniListDetailsResponse.Studios(nodes = studios),
+                tags = tags
+            )
+        )
+    )
+
+    @Test
+    fun `details keep only non animation studios as producers`() {
+        val details = mapper.mapToDetailsDomainModel(
+            detailsResponse(
+                studios = listOf(
+                    AniListDetailsResponse.Studio("Pierrot", "https://anilist.co/studio/1", true),
+                    AniListDetailsResponse.Studio("Aniplex", "https://anilist.co/studio/2", false),
+                    AniListDetailsResponse.Studio(" ", "https://anilist.co/studio/3", false)
+                )
+            )
+        )
+
+        assertEquals(listOf("Aniplex"), details.producers.map { it.name })
+        assertEquals("https://anilist.co/studio/2", details.producers.single().url)
+    }
+
+    @Test
+    fun `details drop spoiler tags, encode the link and cap the themes`() {
+        val tags = listOf(
+            AniListDetailsResponse.Tag("Super Power", false),
+            AniListDetailsResponse.Tag("Big Spoiler", true)
+        ) + (1..15).map { AniListDetailsResponse.Tag("Tag $it", false) }
+
+        val details = mapper.mapToDetailsDomainModel(detailsResponse(tags = tags))
+
+        assertEquals(10, details.themes.size)
+        assertEquals("Super Power", details.themes.first().name)
+        assertEquals(
+            "https://anilist.co/search/anime?includedTags=Super+Power",
+            details.themes.first().url
+        )
+        assertTrue(details.themes.none { it.name == "Big Spoiler" })
+    }
+
+    @Test
+    fun `details of an empty response are empty`() {
+        val details = mapper.mapToDetailsDomainModel(AniListDetailsResponse())
+
+        assertTrue(details.producers.isEmpty())
+        assertTrue(details.themes.isEmpty())
     }
 }

@@ -3,8 +3,8 @@ package dev.fizcode.mediadetails.domain.repository
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.mediadetails.domain.model.AnimeDetailsDomainModel
 import dev.fizcode.mediadetails.domain.model.BookmarkDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanCastDomainModel
-import dev.fizcode.mediadetails.domain.model.JikanStaffDomainModel
+import dev.fizcode.mediadetails.domain.model.CastDomainModel
+import dev.fizcode.mediadetails.domain.model.StaffDomainModel
 import kotlinx.coroutines.flow.Flow
 
 internal interface MediaDetailsRepository {
@@ -14,9 +14,9 @@ internal interface MediaDetailsRepository {
         fields: String
     ): DomainNetworkState<AnimeDetailsDomainModel>
 
-    suspend fun fetchAnimeCast(animeId: Int): DomainNetworkState<List<JikanCastDomainModel>>
+    suspend fun fetchAnimeCast(animeId: Int): DomainNetworkState<List<CastDomainModel>>
 
-    suspend fun fetchAnimeStaff(animeId: Int): DomainNetworkState<List<JikanStaffDomainModel>>
+    suspend fun fetchAnimeStaff(animeId: Int): DomainNetworkState<List<StaffDomainModel>>
 
     fun isBookmarked(animeId: Int): Flow<Boolean>
 

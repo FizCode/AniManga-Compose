@@ -9,7 +9,7 @@ data class AnimeDetailsInfoUiModel(
     val animeDetails: AnimeDetails,
     val animeInfo: AnimeInfo,
     val animeThemes: AnimeThemes,
-    /** False when Jikan was unreachable, so producers, licensors and themes are missing. */
+    /** False when AniList was unreachable, so producers and themes are missing. */
     val isExtendedInfoAvailable: Boolean = true
 )
 
@@ -31,7 +31,6 @@ data class AnimeInfo(
     val premiered: String = "",
     val premieredUrl: String = "",
     val producers: ImmutableList<AnimeDataWithLink> = persistentListOf(),
-    val licensors: ImmutableList<AnimeDataWithLink> = persistentListOf(),
     val studios: ImmutableList<AnimeDataWithLink> = persistentListOf(),
     val source: AnimeDataWithLink = AnimeDataWithLink(),
     val genre: ImmutableList<AnimeDataWithLink> = persistentListOf(),

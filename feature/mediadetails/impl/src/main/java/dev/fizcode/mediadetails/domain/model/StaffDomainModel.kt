@@ -1,12 +1,12 @@
 package dev.fizcode.mediadetails.domain.model
 
-internal data class JikanStaffDomainModel(
+internal data class StaffDomainModel(
     val person: Person = Person(),
     val positions: List<String> = emptyList()
 ) {
     data class Person(
         val images: Images = Images(),
-        val malId: Int = 0,
+        val id: Int = 0,
         val name: String = "",
         val url: String = ""
     )
