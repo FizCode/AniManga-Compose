@@ -1,5 +1,7 @@
 package dev.fizcode.seasonal.domain.model
 
+import dev.fizcode.common.settings.AlternativeTitles
+
 internal data class SeasonalDomainModel(
     val items: List<Item> = emptyList()
 ) {
@@ -15,6 +17,7 @@ internal data class SeasonalDomainModel(
         val numEpisodes: Int = 0,
         val studios: List<String> = emptyList(),
         val synopsis: String = "",
-        val genres: List<String> = emptyList()
+        val genres: List<String> = emptyList(),
+        val alternativeTitles: AlternativeTitles = AlternativeTitles()
     )
 }

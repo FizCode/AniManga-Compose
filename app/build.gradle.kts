@@ -50,6 +50,8 @@ dependencies {
     implementation(projects.feature.dashboard.bookmark.impl)
     implementation(projects.feature.dashboard.manga.api)
     implementation(projects.feature.dashboard.manga.impl)
+    implementation(projects.feature.dashboard.ranking.api)
+    implementation(projects.feature.dashboard.ranking.impl)
     implementation(projects.feature.dashboard.seasonal.api)
     implementation(projects.feature.dashboard.seasonal.impl)
     implementation(projects.feature.dashboard.dashboard)
@@ -58,9 +60,13 @@ dependencies {
     implementation(projects.feature.onboarding.api)
     implementation(projects.feature.onboarding.impl)
     implementation(projects.feature.search.impl)
+    implementation(projects.feature.settings.api)
+    implementation(projects.feature.settings.impl)
 
+    implementation(projects.core.common)
     implementation(projects.core.designsystem)
     implementation(projects.core.datasource)
+    implementation(projects.core.datastore)
     implementation(projects.core.network)
     implementation(projects.core.navigation)
 

@@ -1,5 +1,7 @@
 package dev.fizcode.anime.domain.model
 
+import dev.fizcode.common.settings.AlternativeTitles
+
 internal data class SeasonalAnimeDomainModel(
     val data: List<Data> = emptyList(),
     val paging: Paging = Paging(),
@@ -21,7 +23,8 @@ internal data class Node(
     val numEpisodes: Int = 0,
     val studios: List<Studio> = emptyList(),
     val synopsis: String = "",
-    val genres: List<Genre> = emptyList()
+    val genres: List<Genre> = emptyList(),
+    val alternativeTitles: AlternativeTitles = AlternativeTitles()
 )
 
 internal data class MainPicture(

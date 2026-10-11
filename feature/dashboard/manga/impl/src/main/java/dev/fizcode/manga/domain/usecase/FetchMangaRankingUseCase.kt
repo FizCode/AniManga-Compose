@@ -14,6 +14,8 @@ internal class FetchMangaRankingUseCase(
         limit: Int
     ): DomainNetworkState<MangaDomainModel> {
         val fields = fieldsPicker(
+            MangaFieldsConstant.ALTERNATIVE_TITLES,
+            MangaFieldsConstant.NSFW,
             MangaFieldsConstant.MEDIA_TYPE,
             MangaFieldsConstant.MEAN,
             MangaFieldsConstant.STATUS,

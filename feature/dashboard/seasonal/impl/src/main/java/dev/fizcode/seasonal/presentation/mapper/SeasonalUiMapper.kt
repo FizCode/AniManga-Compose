@@ -5,6 +5,7 @@ import dev.fizcode.seasonal.domain.model.SeasonalDomainModel
 import dev.fizcode.seasonal.presentation.model.SeasonalUiModel
 import kotlinx.collections.immutable.toImmutableList
 import java.util.Locale
+import dev.fizcode.common.settings.MediaTitles
 
 internal class SeasonalUiMapper {
 
@@ -17,6 +18,7 @@ internal class SeasonalUiMapper {
         rank = rank,
         mediaType = mediaType,
         title = title,
+        titles = MediaTitles(title, alternativeTitles),
         posterPath = posterPath,
         rating = String.format(Locale.US, "%.2f", mean),
         releaseInfo = releaseInfo(

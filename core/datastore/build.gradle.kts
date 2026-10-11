@@ -7,6 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.common)
 
     api(libs.androidx.datastore)
     implementation(platform(libs.koin.bom))

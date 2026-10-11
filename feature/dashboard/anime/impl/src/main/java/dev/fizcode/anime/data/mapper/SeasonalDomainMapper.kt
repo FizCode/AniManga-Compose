@@ -10,6 +10,7 @@ import dev.fizcode.anime.domain.model.Season
 import dev.fizcode.anime.domain.model.SeasonalAnimeDomainModel
 import dev.fizcode.anime.domain.model.Studio
 import dev.fizcode.datasource.remote.response.CurrentSeasonAnimeResponse
+import dev.fizcode.datasource.remote.response.toAlternativeTitles
 
 internal class SeasonalDomainMapper {
 
@@ -28,6 +29,7 @@ internal class SeasonalDomainMapper {
         return Node(
             id = id ?: 0,
             title = title.orEmpty(),
+            alternativeTitles = alternativeTitles.toAlternativeTitles(),
             mainPicture = mainPicture.toDomainMainPictureModel(),
             mean = mean ?: 0.0,
             broadcast = broadcast.toDomainBroadcastModel(),

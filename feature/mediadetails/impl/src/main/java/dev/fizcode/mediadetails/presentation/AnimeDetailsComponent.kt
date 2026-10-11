@@ -32,6 +32,7 @@ import dev.fizcode.mediadetails.presentation.info.DetailInfoComponent
 import dev.fizcode.mediadetails.presentation.model.AnimeDetailsUiModel
 import dev.fizcode.mediadetails.util.Constant
 import kotlinx.collections.immutable.ImmutableList
+import dev.fizcode.common.settings.MediaTitles
 
 @Composable
 internal fun AnimeDetailsComponent(
@@ -40,7 +41,7 @@ internal fun AnimeDetailsComponent(
     animeDetails: UiState<AnimeDetailsUiModel>,
     animeCast: UiState<ImmutableList<AnimeCastUiModel>>,
     animeStaff: UiState<ImmutableList<AnimeStaffUiModel>>,
-    headerTitle: (String) -> Unit,
+    headerTitle: (MediaTitles) -> Unit,
     selectedImage: (String) -> Unit,
     onRetryDetails: () -> Unit,
     onRetryCastAndStaff: () -> Unit,
@@ -54,7 +55,7 @@ internal fun AnimeDetailsComponent(
 ) {
     when (animeDetails) {
         is UiState.Success -> {
-            headerTitle(animeDetails.data.animeDetailsHeaderUiModel.title)
+            headerTitle(animeDetails.data.animeDetailsHeaderUiModel.titles)
             item {
                 DetailHeaderComponent(
                     modifier = modifier,

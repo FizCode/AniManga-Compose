@@ -13,6 +13,8 @@ import dev.fizcode.mediadetails.presentation.model.AnimeDetailsUiModel
 import dev.fizcode.mediadetails.presentation.model.BookmarkArgument
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Assert.assertEquals
+import dev.fizcode.common.settings.AlternativeTitles
+import dev.fizcode.common.settings.MediaTitles
 import org.junit.Test
 
 class BookmarkMappersTest {
@@ -64,6 +66,26 @@ class BookmarkMappersTest {
         assertEquals("Finished", entity.status)
         assertEquals("Pierrot", entity.studio)
         assertEquals("Action, Comedy", entity.genres)
+    }
+
+    @Test
+    fun `alternative titles are saved with the bookmark`() {
+        val titles = MediaTitles(
+            default = "Bleach",
+            alternative = AlternativeTitles(
+                synonyms = listOf("Burichi", "Blich"),
+                japanese = "ブリーチ",
+                english = "Bleach EN"
+            )
+        )
+
+        val entity = BookmarkDomainMapper().mapTopBookmarkEntity(
+            AnimeBookmarkUiMapper().mapToBookmarkDomainModel(argument.copy(titles = titles))
+        )
+
+        assertEquals("Burichi\nBlich", entity.titleSynonyms)
+        assertEquals("ブリーチ", entity.titleJapanese)
+        assertEquals("Bleach EN", entity.titleEnglish)
     }
 
     @Test

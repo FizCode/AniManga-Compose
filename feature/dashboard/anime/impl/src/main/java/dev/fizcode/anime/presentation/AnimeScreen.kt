@@ -37,7 +37,11 @@ import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 @Composable
 internal fun AnimeScreen(
     onCardClick: (mediaType: String, mediaId: Int) -> Unit,
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
+    onCurrentSeasonClick: () -> Unit,
+    onTopAiringClick: () -> Unit,
+    onTopRankingClick: () -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     val animeViewModel: AnimeViewModel = koinViewModel()
 
@@ -65,7 +69,11 @@ internal fun AnimeScreen(
         isRefreshing = isRefreshing,
         onRefreshClick = animeViewModel::refresh,
         onCardClick = onCardClick,
-        onSearchClick = onSearchClick
+        onSearchClick = onSearchClick,
+        onCurrentSeasonClick = onCurrentSeasonClick,
+        onTopAiringClick = onTopAiringClick,
+        onTopRankingClick = onTopRankingClick,
+        onSettingsClick = onSettingsClick
     )
 
 }
@@ -79,7 +87,11 @@ private fun AnimeScreenContent(
     isRefreshing: Boolean = false,
     onRefreshClick: () -> Unit = {},
     onCardClick: (mediaType: String, mediaId: Int) -> Unit,
-    onSearchClick: () -> Unit = {}
+    onSearchClick: () -> Unit = {},
+    onCurrentSeasonClick: () -> Unit = {},
+    onTopAiringClick: () -> Unit = {},
+    onTopRankingClick: () -> Unit = {},
+    onSettingsClick: () -> Unit = {}
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val listState = rememberLazyListState()
@@ -91,7 +103,7 @@ private fun AnimeScreenContent(
             AnimeScreenHeader(
                 scrollBehavior = scrollBehavior,
                 value = Constant.SEARCH,
-                onClickSettings = {},
+                onClickSettings = onSettingsClick,
                 onClickSearch = onSearchClick
             )
         }
@@ -110,7 +122,7 @@ private fun AnimeScreenContent(
                     CurrentSeason(
                         headerTitle = Constant.CURRENT_SEASON,
                         cardItem = currentSeason,
-                        onHeaderClick = {},
+                        onHeaderClick = onCurrentSeasonClick,
                         onCardClick = onCardClick
                     )
                 }
@@ -118,7 +130,7 @@ private fun AnimeScreenContent(
                     TopAiring(
                         headerTitle = Constant.TOP_AIRING,
                         cardItem = topAiring,
-                        onHeaderClick = {},
+                        onHeaderClick = onTopAiringClick,
                         onCardClick = onCardClick
                     )
                 }
@@ -126,7 +138,7 @@ private fun AnimeScreenContent(
                     TopRanking(
                         headerTitle = Constant.TOP_RANKING,
                         cardItem = topRanking,
-                        onHeaderClick = {},
+                        onHeaderClick = onTopRankingClick,
                         onCardClick = onCardClick
                     )
                 }

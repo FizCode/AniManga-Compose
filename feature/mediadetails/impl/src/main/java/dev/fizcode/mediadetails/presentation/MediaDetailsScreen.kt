@@ -44,6 +44,8 @@ import dev.fizcode.mediadetails.presentation.mapper.MangaBookmarkMapper.mapToBoo
 import dev.fizcode.mediadetails.util.Constant
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
+import dev.fizcode.common.settings.LocalTitleStyle
+import dev.fizcode.common.settings.MediaTitles
 
 @Composable
 internal fun MediaDetailsScreen(
@@ -61,14 +63,18 @@ internal fun MediaDetailsScreen(
     val mediaKind = remember(mediaType) { MediaKind.from(mediaType) }
     val isBookmarked by mediaDetailsViewModel.isBookmarked.collectAsStateWithLifecycle()
 
-    var headerTitle = ""
+    // The title bar and the share text show the title in the style the user picked.
+    val titleStyle = LocalTitleStyle.current
+    var headerTitles = MediaTitles("")
+    val headerTitle = { headerTitles.resolve(titleStyle) }
     var selectedImage by remember { mutableStateOf<String?>(null) }
 
     val context = LocalContext.current
     // Opens the share sheet with the shared text and a link that opens this media in the app.
     val onClickShare: (String) -> Unit = { content ->
+        val title = headerTitle()
         val text = buildShareText(
-            title = headerTitle,
+            title = title,
             content = content,
             mediaType = mediaType,
             mediaId = mediaId
@@ -76,7 +82,7 @@ internal fun MediaDetailsScreen(
         val sendIntent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, text)
-            if (headerTitle.isNotBlank()) putExtra(Intent.EXTRA_SUBJECT, headerTitle)
+            if (title.isNotBlank()) putExtra(Intent.EXTRA_SUBJECT, title)
         }
         context.startActivity(Intent.createChooser(sendIntent, Constant.SHARE_CHOOSER_TITLE))
     }
@@ -88,7 +94,7 @@ internal fun MediaDetailsScreen(
     }
 
     MediaDetailsLayout(
-        headerTitle = { headerTitle },
+        headerTitle = headerTitle,
         snackbarHostState = snackbarHostState,
         selectedImage = selectedImage,
         onDismissImage = { selectedImage = null },
@@ -106,7 +112,7 @@ internal fun MediaDetailsScreen(
                     animeDetails = animeDetails,
                     animeCast = animeCast,
                     animeStaff = animeStaff,
-                    headerTitle = { headerTitle = it },
+                    headerTitle = { headerTitles = it },
                     selectedImage = { selectedImage = it },
                     onRetryDetails = mediaDetailsViewModel::retryDetails,
                     onRetryCastAndStaff = mediaDetailsViewModel::retryCastAndStaff,
@@ -128,7 +134,7 @@ internal fun MediaDetailsScreen(
                     isBookmarked = isBookmarked,
                     mangaDetails = mangaDetails,
                     characters = mangaCharacters,
-                    headerTitle = { headerTitle = it },
+                    headerTitle = { headerTitles = it },
                     selectedImage = { selectedImage = it },
                     onRetryDetails = mediaDetailsViewModel::retryMangaDetails,
                     onRetryCharacters = mediaDetailsViewModel::retryMangaCharacters,

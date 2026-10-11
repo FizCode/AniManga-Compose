@@ -3,6 +3,7 @@ package dev.fizcode.bookmark.presentation.mapper
 import dev.fizcode.bookmark.data.model.BookmarkDomainModel
 import dev.fizcode.bookmark.presentation.model.BookmarkUiModel
 import dev.fizcode.common.util.extensions.toImmutableList
+import dev.fizcode.common.settings.MediaTitles
 
 internal class BookmarkUiMapper {
 
@@ -13,6 +14,7 @@ internal class BookmarkUiMapper {
             posterPath = it.posterPath,
             rating = it.rating,
             title = it.title,
+            titles = MediaTitles(it.title, it.alternativeTitles),
             subTitle = subTitle(
                 mediaType = it.mediaType,
                 episodes = it.episodes,

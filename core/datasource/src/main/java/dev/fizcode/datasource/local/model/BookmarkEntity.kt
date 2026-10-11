@@ -15,5 +15,9 @@ data class BookmarkEntity(
     @ColumnInfo(name = "episodes") val episodes: String,
     @ColumnInfo(name = "status") val status: String,
     @ColumnInfo(name = "studio") val studio: String,
-    @ColumnInfo(name = "genres") val genres: String
+    @ColumnInfo(name = "genres") val genres: String,
+    /** The other titles of the media, see [encodeSynonyms]. Empty for bookmarks saved before they existed. */
+    @ColumnInfo(name = "title_synonyms", defaultValue = "''") val titleSynonyms: String = "",
+    @ColumnInfo(name = "title_japanese", defaultValue = "''") val titleJapanese: String = "",
+    @ColumnInfo(name = "title_english", defaultValue = "''") val titleEnglish: String = ""
 )

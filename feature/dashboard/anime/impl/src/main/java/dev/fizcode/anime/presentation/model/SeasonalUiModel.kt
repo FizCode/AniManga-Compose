@@ -2,6 +2,7 @@ package dev.fizcode.anime.presentation.model
 
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
+import dev.fizcode.common.settings.MediaTitles
 
 @Immutable
 internal data class SeasonalUiModel(
@@ -13,5 +14,6 @@ internal data class SeasonalUiModel(
     val studio: String,
     val synopsis: String,
     val rating: String,
-    val genre: ImmutableList<String>
+    val genre: ImmutableList<String>,
+    val titles: MediaTitles = MediaTitles(title)
 )

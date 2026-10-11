@@ -1,5 +1,7 @@
 package dev.fizcode.search.domain.model
 
+import dev.fizcode.common.settings.AlternativeTitles
+
 internal data class SearchAnimeDomainModel(
     val data: List<Node> = emptyList()
 ) {
@@ -11,6 +13,7 @@ internal data class SearchAnimeDomainModel(
         val mean: Double = 0.0,
         val status: String = "",
         val numEpisodes: Int = 0,
-        val genres: List<String> = emptyList()
+        val genres: List<String> = emptyList(),
+        val alternativeTitles: AlternativeTitles = AlternativeTitles()
     )
 }

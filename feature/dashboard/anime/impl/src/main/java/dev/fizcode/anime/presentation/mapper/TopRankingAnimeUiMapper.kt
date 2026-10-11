@@ -6,6 +6,7 @@ import dev.fizcode.anime.util.Constant
 import dev.fizcode.common.util.extensions.airingStatus
 import dev.fizcode.common.util.extensions.animeMediaType
 import kotlinx.collections.immutable.toImmutableList
+import dev.fizcode.common.settings.MediaTitles
 
 internal class TopRankingAnimeUiMapper {
 
@@ -19,6 +20,7 @@ internal class TopRankingAnimeUiMapper {
             posterPath = mainPicture.large,
             rating = mean.toString(),
             title = title,
+            titles = MediaTitles(title, alternativeTitles),
             subTitle = subTitle(mediaType, numEpisodes, status),
             studio = studios.joinToString(", ") { it.name },
             genre = genres.map { it.name }.toImmutableList()

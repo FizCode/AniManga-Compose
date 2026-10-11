@@ -3,6 +3,7 @@ package dev.fizcode.search.presentation.model
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import dev.fizcode.common.settings.MediaTitles
 
 @Immutable
 internal data class SearchResultUiModel(
@@ -12,7 +13,8 @@ internal data class SearchResultUiModel(
     val rating: String,
     val title: String,
     val subTitle: String,
-    val genre: ImmutableList<String>
+    val genre: ImmutableList<String>,
+    val titles: MediaTitles = MediaTitles(title)
 )
 
 internal val dummySearchResultUiModel = SearchResultUiModel(

@@ -7,6 +7,7 @@ import dev.fizcode.search.presentation.model.SearchResultUiModel
 import dev.fizcode.search.util.Constant
 import kotlinx.collections.immutable.toImmutableList
 import java.util.Locale
+import dev.fizcode.common.settings.MediaTitles
 
 internal class SearchUiMapper {
 
@@ -20,6 +21,7 @@ internal class SearchUiMapper {
             posterPath = posterPath,
             rating = String.format(Locale.US, "%.2f", mean),
             title = title,
+            titles = MediaTitles(title, alternativeTitles),
             subTitle = subTitle(mediaType, numEpisodes, status),
             genre = genres.toImmutableList()
         )

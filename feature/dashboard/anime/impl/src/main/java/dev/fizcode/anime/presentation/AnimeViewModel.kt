@@ -17,15 +17,23 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import dev.fizcode.common.settings.NsfwFilterProvider
+import dev.fizcode.common.settings.changes
+import kotlinx.coroutines.flow.merge
 
 internal class AnimeViewModel(
     private val animeUseCaseGroup: AnimeUseCaseGroup,
     private val seasonalUiMapper: SeasonalAnimeUiMapper,
     private val topAiringUiMapper: TopAiringAnimeUiMapper,
-    private val topRankingUiMapper: TopRankingAnimeUiMapper
+    private val topRankingUiMapper: TopRankingAnimeUiMapper,
+    nsfwFilterProvider: NsfwFilterProvider
 ) : ViewModel() {
 
     private val _refreshTrigger = MutableSharedFlow<Unit>(replay = 0)
+
+    /** Pull to refresh, and a new NSFW level which changes what the lists contain. */
+    private val reloadTrigger = merge(_refreshTrigger, nsfwFilterProvider.changes())
+
     private var _refreshing = MutableStateFlow(false)
     val refreshing: MutableStateFlow<Boolean> = _refreshing
     fun refresh() = viewModelScope.launch {
@@ -41,7 +49,7 @@ internal class AnimeViewModel(
         scope = viewModelScope,
         domain = { animeUseCaseGroup.fetchSeasonAnimeUseCase(Constant.LIMIT_5) },
         mapper = { data -> seasonalUiMapper.mapToSeasonalAnimeUiModel(data) },
-        retrigger = _refreshTrigger,
+        retrigger = reloadTrigger,
         started = SharingStarted.Lazily
     )
 
@@ -49,7 +57,7 @@ internal class AnimeViewModel(
         scope = viewModelScope,
         domain = { animeUseCaseGroup.fetchTopAiringAnimeUseCase(Constant.LIMIT_5) },
         mapper = { data -> topAiringUiMapper.mapToAiringAnimeUiModel(data) },
-        retrigger = _refreshTrigger,
+        retrigger = reloadTrigger,
         started = SharingStarted.Lazily
     )
 
@@ -57,7 +65,7 @@ internal class AnimeViewModel(
         scope = viewModelScope,
         domain = { animeUseCaseGroup.fetchTopRankingAnimeUseCase(Constant.LIMIT_10) },
         mapper = { data -> topRankingUiMapper.mapToTopRankingAnimeUiModel(data) },
-        retrigger = _refreshTrigger,
+        retrigger = reloadTrigger,
         started = SharingStarted.Lazily
     )
 

@@ -22,10 +22,15 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
+import dev.fizcode.common.settings.NsfwFilterProvider
+import dev.fizcode.common.settings.changes
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onStart
 
 internal class SearchViewModel(
     private val searchAnimeUseCase: SearchAnimeUseCase,
-    private val searchUiMapper: SearchUiMapper
+    private val searchUiMapper: SearchUiMapper,
+    nsfwFilterProvider: NsfwFilterProvider
 ) : ViewModel() {
 
     val queryState = TextFieldState()
@@ -36,8 +41,11 @@ internal class SearchViewModel(
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     val searchResult: StateFlow<UiState<List<SearchResultUiModel>>> =
-        snapshotFlow { queryState.text.toString().trim() }
-        .distinctUntilChanged()
+        // A new NSFW level searches the same query again.
+        combine(
+            snapshotFlow { queryState.text.toString().trim() }.distinctUntilChanged(),
+            nsfwFilterProvider.changes().onStart { emit(Unit) }
+        ) { query, _ -> query }
         .flatMapLatest { query ->
             if (query.length < Constant.MIN_QUERY_LENGTH) {
                 flowOf(UiState.Empty)

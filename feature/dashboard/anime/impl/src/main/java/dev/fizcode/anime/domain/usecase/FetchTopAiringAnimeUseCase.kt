@@ -13,6 +13,8 @@ internal class FetchTopAiringAnimeUseCase(
 
     suspend operator fun invoke(limit: Int): DomainNetworkState<TopAiringDomainModel> {
         val fields = fieldsPicker(
+            AnimeFieldsConstant.ALTERNATIVE_TITLES,
+            AnimeFieldsConstant.NSFW,
             AnimeFieldsConstant.MEDIA_TYPE,
             AnimeFieldsConstant.MEAN
         )

@@ -17,6 +17,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
+import dev.fizcode.common.settings.NsfwFilter
+import dev.fizcode.common.settings.NsfwFilterProvider
+import kotlinx.coroutines.flow.flowOf
 
 class SearchViewModelTest {
 
@@ -40,9 +43,14 @@ class SearchViewModelTest {
 
     private val node = SearchAnimeDomainModel.Node(id = 1, title = "Bleach", mediaType = "tv")
 
+    private val nsfwFilterProvider = object : NsfwFilterProvider {
+        override val nsfwFilter = flowOf(NsfwFilter.SAFE)
+    }
+
     private fun viewModel(repository: SearchRepository) = SearchViewModel(
         searchAnimeUseCase = SearchAnimeUseCase(repository),
-        searchUiMapper = SearchUiMapper()
+        searchUiMapper = SearchUiMapper(),
+        nsfwFilterProvider = nsfwFilterProvider
     )
 
     private fun SearchViewModel.type(text: String) {

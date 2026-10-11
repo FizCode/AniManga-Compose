@@ -17,45 +17,53 @@ class DashboardAnimeService(private val malClient: HttpClient) {
         season: String,
         sortBy: String,
         limit: Int,
-        fields: String
+        fields: String,
+        nsfw: Boolean = false
     ): CurrentSeasonAnimeResponse =
         malClient.get("anime/season/${year}/${season}") {
             parameter(CommonConstant.SORT, sortBy)
             parameter(CommonConstant.LIMIT, limit)
             parameter(CommonConstant.FIELDS, fields)
+            if (nsfw) parameter(CommonConstant.NSFW, true)
         }.body()
 
     suspend fun fetchTopAiringAnime(
         rankingType: String,
         limit: Int,
-        fields: String
+        fields: String,
+        nsfw: Boolean = false
     ): TopAiringAnimeResponse =
         malClient.get("anime/ranking") {
             parameter(CommonConstant.RANKING_TYPE, rankingType)
             parameter(CommonConstant.LIMIT, limit)
             parameter(CommonConstant.FIELDS, fields)
+            if (nsfw) parameter(CommonConstant.NSFW, true)
         }.body()
 
     suspend fun fetchTopRankingAnime(
         rankingType: String,
         limit: Int,
-        fields: String
+        fields: String,
+        nsfw: Boolean = false
     ): TopRankingResponse =
         malClient.get("anime/ranking") {
             parameter(CommonConstant.RANKING_TYPE, rankingType)
             parameter(CommonConstant.LIMIT, limit)
             parameter(CommonConstant.FIELDS, fields)
+            if (nsfw) parameter(CommonConstant.NSFW, true)
         }.body()
 
     suspend fun searchAnime(
         query: String,
         limit: Int,
-        fields: String
+        fields: String,
+        nsfw: Boolean = false
     ): SearchAnimeResponse =
         malClient.get("anime") {
             parameter(CommonConstant.QUERY, query)
             parameter(CommonConstant.LIMIT, limit)
             parameter(CommonConstant.FIELDS, fields)
+            if (nsfw) parameter(CommonConstant.NSFW, true)
         }.body()
 
 }

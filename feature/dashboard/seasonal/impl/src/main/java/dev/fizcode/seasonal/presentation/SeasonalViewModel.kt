@@ -29,11 +29,15 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import dev.fizcode.common.settings.NsfwFilterProvider
+import dev.fizcode.common.settings.changes
+import kotlinx.coroutines.flow.merge
 
 internal class SeasonalViewModel(
     private val fetchSeasonalAnimeUseCase: FetchSeasonalAnimeUseCase,
     private val seasonalUiMapper: SeasonalUiMapper,
-    seasonHelper: SeasonHelper
+    seasonHelper: SeasonHelper,
+    nsfwFilterProvider: NsfwFilterProvider
 ) : ViewModel() {
 
     /** Local title filter applied on top of the loaded season. */
@@ -70,7 +74,7 @@ internal class SeasonalViewModel(
         combine(
             _selectedSeason,
             _selectedYear,
-            retryTrigger.onStart { emit(Unit) }
+            merge(retryTrigger, nsfwFilterProvider.changes()).onStart { emit(Unit) }
         ) { season, year, _ -> season to year }
             .flatMapLatest { (season, year) ->
                 flow {
@@ -101,7 +105,7 @@ internal class SeasonalViewModel(
             snapshotFlow { queryState.text.toString().trim() }.distinctUntilChanged()
         ) { state, query ->
             if (state is UiState.Success && query.isNotEmpty()) {
-                state.data.filter { it.title.contains(query, ignoreCase = true) }
+                state.data.filter { it.titles.matches(query) }
                     .let { if (it.isEmpty()) UiState.Empty else UiState.Success(it) }
             } else {
                 state

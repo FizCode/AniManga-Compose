@@ -2,6 +2,7 @@ package dev.fizcode.manga.data.mapper
 
 import dev.fizcode.datasource.remote.response.MangaRankingResponse
 import dev.fizcode.manga.domain.model.MangaDomainModel
+import dev.fizcode.datasource.remote.response.toAlternativeTitles
 
 internal class MangaDomainMapper {
 
@@ -12,6 +13,7 @@ internal class MangaDomainMapper {
     private fun MangaRankingResponse.Node.toDomainItem() = MangaDomainModel.Item(
         id = id ?: 0,
         title = title.orEmpty(),
+        alternativeTitles = alternativeTitles.toAlternativeTitles(),
         posterPath = mainPicture?.large.orEmpty(),
         mean = mean ?: 0.0,
         mediaType = mediaType.orEmpty(),

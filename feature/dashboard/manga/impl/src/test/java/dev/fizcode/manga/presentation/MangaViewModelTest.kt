@@ -18,6 +18,9 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import dev.fizcode.common.settings.NsfwFilter
+import dev.fizcode.common.settings.NsfwFilterProvider
+import kotlinx.coroutines.flow.flowOf
 
 class MangaViewModelTest {
 
@@ -42,9 +45,14 @@ class MangaViewModelTest {
         }
     }
 
+    private val nsfwFilterProvider = object : NsfwFilterProvider {
+        override val nsfwFilter = flowOf(NsfwFilter.SAFE)
+    }
+
     private fun viewModel(repository: MangaRepository) = MangaViewModel(
         fetchMangaRankingUseCase = FetchMangaRankingUseCase(repository),
-        mangaUiMapper = MangaUiMapper()
+        mangaUiMapper = MangaUiMapper(),
+        nsfwFilterProvider = nsfwFilterProvider
     )
 
     private fun UiState<List<dev.fizcode.manga.presentation.model.MangaUiModel>>.ids() =

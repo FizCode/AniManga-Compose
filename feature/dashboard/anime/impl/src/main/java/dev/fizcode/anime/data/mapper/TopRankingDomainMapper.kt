@@ -2,6 +2,7 @@ package dev.fizcode.anime.data.mapper
 
 import dev.fizcode.anime.domain.model.TopRankingDomainModel
 import dev.fizcode.datasource.remote.response.TopRankingResponse
+import dev.fizcode.datasource.remote.response.toAlternativeTitles
 
 internal class TopRankingDomainMapper {
 
@@ -19,6 +20,7 @@ internal class TopRankingDomainMapper {
         return TopRankingDomainModel.Node(
             id = id.hashCode(),
             title = title.orEmpty(),
+            alternativeTitles = alternativeTitles.toAlternativeTitles(),
             mainPicture = mainPicture.topDomainMainPictureModel(),
             mean = mean ?: 0.0,
             broadcast = broadcast.toDomainBroadcastModel(),

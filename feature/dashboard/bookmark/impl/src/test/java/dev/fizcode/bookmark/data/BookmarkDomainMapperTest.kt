@@ -2,6 +2,7 @@ package dev.fizcode.bookmark.data
 
 import dev.fizcode.bookmark.data.mapper.BookmarkDomainMapper
 import dev.fizcode.datasource.local.model.BookmarkEntity
+import dev.fizcode.datasource.local.model.encodeSynonyms
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -35,5 +36,32 @@ class BookmarkDomainMapperTest {
             assertEquals("Bones", studio)
             assertEquals("Action, Comedy", genres)
         }
+    }
+
+    @Test
+    fun `alternative titles are read from their columns`() {
+        val entity = BookmarkEntity(
+            1, "tv", "p1", "8.0", "A", "12 Episodes", "Finished", "Bones", "Action",
+            titleSynonyms = encodeSynonyms(listOf("A1", "A2")),
+            titleJapanese = "エー",
+            titleEnglish = "Ay"
+        )
+
+        val alternative = mapper.mapToBookmarkDomainModel(listOf(entity)).single().alternativeTitles
+
+        assertEquals(listOf("A1", "A2"), alternative.synonyms)
+        assertEquals("エー", alternative.japanese)
+        assertEquals("Ay", alternative.english)
+    }
+
+    @Test
+    fun `bookmarks saved before alternative titles keep only the default title`() {
+        val old = BookmarkEntity(1, "tv", "p1", "8.0", "A", "12 Episodes", "Finished", "Bones", "Action")
+
+        val alternative = mapper.mapToBookmarkDomainModel(listOf(old)).single().alternativeTitles
+
+        assertTrue(alternative.synonyms.isEmpty())
+        assertEquals("", alternative.japanese)
+        assertEquals("", alternative.english)
     }
 }

@@ -27,6 +27,7 @@ import dev.fizcode.mediadetails.presentation.model.AnimeDetailsUiModel
 import dev.fizcode.mediadetails.util.Constant
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import dev.fizcode.common.settings.MediaTitles
 
 internal class AnimeDetailsUiMapper {
 
@@ -41,6 +42,7 @@ internal class AnimeDetailsUiMapper {
         largePicture = malDomainModel.pictures.map { it.large }.toImmutableList(),
         posterPath = malDomainModel.mainPicture.medium,
         title = malDomainModel.title,
+        titles = MediaTitles(malDomainModel.title, malDomainModel.alternativeTitles.toCommon()),
         mediaType = animeMediaType(malDomainModel.mediaType),
         releaseSeason = malDomainModel.startSeason.season.toCapitalFirstChar() +
                 " ${malDomainModel.startSeason.year}",

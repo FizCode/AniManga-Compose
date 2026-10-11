@@ -17,6 +17,7 @@ import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.MovieCardLarge
 import dev.fizcode.designsystem.component.shimmer.MovieCardLargeShimmer
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.common.settings.LocalTitleStyle
 
 @Composable
 internal fun CurrentSeason(
@@ -54,7 +55,7 @@ internal fun CurrentSeason(
                     MovieCardLarge(
                         posterPath = item.posterPath,
                         rating = item.rating,
-                        title = item.title,
+                        title = item.titles.resolve(LocalTitleStyle.current),
                         subTitle = item.releaseInfo,
                         studio = item.studio,
                         synopsis = item.synopsis,

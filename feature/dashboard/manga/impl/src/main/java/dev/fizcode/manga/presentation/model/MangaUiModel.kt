@@ -3,6 +3,7 @@ package dev.fizcode.manga.presentation.model
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import dev.fizcode.common.settings.MediaTitles
 
 @Immutable
 internal data class MangaUiModel(
@@ -14,7 +15,8 @@ internal data class MangaUiModel(
     val rating: String,
     val subTitle: String,
     val synopsis: String,
-    val genre: ImmutableList<String>
+    val genre: ImmutableList<String>,
+    val titles: MediaTitles = MediaTitles(title)
 )
 
 internal val dummyMangaUiModel = MangaUiModel(

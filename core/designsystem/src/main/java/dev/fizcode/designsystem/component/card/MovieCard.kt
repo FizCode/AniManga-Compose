@@ -343,6 +343,7 @@ fun MovieCardMedium(
  * @param synopsis short description, truncated after two lines.
  * @param genre genre names rendered through [GenreChip].
  * @param onCardClick invoked when the card is clicked.
+ * @param query search text; every case-insensitive match inside [title] is highlighted. Blank disables it.
  */
 @Composable
 fun MovieCardLarge(
@@ -354,8 +355,13 @@ fun MovieCardLarge(
     studio: String,
     synopsis: String,
     genre: List<String>,
-    onCardClick: () -> Unit
+    onCardClick: () -> Unit,
+    query: String = ""
 ) {
+    val highlightColor = MaterialTheme.colorScheme.primary
+    val highlightedTitle = remember(title, query, highlightColor) {
+        highlightQuery(text = title, query = query, color = highlightColor)
+    }
     MediaCardContainer(
         modifier = modifier.width(328.dp),
         shape = RoundedCornerShape(10.dp),
@@ -374,7 +380,7 @@ fun MovieCardLarge(
             )
             Column {
                 CardText(
-                    text = title,
+                    text = highlightedTitle,
                     style = MaterialTheme.typography.titleMedium,
                     maxLines = 2
                 )
@@ -436,6 +442,22 @@ private fun MovieCardMediumPreview() {
         rating = "5.00",
         subTitle = "TV | Episodes 12 | Finished",
         genre = listOf("Action", "Adventure", "Comedy"),
+        onCardClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MovieCardLargeHighlightedPreview() {
+    MovieCardLarge(
+        posterPath = "",
+        title = "1. BLEACH: Sennen Kessen-hen",
+        query = "BLE",
+        subTitle = "Wednesday, 23:00 (JST)",
+        studio = "Toei Animation",
+        rating = "5.00",
+        genre = listOf("Action", "Adventure", "Comedy"),
+        synopsis = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
         onCardClick = {}
     )
 }

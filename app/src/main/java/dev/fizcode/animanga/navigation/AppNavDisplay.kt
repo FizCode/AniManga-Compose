@@ -10,6 +10,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import org.koin.compose.koinInject
+import dev.fizcode.onboarding.api.OnBoardingStatus
+import dev.fizcode.onboarding.api.OnBoardingRoute
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -27,8 +34,10 @@ import dev.fizcode.navigation.Navigator
 import dev.fizcode.navigation.rememberNavigationState
 import dev.fizcode.navigation.toEntries
 import dev.fizcode.onboarding.navigation.onBoardingEntry
+import dev.fizcode.ranking.navigation.rankingEntry
 import dev.fizcode.search.navigation.searchEntry
 import dev.fizcode.seasonal.navigation.seasonalEntry
+import dev.fizcode.settings.navigation.settingsEntry
 
 /**
  * Hosts every destination of the app and the dashboard bottom bar.
@@ -47,28 +56,43 @@ fun AppNavDisplay(
     )
     val navigator = remember(navigationState) { Navigator(navigationState) }
 
-    LaunchedEffect(deepLinkRoute) {
-        if (deepLinkRoute != null) {
+    // The onboarding is only shown on the first launch, so nothing is displayed until it is known.
+    val onBoardingStatus: OnBoardingStatus = koinInject()
+    var isOnBoardingChecked by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        val startStack = navigationState.backStacks.getValue(navigationState.startRoute)
+        // A restored back stack can already contain it, e.g. after the process was killed.
+        if (OnBoardingRoute !in startStack && !onBoardingStatus.isCompleted()) {
+            navigator.navigate(OnBoardingRoute)
+        }
+        isOnBoardingChecked = true
+    }
+
+    // Waits for the onboarding check so a link opens on top of the onboarding, not below it.
+    LaunchedEffect(deepLinkRoute, isOnBoardingChecked) {
+        if (isOnBoardingChecked && deepLinkRoute != null) {
             navigator.navigate(deepLinkRoute)
             onDeepLinkHandled()
         }
     }
 
     val entryProvider = remember(navigator) {
-        entryProvider<NavKey> {
+        entryProvider {
             animeEntry(navigator)
             mangaEntry(navigator)
             seasonalEntry(navigator)
             bookmarkEntry(navigator)
+            rankingEntry(navigator)
             searchEntry(navigator)
+            settingsEntry(navigator)
             mediaDetailsEntry(navigator)
-            onBoardingEntry(onClickSkip = navigator::goBack)
+            onBoardingEntry(onFinished = navigator::goBack)
         }
     }
 
     Scaffold(
         bottomBar = {
-            if (navigationState.currentRoute in dashboardTopLevelRoutes) {
+            if (isOnBoardingChecked && navigationState.currentRoute in dashboardTopLevelRoutes) {
                 NavigationBarComponent(
                     selectedRoute = navigationState.topLevelRoute,
                     onItemClick = navigator::navigate
@@ -77,14 +101,16 @@ fun AppNavDisplay(
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { innerPadding ->
-        NavDisplay(
-            modifier = Modifier.padding(innerPadding),
-            entries = navigationState.toEntries(entryProvider),
-            onBack = navigator::goBack,
-            transitionSpec = { forwardTransition },
-            popTransitionSpec = { backwardTransition },
-            predictivePopTransitionSpec = { backwardTransition }
-        )
+        if (isOnBoardingChecked) {
+            NavDisplay(
+                modifier = Modifier.padding(innerPadding),
+                entries = navigationState.toEntries(entryProvider),
+                onBack = navigator::goBack,
+                transitionSpec = { forwardTransition },
+                popTransitionSpec = { backwardTransition },
+                predictivePopTransitionSpec = { backwardTransition }
+            )
+        }
     }
 }
 

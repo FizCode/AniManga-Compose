@@ -8,6 +8,7 @@ object MangaFieldsConstant {
     const val GENRES = "genres"
     const val MEAN = "mean"
     const val MEDIA_TYPE = "media_type"
+    const val NSFW = "nsfw"
     const val NUM_CHAPTERS = "num_chapters"
     const val NUM_LIST_USERS = "num_list_users"
     const val NUM_SCORING_USERS = "num_scoring_users"

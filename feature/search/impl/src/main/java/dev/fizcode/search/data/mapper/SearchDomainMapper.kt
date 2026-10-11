@@ -2,6 +2,7 @@ package dev.fizcode.search.data.mapper
 
 import dev.fizcode.datasource.remote.response.SearchAnimeResponse
 import dev.fizcode.search.domain.model.SearchAnimeDomainModel
+import dev.fizcode.datasource.remote.response.toAlternativeTitles
 
 internal class SearchDomainMapper {
 
@@ -15,6 +16,7 @@ internal class SearchDomainMapper {
             id = id ?: 0,
             mediaType = mediaType.orEmpty(),
             title = title.orEmpty(),
+            alternativeTitles = alternativeTitles.toAlternativeTitles(),
             posterPath = mainPicture?.large.orEmpty(),
             mean = mean ?: 0.0,
             status = status.orEmpty(),

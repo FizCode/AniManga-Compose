@@ -8,7 +8,7 @@ import dev.fizcode.datasource.local.dao.BookmarkDAO
 import dev.fizcode.datasource.local.model.BookmarkEntity
 import dev.fizcode.datasource.utils.Constant
 
-@Database(entities = [BookmarkEntity::class], version = 2, exportSchema = false)
+@Database(entities = [BookmarkEntity::class], version = 3, exportSchema = false)
 abstract class AniMangaDatabase : RoomDatabase() {
 
     abstract fun bookmarkDao(): BookmarkDAO
@@ -28,6 +28,7 @@ abstract class AniMangaDatabase : RoomDatabase() {
             klass = AniMangaDatabase::class.java,
             name = Constant.ANIMANGA_DB_NAME
         )
+            .addMigrations(MIGRATION_2_3)
             // TODO: Remove fallbackToDestructiveMigration when this goes to production
             .fallbackToDestructiveMigration(false)
             .build()

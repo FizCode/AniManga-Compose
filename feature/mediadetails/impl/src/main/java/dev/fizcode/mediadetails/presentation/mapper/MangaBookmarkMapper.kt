@@ -15,6 +15,7 @@ internal object MangaBookmarkMapper {
         episodes = mangaDetailsHeaderUiModel.publishInfo.substringBefore(" | "),
         status = mangaDetailsInfoUiModel.mangaInfo.status,
         studio = mangaDetailsHeaderUiModel.serialization,
-        genres = mangaDetailsHeaderUiModel.genre
+        genres = mangaDetailsHeaderUiModel.genre,
+        titles = mangaDetailsHeaderUiModel.titles
     )
 }

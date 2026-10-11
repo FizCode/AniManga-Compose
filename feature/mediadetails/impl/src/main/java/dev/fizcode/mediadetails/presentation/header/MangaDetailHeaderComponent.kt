@@ -18,6 +18,7 @@ import dev.fizcode.mediadetails.presentation.header.model.MangaDetailsHeaderUiMo
 import kotlinx.collections.immutable.persistentListOf
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
+import dev.fizcode.common.settings.LocalTitleStyle
 
 @Composable
 fun MangaDetailHeaderComponent(
@@ -38,7 +39,7 @@ fun MangaDetailHeaderComponent(
         Spacer(modifier = Modifier.height(8.dp))
         DetailMediaTitle(
             posterPath = header.posterPath,
-            title = header.title,
+            title = header.titles.resolve(LocalTitleStyle.current),
             subtitle = header.serialization,
             caption = header.mediaType
         )

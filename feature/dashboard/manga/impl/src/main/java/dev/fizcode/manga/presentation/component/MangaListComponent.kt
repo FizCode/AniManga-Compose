@@ -20,6 +20,7 @@ import dev.fizcode.manga.presentation.model.MangaUiModel
 import dev.fizcode.manga.presentation.model.dummyMangaUiModel
 import dev.fizcode.manga.util.Constant
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.common.settings.LocalTitleStyle
 
 @Composable
 internal fun MangaListComponent(
@@ -46,7 +47,7 @@ internal fun MangaListComponent(
                 modifier = Modifier.fillMaxWidth(),
                 posterPath = item.posterPath,
                 rating = item.rating,
-                title = item.title,
+                title = item.titles.resolve(LocalTitleStyle.current),
                 subTitle = item.subTitle,
                 studio = item.mediaTypeLabel,
                 synopsis = item.synopsis,

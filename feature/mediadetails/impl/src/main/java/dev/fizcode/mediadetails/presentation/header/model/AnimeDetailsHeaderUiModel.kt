@@ -2,6 +2,7 @@ package dev.fizcode.mediadetails.presentation.header.model
 
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
+import dev.fizcode.common.settings.MediaTitles
 
 @Immutable
 data class AnimeDetailsHeaderUiModel(
@@ -21,5 +22,6 @@ data class AnimeDetailsHeaderUiModel(
     val score: String,
     val stars: Double,
     val totalVote: String,
-    val genre: ImmutableList<String>
+    val genre: ImmutableList<String>,
+    val titles: MediaTitles = MediaTitles(title)
 )

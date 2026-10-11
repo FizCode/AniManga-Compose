@@ -20,6 +20,7 @@ import dev.fizcode.mediadetails.presentation.model.MangaDetailsUiModel
 import dev.fizcode.mediadetails.util.Constant
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import dev.fizcode.common.settings.MediaTitles
 
 internal class MangaDetailsUiMapper {
 
@@ -36,6 +37,7 @@ internal class MangaDetailsUiMapper {
             largePicture = mal.pictures.map { it.large }.toImmutableList(),
             posterPath = mal.mainPicture.medium,
             title = mal.title,
+            titles = MediaTitles(mal.title, mal.alternativeTitles.toCommon()),
             mediaType = mangaMediaTypeLabel(mal.mediaType),
             serialization = mal.serialization.toStringWithComma { it.name },
             publishInfo = "${volumeAndChapter(mal)} | ${mangaStatusLabel(mal.status)}",
