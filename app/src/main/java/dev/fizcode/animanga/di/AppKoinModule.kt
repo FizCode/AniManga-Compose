@@ -9,6 +9,7 @@ import dev.fizcode.manga.di.mangaKoinModule
 import dev.fizcode.mediadetails.di.mediaDetailsKoinModule
 import dev.fizcode.network.di.networkModule
 import dev.fizcode.onboarding.di.onBoardingKoinModule
+import dev.fizcode.ranking.di.rankingKoinModule
 import dev.fizcode.search.di.searchKoinModule
 import dev.fizcode.seasonal.di.seasonalKoinModule
 import org.koin.dsl.module
@@ -28,6 +29,7 @@ internal fun featureModule() = module {
         seasonalKoinModule(),
         mangaKoinModule(),
         onBoardingKoinModule(),
+        rankingKoinModule(),
         searchKoinModule()
     )
 }

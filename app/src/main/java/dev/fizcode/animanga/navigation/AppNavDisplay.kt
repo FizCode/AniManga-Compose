@@ -34,6 +34,7 @@ import dev.fizcode.navigation.Navigator
 import dev.fizcode.navigation.rememberNavigationState
 import dev.fizcode.navigation.toEntries
 import dev.fizcode.onboarding.navigation.onBoardingEntry
+import dev.fizcode.ranking.navigation.rankingEntry
 import dev.fizcode.search.navigation.searchEntry
 import dev.fizcode.seasonal.navigation.seasonalEntry
 
@@ -80,6 +81,7 @@ fun AppNavDisplay(
             mangaEntry(navigator)
             seasonalEntry(navigator)
             bookmarkEntry(navigator)
+            rankingEntry(navigator)
             searchEntry(navigator)
             mediaDetailsEntry(navigator)
             onBoardingEntry(onFinished = navigator::goBack)
