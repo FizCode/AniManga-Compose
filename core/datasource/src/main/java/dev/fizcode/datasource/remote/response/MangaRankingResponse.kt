@@ -24,6 +24,10 @@ data class MangaRankingResponse(
         val id: Int? = null,
         @SerialName("title")
         val title: String? = null,
+        @SerialName("alternative_titles")
+        val alternativeTitles: AlternativeTitlesResponse? = null,
+        @SerialName("nsfw")
+        val nsfw: String? = null,
         @SerialName("main_picture")
         val mainPicture: MainPicture? = null,
         @SerialName("mean")

@@ -1,5 +1,7 @@
 package dev.fizcode.ranking.domain.model
 
+import dev.fizcode.common.settings.AlternativeTitles
+
 internal data class RankingDomainModel(
     val items: List<Item> = emptyList()
 ) {
@@ -16,6 +18,7 @@ internal data class RankingDomainModel(
         val numEpisodes: Int = 0,
         val studios: List<String> = emptyList(),
         val synopsis: String = "",
-        val genres: List<String> = emptyList()
+        val genres: List<String> = emptyList(),
+        val alternativeTitles: AlternativeTitles = AlternativeTitles()
     )
 }

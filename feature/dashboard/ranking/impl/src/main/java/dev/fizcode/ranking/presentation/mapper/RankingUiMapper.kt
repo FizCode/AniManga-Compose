@@ -5,6 +5,7 @@ import dev.fizcode.ranking.domain.model.RankingDomainModel
 import dev.fizcode.ranking.presentation.model.RankingUiModel
 import kotlinx.collections.immutable.toImmutableList
 import java.util.Locale
+import dev.fizcode.common.settings.MediaTitles
 
 internal class RankingUiMapper {
 
@@ -16,6 +17,7 @@ internal class RankingUiMapper {
         rank = rank,
         mediaType = mediaType,
         title = title,
+        titles = MediaTitles(title, alternativeTitles),
         posterPath = posterPath,
         rating = String.format(Locale.US, "%.2f", mean),
         releaseInfo = releaseInfo(

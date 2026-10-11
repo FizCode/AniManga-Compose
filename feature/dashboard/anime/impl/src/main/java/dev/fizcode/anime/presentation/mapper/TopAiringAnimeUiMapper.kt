@@ -2,6 +2,7 @@ package dev.fizcode.anime.presentation.mapper
 
 import dev.fizcode.anime.domain.model.TopAiringDomainModel
 import dev.fizcode.anime.presentation.model.TopAiringUiModel
+import dev.fizcode.common.settings.MediaTitles
 
 internal class TopAiringAnimeUiMapper {
 
@@ -12,6 +13,7 @@ internal class TopAiringAnimeUiMapper {
         id = id,
         mediaType = mediaType,
         title = title,
+        titles = MediaTitles(title, alternativeTitles),
         posterPath = mainPicture.large,
         rating = mean.toString()
     )

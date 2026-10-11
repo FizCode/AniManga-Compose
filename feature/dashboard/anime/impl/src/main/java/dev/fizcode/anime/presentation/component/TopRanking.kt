@@ -15,6 +15,7 @@ import dev.fizcode.designsystem.component.card.MovieCardSmall
 import dev.fizcode.designsystem.component.shimmer.MovieCardSmallShimmer
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import dev.fizcode.common.settings.LocalTitleStyle
 
 @Composable
 internal fun TopRanking(
@@ -57,7 +58,7 @@ internal fun TopRanking(
                         MovieCardSmall(
                             posterPath = item.posterPath,
                             rating = item.rating,
-                            title = "${index + 1}. ${item.title}",
+                            title = "${index + 1}. ${item.titles.resolve(LocalTitleStyle.current)}",
                             subTitle = item.subTitle,
                             studio = item.studio,
                             genre = item.genre,

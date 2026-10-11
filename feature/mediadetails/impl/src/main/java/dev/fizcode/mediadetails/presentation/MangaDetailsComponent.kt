@@ -18,6 +18,7 @@ import kotlinx.collections.immutable.ImmutableList
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 import androidx.compose.ui.tooling.preview.Preview
+import dev.fizcode.common.settings.MediaTitles
 
 @Composable
 internal fun MangaDetailsComponent(
@@ -25,7 +26,7 @@ internal fun MangaDetailsComponent(
     isBookmarked: Boolean,
     mangaDetails: UiState<MangaDetailsUiModel>,
     characters: UiState<ImmutableList<MangaCharacterUiModel>>,
-    headerTitle: (String) -> Unit,
+    headerTitle: (MediaTitles) -> Unit,
     selectedImage: (String) -> Unit,
     onRetryDetails: () -> Unit,
     onRetryCharacters: () -> Unit,
@@ -39,7 +40,7 @@ internal fun MangaDetailsComponent(
 ) {
     when (mangaDetails) {
         is UiState.Success -> {
-            headerTitle(mangaDetails.data.mangaDetailsHeaderUiModel.title)
+            headerTitle(mangaDetails.data.mangaDetailsHeaderUiModel.titles)
             item {
                 MangaDetailHeaderComponent(
                     modifier = modifier,

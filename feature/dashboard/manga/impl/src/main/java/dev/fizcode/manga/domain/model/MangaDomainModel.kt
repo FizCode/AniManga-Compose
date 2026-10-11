@@ -1,5 +1,7 @@
 package dev.fizcode.manga.domain.model
 
+import dev.fizcode.common.settings.AlternativeTitles
+
 internal data class MangaDomainModel(
     val items: List<Item> = emptyList()
 ) {
@@ -13,6 +15,7 @@ internal data class MangaDomainModel(
         val numVolumes: Int = 0,
         val numChapters: Int = 0,
         val synopsis: String = "",
-        val genres: List<String> = emptyList()
+        val genres: List<String> = emptyList(),
+        val alternativeTitles: AlternativeTitles = AlternativeTitles()
     )
 }

@@ -5,6 +5,7 @@ import dev.fizcode.anime.domain.model.SeasonalAnimeDomainModel
 import dev.fizcode.anime.presentation.model.SeasonalUiModel
 import dev.fizcode.common.util.extensions.releaseInfo
 import kotlinx.collections.immutable.toImmutableList
+import dev.fizcode.common.settings.MediaTitles
 
 internal class SeasonalAnimeUiMapper {
 
@@ -16,6 +17,7 @@ internal class SeasonalAnimeUiMapper {
             id = id,
             mediaType = mediaType,
             title = title,
+            titles = MediaTitles(title, alternativeTitles),
             posterPath = mainPicture.large,
             releaseInfo = releaseInfo(
                 broadcastDay = broadcast.dayOfTheWeek,

@@ -17,6 +17,7 @@ import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.MovieCardSimple
 import dev.fizcode.designsystem.component.shimmer.MovieCardSimpleShimmer
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.common.settings.LocalTitleStyle
 
 @Composable
 internal fun TopAiring(
@@ -54,7 +55,7 @@ internal fun TopAiring(
                     MovieCardSimple(
                         posterPath = item.posterPath,
                         rating = item.rating,
-                        title = item.title,
+                        title = item.titles.resolve(LocalTitleStyle.current),
                         onCardClick = { onCardClick(item.mediaType, item.id) }
                     )
                 }

@@ -47,7 +47,7 @@ internal class BookmarkViewModel(
     ) { state, tab, query ->
         if (state is UiState.Success) {
             state.data
-                .filter { tab.matches(it.mediaType) && it.title.contains(query, ignoreCase = true) }
+                .filter { tab.matches(it.mediaType) && it.titles.matches(query) }
                 .let { if (it.isEmpty()) UiState.Empty else UiState.Success(it) }
         } else {
             state

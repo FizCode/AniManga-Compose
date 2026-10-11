@@ -15,6 +15,8 @@ internal class SearchAnimeUseCase(
         limit: Int
     ): DomainNetworkState<SearchAnimeDomainModel> {
         val fields = fieldsPicker(
+            AnimeFieldsConstant.ALTERNATIVE_TITLES,
+            AnimeFieldsConstant.NSFW,
             AnimeFieldsConstant.MEDIA_TYPE,
             AnimeFieldsConstant.MEAN,
             AnimeFieldsConstant.STATUS,

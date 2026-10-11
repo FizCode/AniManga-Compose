@@ -14,7 +14,8 @@ internal object AnimeBookmarkMapper {
         episodes = this.animeDetailsInfoUiModel.animeInfo.episodes,
         status = this.animeDetailsInfoUiModel.animeInfo.status,
         studio = this.animeDetailsHeaderUiModel.studio,
-        genres = this.animeDetailsHeaderUiModel.genre
+        genres = this.animeDetailsHeaderUiModel.genre,
+        titles = this.animeDetailsHeaderUiModel.titles
     )
 
 }

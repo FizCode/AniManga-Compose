@@ -1,5 +1,7 @@
 package dev.fizcode.anime.domain.model
 
+import dev.fizcode.common.settings.AlternativeTitles
+
 internal data class TopAiringDomainModel(
     val data: List<Data> = emptyList(),
     val paging: Paging = Paging(),
@@ -14,7 +16,8 @@ internal data class TopAiringDomainModel(
         val mediaType: String = "",
         val title: String = "",
         val mainPicture: MainPicture = MainPicture(),
-        val mean: Double = 0.0
+        val mean: Double = 0.0,
+        val alternativeTitles: AlternativeTitles = AlternativeTitles()
     )
 
     data class MainPicture(

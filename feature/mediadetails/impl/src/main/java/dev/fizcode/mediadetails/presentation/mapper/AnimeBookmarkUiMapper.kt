@@ -15,6 +15,7 @@ internal class AnimeBookmarkUiMapper {
             episodes = uiModel.episodes,
             status = uiModel.status,
             studio = uiModel.studio,
-            genres = uiModel.genres
+            genres = uiModel.genres,
+            alternativeTitles = uiModel.titles.alternative
         )
 }

@@ -16,6 +16,8 @@ internal class FetchSeasonalAnimeUseCase(
         val currentYear = seasonHelper.getCurrentYear()
         val currentSeason = seasonHelper.getCurrentSeason()
         val fields = fieldsPicker(
+            AnimeFieldsConstant.ALTERNATIVE_TITLES,
+            AnimeFieldsConstant.NSFW,
             AnimeFieldsConstant.MEDIA_TYPE,
             AnimeFieldsConstant.MEAN,
             AnimeFieldsConstant.BROADCAST,

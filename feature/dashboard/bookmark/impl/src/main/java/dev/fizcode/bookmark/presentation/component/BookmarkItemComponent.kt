@@ -18,6 +18,7 @@ import dev.fizcode.designsystem.component.card.MovieCardSmall
 import dev.fizcode.designsystem.component.shimmer.MovieCardSmallShimmer
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import kotlinx.collections.immutable.persistentListOf
+import dev.fizcode.common.settings.LocalTitleStyle
 
 /**
  * The bookmark list for each [UiState]; [emptyMessage] is shown when there is nothing to list.
@@ -45,7 +46,7 @@ internal fun BookmarkItemComponent(
             MovieCardSmall(
                 posterPath = item.posterPath,
                 rating = item.rating,
-                title = item.title,
+                title = item.titles.resolve(LocalTitleStyle.current),
                 subTitle = item.subTitle,
                 studio = item.studio,
                 genre = item.genre,

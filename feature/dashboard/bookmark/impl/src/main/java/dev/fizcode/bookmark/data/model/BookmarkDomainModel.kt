@@ -1,5 +1,7 @@
 package dev.fizcode.bookmark.data.model
 
+import dev.fizcode.common.settings.AlternativeTitles
+
 internal data class BookmarkDomainModel(
     val mediaId: Int,
     val mediaType: String,
@@ -9,5 +11,6 @@ internal data class BookmarkDomainModel(
     val episodes: String,
     val status: String,
     val studio: String,
-    val genres: String
+    val genres: String,
+    val alternativeTitles: AlternativeTitles = AlternativeTitles()
 )

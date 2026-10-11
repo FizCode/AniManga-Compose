@@ -1,5 +1,7 @@
 package dev.fizcode.mediadetails.presentation.model
 
+import dev.fizcode.common.settings.MediaTitles
+
 internal data class BookmarkArgument(
     val mediaId: Int,
     val mediaType: String,
@@ -9,5 +11,6 @@ internal data class BookmarkArgument(
     val episodes: String,
     val status: String,
     val studio: String,
-    val genres: List<String>
+    val genres: List<String>,
+    val titles: MediaTitles = MediaTitles(title)
 )

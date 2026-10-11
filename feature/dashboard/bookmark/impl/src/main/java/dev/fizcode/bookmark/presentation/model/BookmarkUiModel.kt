@@ -2,6 +2,7 @@ package dev.fizcode.bookmark.presentation.model
 
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
+import dev.fizcode.common.settings.MediaTitles
 
 @Immutable
 internal data class BookmarkUiModel(
@@ -12,5 +13,6 @@ internal data class BookmarkUiModel(
     val title: String,
     val subTitle: String,
     val studio: String,
-    val genre: ImmutableList<String>
+    val genre: ImmutableList<String>,
+    val titles: MediaTitles = MediaTitles(title)
 )

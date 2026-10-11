@@ -20,6 +20,7 @@ import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.ranking.presentation.model.RankingUiModel
 import dev.fizcode.ranking.presentation.model.dummyRankingUiModel
 import dev.fizcode.ranking.util.Constant
+import dev.fizcode.common.settings.LocalTitleStyle
 
 /**
  * The ranking list for each [UiState]. Every [query] match inside a card title is highlighted.
@@ -49,7 +50,7 @@ internal fun RankingListComponent(
                 modifier = Modifier.fillMaxWidth(),
                 posterPath = item.posterPath,
                 rating = item.rating,
-                title = "${item.rank}. ${item.title}",
+                title = "${item.rank}. ${item.titles.resolve(LocalTitleStyle.current)}",
                 query = query,
                 subTitle = item.releaseInfo,
                 studio = item.studio,

@@ -3,6 +3,7 @@ package dev.fizcode.mediadetails.data.mapper
 import dev.fizcode.common.util.extensions.toStringWithComma
 import dev.fizcode.datasource.local.model.BookmarkEntity
 import dev.fizcode.mediadetails.domain.model.BookmarkDomainModel
+import dev.fizcode.datasource.local.model.encodeSynonyms
 
 internal class BookmarkDomainMapper {
 
@@ -16,6 +17,9 @@ internal class BookmarkDomainMapper {
             episodes = data.episodes,
             status = data.status,
             studio = data.studio,
-            genres = data.genres.toStringWithComma()
+            genres = data.genres.toStringWithComma(),
+            titleSynonyms = encodeSynonyms(data.alternativeTitles.synonyms),
+            titleJapanese = data.alternativeTitles.japanese,
+            titleEnglish = data.alternativeTitles.english
         )
 }

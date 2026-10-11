@@ -1,5 +1,7 @@
 package dev.fizcode.anime.domain.model
 
+import dev.fizcode.common.settings.AlternativeTitles
+
 internal data class TopRankingDomainModel(
     val data: List<Data> = emptyList(),
     val paging: Paging = Paging()
@@ -19,7 +21,8 @@ internal data class TopRankingDomainModel(
         val status: String = "",
         val numEpisodes: Int = 0,
         val studios: List<Studio> = emptyList(),
-        val genres: List<Genre> = emptyList()
+        val genres: List<Genre> = emptyList(),
+        val alternativeTitles: AlternativeTitles = AlternativeTitles()
     )
 
     data class MainPicture(

@@ -5,6 +5,7 @@ import dev.fizcode.manga.presentation.model.MangaUiModel
 import dev.fizcode.manga.util.Constant
 import kotlinx.collections.immutable.toImmutableList
 import java.util.Locale
+import dev.fizcode.common.settings.MediaTitles
 
 internal class MangaUiMapper {
 
@@ -16,6 +17,7 @@ internal class MangaUiMapper {
         mediaType = mediaType,
         mediaTypeLabel = mediaTypeLabel(mediaType),
         title = title,
+        titles = MediaTitles(title, alternativeTitles),
         posterPath = posterPath,
         rating = String.format(Locale.US, "%.2f", mean),
         subTitle = "${Constant.VOLUME} ${count(numVolumes)} ${Constant.CHAPTER} ${count(numChapters)}" +

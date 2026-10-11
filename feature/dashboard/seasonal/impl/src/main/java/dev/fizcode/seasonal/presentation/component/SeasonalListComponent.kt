@@ -20,6 +20,7 @@ import dev.fizcode.seasonal.presentation.model.SeasonalUiModel
 import dev.fizcode.seasonal.presentation.model.dummySeasonalUiModel
 import dev.fizcode.seasonal.util.Constant
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.common.settings.LocalTitleStyle
 
 @Composable
 internal fun SeasonalListComponent(
@@ -46,7 +47,7 @@ internal fun SeasonalListComponent(
                 modifier = Modifier.fillMaxWidth(),
                 posterPath = item.posterPath,
                 rating = item.rating,
-                title = "${item.rank}. ${item.title}",
+                title = "${item.rank}. ${item.titles.resolve(LocalTitleStyle.current)}",
                 subTitle = item.releaseInfo,
                 studio = item.studio,
                 synopsis = item.synopsis,

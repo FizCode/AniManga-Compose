@@ -19,6 +19,7 @@ import dev.fizcode.search.presentation.model.SearchResultUiModel
 import dev.fizcode.search.presentation.model.dummySearchResultUiModel
 import dev.fizcode.search.util.Constant
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.common.settings.LocalTitleStyle
 
 @Composable
 internal fun SearchResultComponent(
@@ -42,7 +43,7 @@ internal fun SearchResultComponent(
         items(items = result.data, key = { it.id }) { item ->
             MovieCardMedium(
                 posterPath = item.posterPath,
-                title = item.title,
+                title = item.titles.resolve(LocalTitleStyle.current),
                 query = query,
                 rating = item.rating,
                 subTitle = item.subTitle,

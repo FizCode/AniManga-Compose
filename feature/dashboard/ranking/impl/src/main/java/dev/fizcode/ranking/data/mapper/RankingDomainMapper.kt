@@ -2,6 +2,7 @@ package dev.fizcode.ranking.data.mapper
 
 import dev.fizcode.datasource.remote.response.TopRankingResponse
 import dev.fizcode.ranking.domain.model.RankingDomainModel
+import dev.fizcode.datasource.remote.response.toAlternativeTitles
 
 internal class RankingDomainMapper {
 
@@ -18,6 +19,7 @@ internal class RankingDomainMapper {
         rank = rank,
         mediaType = mediaType.orEmpty(),
         title = title.orEmpty(),
+        alternativeTitles = alternativeTitles.toAlternativeTitles(),
         posterPath = mainPicture?.large.orEmpty(),
         mean = mean ?: 0.0,
         broadcastDay = broadcast?.dayOfTheWeek.orEmpty(),
