@@ -12,12 +12,14 @@ class MangaService(private val malClient: HttpClient) {
     suspend fun fetchMangaRanking(
         rankingType: String,
         limit: Int,
-        fields: String
+        fields: String,
+        nsfw: Boolean = false
     ): MangaRankingResponse =
         malClient.get("manga/ranking") {
             parameter(CommonConstant.RANKING_TYPE, rankingType)
             parameter(CommonConstant.LIMIT, limit)
             parameter(CommonConstant.FIELDS, fields)
+            if (nsfw) parameter(CommonConstant.NSFW, true)
         }.body()
 
 }

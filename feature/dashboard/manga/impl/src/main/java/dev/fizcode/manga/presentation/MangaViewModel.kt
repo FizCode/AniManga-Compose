@@ -28,10 +28,14 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import dev.fizcode.common.settings.NsfwFilterProvider
+import dev.fizcode.common.settings.changes
+import kotlinx.coroutines.flow.merge
 
 internal class MangaViewModel(
     private val fetchMangaRankingUseCase: FetchMangaRankingUseCase,
-    private val mangaUiMapper: MangaUiMapper
+    private val mangaUiMapper: MangaUiMapper,
+    nsfwFilterProvider: NsfwFilterProvider
 ) : ViewModel() {
 
     /** Local title filter applied on top of the loaded list. */
@@ -73,7 +77,7 @@ internal class MangaViewModel(
         combine(
             _selectedType,
             _selectedSort,
-            retryTrigger.onStart { emit(Unit) }
+            merge(retryTrigger, nsfwFilterProvider.changes()).onStart { emit(Unit) }
         ) { type, sort, _ -> resolveRequest(type, sort) }
             .distinctUntilChanged()
             .flatMapLatest { request ->
@@ -107,7 +111,7 @@ internal class MangaViewModel(
                 UiState.Loading
             } else if (state is UiState.Success) {
                 state.data
-                    .filter { type.matches(it.mediaType) && it.title.contains(query, ignoreCase = true) }
+                    .filter { type.matches(it.mediaType) && it.titles.matches(query) }
                     .let { if (it.isEmpty()) UiState.Empty else UiState.Success(it) }
             } else {
                 state

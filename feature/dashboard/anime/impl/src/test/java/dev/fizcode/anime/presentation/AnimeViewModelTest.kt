@@ -27,6 +27,9 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import java.util.concurrent.atomic.AtomicInteger
+import dev.fizcode.common.settings.NsfwFilter
+import dev.fizcode.common.settings.NsfwFilterProvider
+import kotlinx.coroutines.flow.flowOf
 
 class AnimeViewModelTest {
 
@@ -71,6 +74,10 @@ class AnimeViewModelTest {
 
     private val repository = FakeAnimeRepository()
 
+    private val nsfwFilterProvider = object : NsfwFilterProvider {
+        override val nsfwFilter = flowOf(NsfwFilter.SAFE)
+    }
+
     private fun viewModel() = AnimeViewModel(
         animeUseCaseGroup = AnimeUseCaseGroup(
             fetchSeasonAnimeUseCase = FetchSeasonalAnimeUseCase(
@@ -86,7 +93,8 @@ class AnimeViewModelTest {
         ),
         seasonalUiMapper = SeasonalAnimeUiMapper(),
         topAiringUiMapper = TopAiringAnimeUiMapper(),
-        topRankingUiMapper = TopRankingAnimeUiMapper()
+        topRankingUiMapper = TopRankingAnimeUiMapper(),
+        nsfwFilterProvider = nsfwFilterProvider
     )
 
     @Test

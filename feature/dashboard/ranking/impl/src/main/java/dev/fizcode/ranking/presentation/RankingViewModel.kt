@@ -17,12 +17,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
+import dev.fizcode.common.settings.NsfwFilterProvider
+import dev.fizcode.common.settings.changes
+import kotlinx.coroutines.flow.merge
 
 internal class RankingViewModel(
     /** The MAL `ranking_type` to list, see [RankingType.apiValue]. */
     private val rankingType: String,
     private val fetchAnimeRankingUseCase: FetchAnimeRankingUseCase,
-    private val rankingUiMapper: RankingUiMapper
+    private val rankingUiMapper: RankingUiMapper,
+    nsfwFilterProvider: NsfwFilterProvider
 ) : ViewModel() {
 
     /** Local title filter applied on top of the loaded ranking. */
@@ -38,7 +42,7 @@ internal class RankingViewModel(
         scope = viewModelScope,
         domain = { fetchAnimeRankingUseCase(rankingType, Constant.RESULT_LIMIT) },
         mapper = rankingUiMapper::mapToRankingUiModel,
-        retrigger = retryTrigger,
+        retrigger = merge(retryTrigger, nsfwFilterProvider.changes()),
         started = SharingStarted.WhileSubscribed(Constant.STOP_TIMEOUT_MILLIS)
     )
 
@@ -48,7 +52,7 @@ internal class RankingViewModel(
         snapshotFlow { queryState.text.toString().trim() }.distinctUntilChanged()
     ) { state, query ->
         if (state is UiState.Success && query.isNotEmpty()) {
-            state.data.filter { it.title.contains(query, ignoreCase = true) }
+            state.data.filter { it.titles.matches(query) }
                 .let { if (it.isEmpty()) UiState.Empty else UiState.Success(it) }
         } else {
             state

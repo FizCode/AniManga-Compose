@@ -6,10 +6,15 @@ import dev.fizcode.datasource.remote.service.DashboardAnimeService
 import dev.fizcode.ranking.data.mapper.RankingDomainMapper
 import dev.fizcode.ranking.domain.model.RankingDomainModel
 import dev.fizcode.ranking.domain.repository.RankingRepository
+import dev.fizcode.common.settings.NsfwFilterProvider
+import dev.fizcode.common.settings.allows
+import dev.fizcode.common.settings.current
+import dev.fizcode.common.settings.includesNsfw
 
 internal class RankingRepositoryImpl(
     private val animeService: DashboardAnimeService,
-    private val rankingDomainMapper: RankingDomainMapper
+    private val rankingDomainMapper: RankingDomainMapper,
+    private val nsfwFilterProvider: NsfwFilterProvider
 ) : RankingRepository {
 
     override suspend fun fetchAnimeRanking(
@@ -17,12 +22,15 @@ internal class RankingRepositoryImpl(
         limit: Int,
         fields: String
     ): DomainNetworkState<RankingDomainModel> = processResponse {
+        val nsfwFilter = nsfwFilterProvider.current()
+        val response = animeService.fetchTopRankingAnime(
+            rankingType = rankingType,
+            limit = limit,
+            fields = fields,
+            nsfw = nsfwFilter.includesNsfw
+        )
         rankingDomainMapper.mapToRanking(
-            animeService.fetchTopRankingAnime(
-                rankingType = rankingType,
-                limit = limit,
-                fields = fields
-            )
+            response.copy(data = response.data?.filter { nsfwFilter.allows(it.node?.nsfw) })
         )
     }
 }

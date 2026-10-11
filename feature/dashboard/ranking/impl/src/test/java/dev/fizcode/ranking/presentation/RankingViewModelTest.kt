@@ -17,6 +17,10 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import dev.fizcode.common.settings.NsfwFilter
+import dev.fizcode.common.settings.NsfwFilterProvider
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class RankingViewModelTest {
 
@@ -46,10 +50,15 @@ class RankingViewModelTest {
 
     private val repository = FakeRankingRepository()
 
+    private val nsfwFilter = MutableStateFlow(NsfwFilter.SAFE)
+
     private fun viewModel(type: RankingType = RankingType.TOP_AIRING) = RankingViewModel(
         rankingType = type.apiValue,
         fetchAnimeRankingUseCase = FetchAnimeRankingUseCase(repository),
-        rankingUiMapper = RankingUiMapper()
+        rankingUiMapper = RankingUiMapper(),
+        nsfwFilterProvider = object : NsfwFilterProvider {
+            override val nsfwFilter = this@RankingViewModelTest.nsfwFilter
+        }
     )
 
     @Test
@@ -99,6 +108,19 @@ class RankingViewModelTest {
         assertEquals(1, repository.requestedTypes.size)
 
         vm.retry()
+
+        vm.rankingResult.awaitValue { repository.requestedTypes.size == 2 }
+        job.cancel()
+    }
+
+    @Test
+    fun `picking another nsfw level loads the ranking again`() = runBlocking {
+        val vm = viewModel()
+        val job = vm.rankingResult.onEach { }.launchIn(this)
+        vm.rankingResult.awaitValue { it is UiState.Success }
+        assertEquals(1, repository.requestedTypes.size)
+
+        nsfwFilter.value = NsfwFilter.NOT_SAFE
 
         vm.rankingResult.awaitValue { repository.requestedTypes.size == 2 }
         job.cancel()

@@ -19,6 +19,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
+import dev.fizcode.common.settings.NsfwFilter
+import dev.fizcode.common.settings.NsfwFilterProvider
+import kotlinx.coroutines.flow.flowOf
 
 class SeasonalViewModelTest {
 
@@ -50,13 +53,18 @@ class SeasonalViewModelTest {
         override fun getCurrentYear() = 2026
     }
 
+    private val nsfwFilterProvider = object : NsfwFilterProvider {
+        override val nsfwFilter = flowOf(NsfwFilter.SAFE)
+    }
+
     private fun viewModel(
         repository: SeasonalRepository,
         currentSeason: String = "spring"
     ) = SeasonalViewModel(
         fetchSeasonalAnimeUseCase = FetchSeasonalAnimeUseCase(repository),
         seasonalUiMapper = SeasonalUiMapper(),
-        seasonHelper = FakeSeasonHelper(currentSeason)
+        seasonHelper = FakeSeasonHelper(currentSeason),
+        nsfwFilterProvider = nsfwFilterProvider
     )
 
     @Test

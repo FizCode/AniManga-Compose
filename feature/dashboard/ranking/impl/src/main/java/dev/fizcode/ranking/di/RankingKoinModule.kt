@@ -27,7 +27,8 @@ private fun rankingViewModelModule() = module {
         RankingViewModel(
             rankingType = rankingType,
             fetchAnimeRankingUseCase = get(),
-            rankingUiMapper = get()
+            rankingUiMapper = get(),
+            nsfwFilterProvider = get()
         )
     }
 }

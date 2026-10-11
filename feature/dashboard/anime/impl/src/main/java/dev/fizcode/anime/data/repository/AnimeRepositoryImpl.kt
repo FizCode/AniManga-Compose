@@ -10,12 +10,17 @@ import dev.fizcode.anime.domain.repository.AnimeRepository
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.base.callhandler.processResponse
 import dev.fizcode.datasource.remote.service.DashboardAnimeService
+import dev.fizcode.common.settings.NsfwFilterProvider
+import dev.fizcode.common.settings.allows
+import dev.fizcode.common.settings.current
+import dev.fizcode.common.settings.includesNsfw
 
 internal class AnimeRepositoryImpl(
     private val animeService: DashboardAnimeService,
     private val seasonalDomainMapper: SeasonalDomainMapper,
     private val topAiringDomainMapper: TopAiringDomainMapper,
-    private val topRankingDomainMapper: TopRankingDomainMapper
+    private val topRankingDomainMapper: TopRankingDomainMapper,
+    private val nsfwFilterProvider: NsfwFilterProvider
 ) : AnimeRepository {
 
     override suspend fun fetchSeasonAnime(
@@ -25,14 +30,17 @@ internal class AnimeRepositoryImpl(
         limit: Int,
         fields: String
     ): DomainNetworkState<SeasonalAnimeDomainModel> = processResponse {
+        val nsfwFilter = nsfwFilterProvider.current()
+        val response = animeService.fetchSeasonAnime(
+            year = year,
+            season = season,
+            sortBy = sortBy,
+            limit = limit,
+            fields = fields,
+            nsfw = nsfwFilter.includesNsfw
+        )
         seasonalDomainMapper.mapToSeasonAnime(
-            animeService.fetchSeasonAnime(
-                year = year,
-                season = season,
-                sortBy = sortBy,
-                limit = limit,
-                fields = fields
-            )
+            response.copy(data = response.data?.filter { nsfwFilter.allows(it.node?.nsfw) })
         )
     }
 
@@ -41,12 +49,15 @@ internal class AnimeRepositoryImpl(
         limit: Int,
         fields: String
     ): DomainNetworkState<TopAiringDomainModel> = processResponse {
+        val nsfwFilter = nsfwFilterProvider.current()
+        val response = animeService.fetchTopAiringAnime(
+            rankingType = rankingType,
+            limit = limit,
+            fields = fields,
+            nsfw = nsfwFilter.includesNsfw
+        )
         topAiringDomainMapper.mapToTopAiringAnime(
-            animeService.fetchTopAiringAnime(
-                rankingType = rankingType,
-                limit = limit,
-                fields = fields
-            )
+            response.copy(data = response.data?.filter { nsfwFilter.allows(it.node?.nsfw) })
         )
     }
 
@@ -55,12 +66,15 @@ internal class AnimeRepositoryImpl(
         limit: Int,
         fields: String
     ): DomainNetworkState<TopRankingDomainModel> = processResponse {
+        val nsfwFilter = nsfwFilterProvider.current()
+        val response = animeService.fetchTopRankingAnime(
+            rankingType = rankingType,
+            limit = limit,
+            fields = fields,
+            nsfw = nsfwFilter.includesNsfw
+        )
         topRankingDomainMapper.mapToTopRankingAnime(
-            animeService.fetchTopRankingAnime(
-                rankingType = rankingType,
-                limit = limit,
-                fields = fields
-            )
+            response.copy(data = response.data?.filter { nsfwFilter.allows(it.node?.nsfw) })
         )
     }
 }
