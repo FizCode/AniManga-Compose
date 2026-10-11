@@ -37,7 +37,8 @@ import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 @Composable
 internal fun AnimeScreen(
     onCardClick: (mediaType: String, mediaId: Int) -> Unit,
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
+    onCurrentSeasonClick: () -> Unit
 ) {
     val animeViewModel: AnimeViewModel = koinViewModel()
 
@@ -65,7 +66,8 @@ internal fun AnimeScreen(
         isRefreshing = isRefreshing,
         onRefreshClick = animeViewModel::refresh,
         onCardClick = onCardClick,
-        onSearchClick = onSearchClick
+        onSearchClick = onSearchClick,
+        onCurrentSeasonClick = onCurrentSeasonClick
     )
 
 }
@@ -79,7 +81,8 @@ private fun AnimeScreenContent(
     isRefreshing: Boolean = false,
     onRefreshClick: () -> Unit = {},
     onCardClick: (mediaType: String, mediaId: Int) -> Unit,
-    onSearchClick: () -> Unit = {}
+    onSearchClick: () -> Unit = {},
+    onCurrentSeasonClick: () -> Unit = {}
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val listState = rememberLazyListState()
@@ -110,7 +113,7 @@ private fun AnimeScreenContent(
                     CurrentSeason(
                         headerTitle = Constant.CURRENT_SEASON,
                         cardItem = currentSeason,
-                        onHeaderClick = {},
+                        onHeaderClick = onCurrentSeasonClick,
                         onCardClick = onCardClick
                     )
                 }
