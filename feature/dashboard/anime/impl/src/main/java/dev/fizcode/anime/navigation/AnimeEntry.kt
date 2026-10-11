@@ -10,6 +10,7 @@ import dev.fizcode.navigation.topLevelEntryMetadata
 import dev.fizcode.ranking.api.TopAiringRoute
 import dev.fizcode.ranking.api.TopRankingRoute
 import dev.fizcode.search.api.SearchRoute
+import dev.fizcode.settings.api.SettingsRoute
 import dev.fizcode.seasonal.api.SeasonalRoute
 
 fun EntryProviderScope<NavKey>.animeEntry(navigator: Navigator) {
@@ -21,7 +22,8 @@ fun EntryProviderScope<NavKey>.animeEntry(navigator: Navigator) {
             onSearchClick = { navigator.navigate(SearchRoute) },
             onCurrentSeasonClick = { navigator.navigate(SeasonalRoute) },
             onTopAiringClick = { navigator.navigate(TopAiringRoute) },
-            onTopRankingClick = { navigator.navigate(TopRankingRoute) }
+            onTopRankingClick = { navigator.navigate(TopRankingRoute) },
+            onSettingsClick = { navigator.navigate(SettingsRoute) }
         )
     }
 }

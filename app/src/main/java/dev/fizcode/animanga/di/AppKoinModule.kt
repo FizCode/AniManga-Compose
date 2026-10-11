@@ -12,6 +12,7 @@ import dev.fizcode.onboarding.di.onBoardingKoinModule
 import dev.fizcode.ranking.di.rankingKoinModule
 import dev.fizcode.search.di.searchKoinModule
 import dev.fizcode.seasonal.di.seasonalKoinModule
+import dev.fizcode.settings.di.settingsKoinModule
 import org.koin.dsl.module
 
 internal fun appModule() = module {
@@ -30,7 +31,8 @@ internal fun featureModule() = module {
         mangaKoinModule(),
         onBoardingKoinModule(),
         rankingKoinModule(),
-        searchKoinModule()
+        searchKoinModule(),
+        settingsKoinModule()
     )
 }
 

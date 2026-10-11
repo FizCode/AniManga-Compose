@@ -12,6 +12,7 @@ dependencies {
     implementation(projects.feature.dashboard.anime.api)
     implementation(projects.feature.mediadetails.api)
     implementation(projects.feature.search.api)
+    implementation(projects.feature.settings.api)
     implementation(projects.feature.dashboard.ranking.api)
     implementation(projects.feature.dashboard.seasonal.api)
 

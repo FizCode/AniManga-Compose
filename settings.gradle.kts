@@ -42,6 +42,8 @@ include(":feature:mediadetails:api")
 include(":feature:mediadetails:impl")
 include(":feature:onboarding:api")
 include(":feature:onboarding:impl")
+include(":feature:settings:api")
+include(":feature:settings:impl")
 include(":feature:search:api")
 include(":feature:search:impl")
 

@@ -37,6 +37,7 @@ import dev.fizcode.onboarding.navigation.onBoardingEntry
 import dev.fizcode.ranking.navigation.rankingEntry
 import dev.fizcode.search.navigation.searchEntry
 import dev.fizcode.seasonal.navigation.seasonalEntry
+import dev.fizcode.settings.navigation.settingsEntry
 
 /**
  * Hosts every destination of the app and the dashboard bottom bar.
@@ -83,6 +84,7 @@ fun AppNavDisplay(
             bookmarkEntry(navigator)
             rankingEntry(navigator)
             searchEntry(navigator)
+            settingsEntry(navigator)
             mediaDetailsEntry(navigator)
             onBoardingEntry(onFinished = navigator::goBack)
         }

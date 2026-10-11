@@ -40,7 +40,8 @@ internal fun AnimeScreen(
     onSearchClick: () -> Unit,
     onCurrentSeasonClick: () -> Unit,
     onTopAiringClick: () -> Unit,
-    onTopRankingClick: () -> Unit
+    onTopRankingClick: () -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     val animeViewModel: AnimeViewModel = koinViewModel()
 
@@ -71,7 +72,8 @@ internal fun AnimeScreen(
         onSearchClick = onSearchClick,
         onCurrentSeasonClick = onCurrentSeasonClick,
         onTopAiringClick = onTopAiringClick,
-        onTopRankingClick = onTopRankingClick
+        onTopRankingClick = onTopRankingClick,
+        onSettingsClick = onSettingsClick
     )
 
 }
@@ -88,7 +90,8 @@ private fun AnimeScreenContent(
     onSearchClick: () -> Unit = {},
     onCurrentSeasonClick: () -> Unit = {},
     onTopAiringClick: () -> Unit = {},
-    onTopRankingClick: () -> Unit = {}
+    onTopRankingClick: () -> Unit = {},
+    onSettingsClick: () -> Unit = {}
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val listState = rememberLazyListState()
@@ -100,7 +103,7 @@ private fun AnimeScreenContent(
             AnimeScreenHeader(
                 scrollBehavior = scrollBehavior,
                 value = Constant.SEARCH,
-                onClickSettings = {},
+                onClickSettings = onSettingsClick,
                 onClickSearch = onSearchClick
             )
         }
