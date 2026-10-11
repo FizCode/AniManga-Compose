@@ -39,7 +39,9 @@ data class TopRankingResponse(
         @SerialName("studios")
         val studios: List<Studio>? = null,
         @SerialName("genres")
-        val genres: List<Genre>? = null
+        val genres: List<Genre>? = null,
+        @SerialName("synopsis")
+        val synopsis: String? = null
     )
 
     @Serializable
