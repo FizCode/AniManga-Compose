@@ -1,5 +1,6 @@
 package dev.fizcode.designsystem.component.other
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,6 +35,8 @@ fun ErrorWithRetry(
     modifier = modifier
         .fillMaxWidth()
         .padding(horizontal = 32.dp, vertical = 32.dp),
+    // Only visible when the caller gives it more height than its content needs.
+    verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally
 ) {
     AnimangaGatewayTimeoutIllustration(

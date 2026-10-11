@@ -59,7 +59,7 @@ fun SearchSimpleRowComponent(
     )
     Text(
         color = MaterialTheme.colorScheme.outline,
-        fontSize = MaterialTheme.typography.titleMedium.fontSize,
+        style = MaterialTheme.typography.bodyLarge,
         text = value
     )
 }
@@ -79,7 +79,7 @@ fun SearchTextFieldComponent(
     placeholder: String = "",
     onSearch: () -> Unit = {}
 ) {
-    val textStyle = MaterialTheme.typography.titleMedium.copy(
+    val textStyle = MaterialTheme.typography.bodyLarge.copy(
         color = MaterialTheme.colorScheme.onSurface
     )
     val focusManager = LocalFocusManager.current
