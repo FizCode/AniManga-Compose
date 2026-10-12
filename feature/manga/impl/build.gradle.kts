@@ -9,7 +9,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.dashboard.manga.api)
+    implementation(projects.feature.manga.api)
     implementation(projects.feature.mediadetails.api)
 
     implementation(projects.core.common)

@@ -5,16 +5,18 @@ plugins {
 }
 
 android {
-    namespace = "dev.fizcode.ranking"
+    namespace = "dev.fizcode.dashboard"
 }
 
 dependencies {
-    implementation(projects.feature.dashboard.ranking.api)
-    implementation(projects.feature.mediadetails.api)
+
+    implementation(projects.feature.anime.api)
+    implementation(projects.feature.bookmark.api)
+    implementation(projects.feature.manga.api)
+    implementation(projects.feature.seasonal.api)
 
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
-    implementation(projects.core.datasource)
     implementation(projects.core.navigation)
 
 }

@@ -9,7 +9,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.dashboard.seasonal.api)
+    implementation(projects.feature.seasonal.api)
     implementation(projects.feature.mediadetails.api)
 
     implementation(projects.core.common)
