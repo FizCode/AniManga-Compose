@@ -3,9 +3,15 @@ package dev.fizcode.anime.data
 import dev.fizcode.anime.data.mapper.SeasonalDomainMapper
 import dev.fizcode.anime.data.mapper.TopAiringDomainMapper
 import dev.fizcode.anime.data.mapper.TopRankingDomainMapper
-import dev.fizcode.datasource.remote.response.CurrentSeasonAnimeResponse
-import dev.fizcode.datasource.remote.response.TopAiringAnimeResponse
-import dev.fizcode.datasource.remote.response.TopRankingResponse
+import dev.fizcode.mal.response.MalAnimeNode
+import dev.fizcode.mal.response.MalBroadcast
+import dev.fizcode.mal.response.MalGenre
+import dev.fizcode.mal.response.MalListItem
+import dev.fizcode.mal.response.MalListResponse
+import dev.fizcode.mal.response.MalPaging
+import dev.fizcode.mal.response.MalPicture
+import dev.fizcode.mal.response.MalSeason
+import dev.fizcode.mal.response.MalStudio
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -16,7 +22,7 @@ class SeasonalDomainMapperTest {
 
     @Test
     fun `empty response maps to defaults`() {
-        val domain = mapper.mapToSeasonAnime(CurrentSeasonAnimeResponse())
+        val domain = mapper.mapToSeasonAnime(MalListResponse())
 
         assertTrue(domain.data.isEmpty())
         assertEquals("", domain.paging.next)
@@ -27,7 +33,7 @@ class SeasonalDomainMapperTest {
     @Test
     fun `null node maps to default node`() {
         val domain = mapper.mapToSeasonAnime(
-            CurrentSeasonAnimeResponse(data = listOf(CurrentSeasonAnimeResponse.Data(null)))
+            MalListResponse<MalAnimeNode>(data = listOf(MalListItem(null)))
         )
 
         assertEquals(0, domain.data.single().node.id)
@@ -37,26 +43,26 @@ class SeasonalDomainMapperTest {
     @Test
     fun `maps a full response`() {
         val domain = mapper.mapToSeasonAnime(
-            CurrentSeasonAnimeResponse(
+            MalListResponse(
                 data = listOf(
-                    CurrentSeasonAnimeResponse.Data(
-                        CurrentSeasonAnimeResponse.Node(
+                    MalListItem(
+                        MalAnimeNode(
                             id = 1,
                             title = "Title",
-                            mainPicture = CurrentSeasonAnimeResponse.MainPicture("m", "l"),
+                            mainPicture = MalPicture("m", "l"),
                             mean = 7.5,
                             status = "currently_airing",
                             mediaType = "tv",
                             numEpisodes = 12,
-                            studios = listOf(CurrentSeasonAnimeResponse.Studio(2, "Studio")),
+                            studios = listOf(MalStudio(2, "Studio")),
                             synopsis = "Syn",
-                            genres = listOf(CurrentSeasonAnimeResponse.Genre(3, "Action")),
-                            broadcast = CurrentSeasonAnimeResponse.Broadcast("monday", "20:00")
+                            genres = listOf(MalGenre(3, "Action")),
+                            broadcast = MalBroadcast("monday", "20:00")
                         )
                     )
                 ),
-                paging = CurrentSeasonAnimeResponse.Paging(next = "next"),
-                season = CurrentSeasonAnimeResponse.Season(year = 2025, season = "fall")
+                paging = MalPaging(next = "next"),
+                season = MalSeason(year = 2025, season = "fall")
             )
         )
 
@@ -87,7 +93,7 @@ class TopAiringDomainMapperTest {
 
     @Test
     fun `empty response maps to defaults`() {
-        val domain = mapper.mapToTopAiringAnime(TopAiringAnimeResponse())
+        val domain = mapper.mapToTopAiringAnime(MalListResponse())
 
         assertTrue(domain.data.isEmpty())
         assertEquals("", domain.paging.next)
@@ -97,19 +103,19 @@ class TopAiringDomainMapperTest {
     @Test
     fun `maps a full response`() {
         val domain = mapper.mapToTopAiringAnime(
-            TopAiringAnimeResponse(
+            MalListResponse(
                 data = listOf(
-                    TopAiringAnimeResponse.Data(
-                        TopAiringAnimeResponse.Node(
+                    MalListItem(
+                        MalAnimeNode(
                             id = 4,
                             title = "Title",
-                            mainPicture = TopAiringAnimeResponse.MainPicture("m", "l"),
+                            mainPicture = MalPicture("m", "l"),
                             mean = 8.0
                         )
                     )
                 ),
-                paging = TopAiringAnimeResponse.Paging("next"),
-                season = TopAiringAnimeResponse.Season(2025, "fall")
+                paging = MalPaging("next"),
+                season = MalSeason(2025, "fall")
             )
         )
 
@@ -130,7 +136,7 @@ class TopRankingDomainMapperTest {
 
     @Test
     fun `empty response maps to defaults`() {
-        val domain = mapper.mapToTopRankingAnime(TopRankingResponse())
+        val domain = mapper.mapToTopRankingAnime(MalListResponse())
 
         assertTrue(domain.data.isEmpty())
         assertEquals("", domain.paging.next)
@@ -139,23 +145,23 @@ class TopRankingDomainMapperTest {
     @Test
     fun `maps a full response`() {
         val domain = mapper.mapToTopRankingAnime(
-            TopRankingResponse(
+            MalListResponse(
                 data = listOf(
-                    TopRankingResponse.Data(
-                        node = TopRankingResponse.Node(
+                    MalListItem(
+                        node = MalAnimeNode(
                             id = 6,
                             title = "Title",
-                            mainPicture = TopRankingResponse.MainPicture("m", "l"),
+                            mainPicture = MalPicture("m", "l"),
                             mean = 9.0,
-                            broadcast = TopRankingResponse.Broadcast("sunday", "10:00"),
+                            broadcast = MalBroadcast("sunday", "10:00"),
                             status = "finished_airing",
                             numEpisodes = 64,
-                            studios = listOf(TopRankingResponse.Studio(1, "Bones")),
-                            genres = listOf(TopRankingResponse.Genre(2, "Action"))
+                            studios = listOf(MalStudio(1, "Bones")),
+                            genres = listOf(MalGenre(2, "Action"))
                         )
                     )
                 ),
-                paging = TopRankingResponse.Paging("next")
+                paging = MalPaging("next")
             )
         )
 
@@ -175,7 +181,7 @@ class TopRankingDomainMapperTest {
     @Test
     fun `null node maps to default node`() {
         val domain = mapper.mapToTopRankingAnime(
-            TopRankingResponse(data = listOf(TopRankingResponse.Data(node = null)))
+            MalListResponse<MalAnimeNode>(data = listOf(MalListItem(node = null)))
         )
 
         assertEquals("", domain.data.single().node.title)

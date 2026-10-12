@@ -1,16 +1,17 @@
 package dev.fizcode.manga.data.mapper
 
-import dev.fizcode.datasource.remote.response.MangaRankingResponse
+import dev.fizcode.mal.response.MalListResponse
+import dev.fizcode.mal.response.MalMangaNode
+import dev.fizcode.mal.response.toAlternativeTitles
 import dev.fizcode.manga.domain.model.MangaDomainModel
-import dev.fizcode.datasource.remote.response.toAlternativeTitles
 
 internal class MangaDomainMapper {
 
-    fun mapToManga(response: MangaRankingResponse): MangaDomainModel = MangaDomainModel(
+    fun mapToManga(response: MalListResponse<MalMangaNode>): MangaDomainModel = MangaDomainModel(
         items = response.data.orEmpty().mapNotNull { it.node?.toDomainItem() }
     )
 
-    private fun MangaRankingResponse.Node.toDomainItem() = MangaDomainModel.Item(
+    private fun MalMangaNode.toDomainItem() = MangaDomainModel.Item(
         id = id ?: 0,
         title = title.orEmpty(),
         alternativeTitles = alternativeTitles.toAlternativeTitles(),

@@ -1,17 +1,18 @@
 package dev.fizcode.seasonal.data.mapper
 
-import dev.fizcode.datasource.remote.response.CurrentSeasonAnimeResponse
+import dev.fizcode.mal.response.MalAnimeNode
+import dev.fizcode.mal.response.MalListResponse
+import dev.fizcode.mal.response.toAlternativeTitles
 import dev.fizcode.seasonal.domain.model.SeasonalDomainModel
-import dev.fizcode.datasource.remote.response.toAlternativeTitles
 
 internal class SeasonalDomainMapper {
 
-    fun mapToSeasonalAnime(response: CurrentSeasonAnimeResponse): SeasonalDomainModel =
+    fun mapToSeasonalAnime(response: MalListResponse<MalAnimeNode>): SeasonalDomainModel =
         SeasonalDomainModel(
             items = response.data.orEmpty().mapNotNull { it.node?.toDomainItem() }
         )
 
-    private fun CurrentSeasonAnimeResponse.Node.toDomainItem() = SeasonalDomainModel.Item(
+    private fun MalAnimeNode.toDomainItem() = SeasonalDomainModel.Item(
         id = id ?: 0,
         mediaType = mediaType.orEmpty(),
         title = title.orEmpty(),

@@ -2,7 +2,7 @@ package dev.fizcode.seasonal.data.repository
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.base.callhandler.processResponse
-import dev.fizcode.datasource.remote.service.DashboardAnimeService
+import dev.fizcode.mal.service.MalAnimeService
 import dev.fizcode.seasonal.data.mapper.SeasonalDomainMapper
 import dev.fizcode.seasonal.domain.model.SeasonalDomainModel
 import dev.fizcode.seasonal.domain.repository.SeasonalRepository
@@ -12,7 +12,7 @@ import dev.fizcode.common.settings.current
 import dev.fizcode.common.settings.includesNsfw
 
 internal class SeasonalRepositoryImpl(
-    private val animeService: DashboardAnimeService,
+    private val animeService: MalAnimeService,
     private val seasonalDomainMapper: SeasonalDomainMapper,
     private val nsfwFilterProvider: NsfwFilterProvider
 ) : SeasonalRepository {
@@ -25,7 +25,7 @@ internal class SeasonalRepositoryImpl(
         fields: String
     ): DomainNetworkState<SeasonalDomainModel> = processResponse {
         val nsfwFilter = nsfwFilterProvider.current()
-        val response = animeService.fetchSeasonAnime(
+        val response = animeService.fetchSeason(
             year = year,
             season = season,
             sortBy = sortBy,

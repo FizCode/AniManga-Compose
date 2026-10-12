@@ -1,25 +1,26 @@
-package dev.fizcode.datasource.remote.service
+package dev.fizcode.mal.service
 
 import dev.fizcode.common.util.CommonConstant
-import dev.fizcode.datasource.remote.response.MangaRankingResponse
+import dev.fizcode.mal.response.MalListResponse
+import dev.fizcode.mal.response.MalMangaNode
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 
-class MangaService(private val malClient: HttpClient) {
+/** The manga list endpoints of MyAnimeList, see [MalAnimeService] for [nsfw]. */
+class MalMangaService(private val malClient: HttpClient) {
 
-    suspend fun fetchMangaRanking(
+    suspend fun fetchRanking(
         rankingType: String,
         limit: Int,
         fields: String,
         nsfw: Boolean = false
-    ): MangaRankingResponse =
+    ): MalListResponse<MalMangaNode> =
         malClient.get("manga/ranking") {
             parameter(CommonConstant.RANKING_TYPE, rankingType)
             parameter(CommonConstant.LIMIT, limit)
             parameter(CommonConstant.FIELDS, fields)
             if (nsfw) parameter(CommonConstant.NSFW, true)
         }.body()
-
 }

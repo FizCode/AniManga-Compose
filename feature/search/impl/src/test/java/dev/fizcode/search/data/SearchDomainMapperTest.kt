@@ -1,6 +1,10 @@
 package dev.fizcode.search.data
 
-import dev.fizcode.datasource.remote.response.SearchAnimeResponse
+import dev.fizcode.mal.response.MalAnimeNode
+import dev.fizcode.mal.response.MalGenre
+import dev.fizcode.mal.response.MalListItem
+import dev.fizcode.mal.response.MalListResponse
+import dev.fizcode.mal.response.MalPicture
 import dev.fizcode.search.data.mapper.SearchDomainMapper
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -12,15 +16,15 @@ class SearchDomainMapperTest {
 
     @Test
     fun `null data maps to empty list`() {
-        assertTrue(mapper.mapToSearchAnime(SearchAnimeResponse()).data.isEmpty())
+        assertTrue(mapper.mapToSearchAnime(MalListResponse()).data.isEmpty())
     }
 
     @Test
     fun `entries without a node are dropped`() {
-        val response = SearchAnimeResponse(
+        val response = MalListResponse<MalAnimeNode>(
             data = listOf(
-                SearchAnimeResponse.Data(node = null),
-                SearchAnimeResponse.Data(node = SearchAnimeResponse.Node(id = 5))
+                MalListItem(node = null),
+                MalListItem(node = MalAnimeNode(id = 5))
             )
         )
 
@@ -30,7 +34,7 @@ class SearchDomainMapperTest {
     @Test
     fun `null fields fall back to defaults`() {
         val node = mapper.mapToSearchAnime(
-            SearchAnimeResponse(data = listOf(SearchAnimeResponse.Data(SearchAnimeResponse.Node())))
+            MalListResponse(data = listOf(MalListItem(MalAnimeNode())))
         ).data.single()
 
         assertEquals(0, node.id)
@@ -44,21 +48,18 @@ class SearchDomainMapperTest {
     @Test
     fun `maps all fields and uses large picture`() {
         val node = mapper.mapToSearchAnime(
-            SearchAnimeResponse(
+            MalListResponse(
                 data = listOf(
-                    SearchAnimeResponse.Data(
-                        SearchAnimeResponse.Node(
+                    MalListItem(
+                        MalAnimeNode(
                             id = 9,
                             title = "Bleach",
-                            mainPicture = SearchAnimeResponse.MainPicture(medium = "m", large = "l"),
+                            mainPicture = MalPicture(medium = "m", large = "l"),
                             mean = 8.5,
                             status = "finished_airing",
                             mediaType = "tv",
                             numEpisodes = 366,
-                            genres = listOf(
-                                SearchAnimeResponse.Genre(1, "Action"),
-                                SearchAnimeResponse.Genre(2, null)
-                            )
+                            genres = listOf(MalGenre(1, "Action"), MalGenre(2, null))
                         )
                     )
                 )

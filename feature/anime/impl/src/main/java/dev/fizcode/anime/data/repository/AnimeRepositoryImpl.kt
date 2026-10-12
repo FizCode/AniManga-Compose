@@ -9,14 +9,14 @@ import dev.fizcode.anime.domain.model.TopRankingDomainModel
 import dev.fizcode.anime.domain.repository.AnimeRepository
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.base.callhandler.processResponse
-import dev.fizcode.datasource.remote.service.DashboardAnimeService
+import dev.fizcode.mal.service.MalAnimeService
 import dev.fizcode.common.settings.NsfwFilterProvider
 import dev.fizcode.common.settings.allows
 import dev.fizcode.common.settings.current
 import dev.fizcode.common.settings.includesNsfw
 
 internal class AnimeRepositoryImpl(
-    private val animeService: DashboardAnimeService,
+    private val animeService: MalAnimeService,
     private val seasonalDomainMapper: SeasonalDomainMapper,
     private val topAiringDomainMapper: TopAiringDomainMapper,
     private val topRankingDomainMapper: TopRankingDomainMapper,
@@ -31,7 +31,7 @@ internal class AnimeRepositoryImpl(
         fields: String
     ): DomainNetworkState<SeasonalAnimeDomainModel> = processResponse {
         val nsfwFilter = nsfwFilterProvider.current()
-        val response = animeService.fetchSeasonAnime(
+        val response = animeService.fetchSeason(
             year = year,
             season = season,
             sortBy = sortBy,
@@ -50,7 +50,7 @@ internal class AnimeRepositoryImpl(
         fields: String
     ): DomainNetworkState<TopAiringDomainModel> = processResponse {
         val nsfwFilter = nsfwFilterProvider.current()
-        val response = animeService.fetchTopAiringAnime(
+        val response = animeService.fetchRanking(
             rankingType = rankingType,
             limit = limit,
             fields = fields,
@@ -67,7 +67,7 @@ internal class AnimeRepositoryImpl(
         fields: String
     ): DomainNetworkState<TopRankingDomainModel> = processResponse {
         val nsfwFilter = nsfwFilterProvider.current()
-        val response = animeService.fetchTopRankingAnime(
+        val response = animeService.fetchRanking(
             rankingType = rankingType,
             limit = limit,
             fields = fields,

@@ -9,79 +9,46 @@ import dev.fizcode.anime.domain.model.Paging
 import dev.fizcode.anime.domain.model.Season
 import dev.fizcode.anime.domain.model.SeasonalAnimeDomainModel
 import dev.fizcode.anime.domain.model.Studio
-import dev.fizcode.datasource.remote.response.CurrentSeasonAnimeResponse
-import dev.fizcode.datasource.remote.response.toAlternativeTitles
+import dev.fizcode.mal.response.MalAnimeNode
+import dev.fizcode.mal.response.MalListResponse
+import dev.fizcode.mal.response.toAlternativeTitles
 
 internal class SeasonalDomainMapper {
 
-    fun mapToSeasonAnime(response: CurrentSeasonAnimeResponse): SeasonalAnimeDomainModel =
+    fun mapToSeasonAnime(response: MalListResponse<MalAnimeNode>): SeasonalAnimeDomainModel =
         SeasonalAnimeDomainModel(
-            data = response.data.toDomainDataModel(),
-            paging = response.paging.toDomainPagingModel(),
-            season = response.season.toDomainSeasonModel()
+            data = response.data.orEmpty().map { Data(node = it.node.toDomainNodeModel()) },
+            paging = Paging(next = response.paging?.next.orEmpty()),
+            season = Season(
+                year = response.season?.year ?: 0,
+                season = response.season?.season.orEmpty()
+            )
         )
 
-    private fun List<CurrentSeasonAnimeResponse.Data>?.toDomainDataModel() = this.orEmpty().map {
-        Data(node = it.node.toDomainNodeModel())
-    }
-
-    private fun CurrentSeasonAnimeResponse.Node?.toDomainNodeModel() = this?.run {
-        return Node(
-            id = id ?: 0,
-            title = title.orEmpty(),
-            alternativeTitles = alternativeTitles.toAlternativeTitles(),
-            mainPicture = mainPicture.toDomainMainPictureModel(),
-            mean = mean ?: 0.0,
-            broadcast = broadcast.toDomainBroadcastModel(),
-            status = status.orEmpty(),
-            mediaType = mediaType.orEmpty(),
-            numEpisodes = numEpisodes ?: 0,
-            studios = studios.toDomainStudioModel(),
-            synopsis = synopsis.orEmpty(),
-            genres = genres.toDomainGenreModel()
+    private fun MalAnimeNode?.toDomainNodeModel(): Node = this?.let {
+        Node(
+            id = it.id ?: 0,
+            title = it.title.orEmpty(),
+            alternativeTitles = it.alternativeTitles.toAlternativeTitles(),
+            mainPicture = MainPicture(
+                medium = it.mainPicture?.medium.orEmpty(),
+                large = it.mainPicture?.large.orEmpty()
+            ),
+            mean = it.mean ?: 0.0,
+            broadcast = Broadcast(
+                dayOfTheWeek = it.broadcast?.dayOfTheWeek.orEmpty(),
+                startTime = it.broadcast?.startTime.orEmpty()
+            ),
+            status = it.status.orEmpty(),
+            mediaType = it.mediaType.orEmpty(),
+            numEpisodes = it.numEpisodes ?: 0,
+            studios = it.studios.orEmpty().map { studio ->
+                Studio(id = studio.id ?: 0, name = studio.name.orEmpty())
+            },
+            synopsis = it.synopsis.orEmpty(),
+            genres = it.genres.orEmpty().map { genre ->
+                Genre(id = genre.id ?: 0, name = genre.name.orEmpty())
+            }
         )
     } ?: Node()
-
-    private fun CurrentSeasonAnimeResponse.MainPicture?.toDomainMainPictureModel(): MainPicture =
-        this?.run {
-            return MainPicture(
-                medium = medium.orEmpty(),
-                large = large.orEmpty()
-            )
-        } ?: MainPicture()
-
-    private fun CurrentSeasonAnimeResponse.Broadcast?.toDomainBroadcastModel(): Broadcast =
-        this?.run {
-            return Broadcast(
-                dayOfTheWeek = dayOfTheWeek.orEmpty(),
-                startTime = startTime.orEmpty()
-            )
-        } ?: Broadcast()
-
-    private fun List<CurrentSeasonAnimeResponse.Studio>?.toDomainStudioModel() = this.orEmpty().map {
-        Studio(
-            id = it.id ?: 0,
-            name = it.name.orEmpty()
-        )
-    }
-
-    private fun List<CurrentSeasonAnimeResponse.Genre>?.toDomainGenreModel() = this.orEmpty().map {
-        Genre(
-            id = it.id ?: 0,
-            name = it.name.orEmpty()
-        )
-    }
-
-    private fun CurrentSeasonAnimeResponse.Paging?.toDomainPagingModel(): Paging = this?.run {
-        return Paging(
-            next = next.orEmpty()
-        )
-    } ?: Paging()
-
-    private fun CurrentSeasonAnimeResponse.Season?.toDomainSeasonModel(): Season = this?.run {
-        return Season(
-            year = year ?: 0,
-            season = season.orEmpty()
-        )
-    } ?: Season()
 }

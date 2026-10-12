@@ -1,48 +1,35 @@
 package dev.fizcode.anime.data.mapper
 
 import dev.fizcode.anime.domain.model.TopAiringDomainModel
-import dev.fizcode.datasource.remote.response.TopAiringAnimeResponse
-import dev.fizcode.datasource.remote.response.toAlternativeTitles
+import dev.fizcode.mal.response.MalAnimeNode
+import dev.fizcode.mal.response.MalListResponse
+import dev.fizcode.mal.response.toAlternativeTitles
 
 internal class TopAiringDomainMapper {
 
-    fun mapToTopAiringAnime(response: TopAiringAnimeResponse): TopAiringDomainModel =
+    fun mapToTopAiringAnime(response: MalListResponse<MalAnimeNode>): TopAiringDomainModel =
         TopAiringDomainModel(
-            data = response.data.toDomainDataModel(),
-            paging = response.paging.toDomainPagingModel(),
-            season = response.season.toDomainSeasonModel()
+            data = response.data.orEmpty().map {
+                TopAiringDomainModel.Data(node = it.node.toDomainNodeModel())
+            },
+            paging = TopAiringDomainModel.Paging(next = response.paging?.next.orEmpty()),
+            season = TopAiringDomainModel.Season(
+                year = response.season?.year ?: 0,
+                season = response.season?.season.orEmpty()
+            )
         )
 
-    private fun List<TopAiringAnimeResponse.Data>?.toDomainDataModel() = this.orEmpty().map {
-        TopAiringDomainModel.Data(node = it.node.toDomainNodeModel())
-    }
-
-    private fun TopAiringAnimeResponse.Node?.toDomainNodeModel() = this?.run {
-        return TopAiringDomainModel.Node(
-            id = id.hashCode(),
-            title = title.orEmpty(),
-            alternativeTitles = alternativeTitles.toAlternativeTitles(),
-            mainPicture = mainPicture.toDomainMainPictureModel(),
-            mean = mean ?: 0.0
+    private fun MalAnimeNode?.toDomainNodeModel(): TopAiringDomainModel.Node = this?.let {
+        TopAiringDomainModel.Node(
+            id = it.id ?: 0,
+            mediaType = it.mediaType.orEmpty(),
+            title = it.title.orEmpty(),
+            alternativeTitles = it.alternativeTitles.toAlternativeTitles(),
+            mainPicture = TopAiringDomainModel.MainPicture(
+                medium = it.mainPicture?.medium.orEmpty(),
+                large = it.mainPicture?.large.orEmpty()
+            ),
+            mean = it.mean ?: 0.0
         )
     } ?: TopAiringDomainModel.Node()
-
-    private fun TopAiringAnimeResponse.MainPicture?.toDomainMainPictureModel() = this?.run {
-        return TopAiringDomainModel.MainPicture(
-            medium = medium.orEmpty(),
-            large = large.orEmpty()
-        )
-    } ?: TopAiringDomainModel.MainPicture()
-
-    private fun TopAiringAnimeResponse.Paging?.toDomainPagingModel() =
-        TopAiringDomainModel.Paging(
-            next = this?.next.orEmpty()
-        )
-
-    private fun TopAiringAnimeResponse.Season?.toDomainSeasonModel() = this?.run {
-        return TopAiringDomainModel.Season(
-            year = year.hashCode(),
-            season = season.orEmpty()
-        )
-    } ?: TopAiringDomainModel.Season()
 }

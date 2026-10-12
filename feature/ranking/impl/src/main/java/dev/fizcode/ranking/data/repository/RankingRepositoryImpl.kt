@@ -2,7 +2,7 @@ package dev.fizcode.ranking.data.repository
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.base.callhandler.processResponse
-import dev.fizcode.datasource.remote.service.DashboardAnimeService
+import dev.fizcode.mal.service.MalAnimeService
 import dev.fizcode.ranking.data.mapper.RankingDomainMapper
 import dev.fizcode.ranking.domain.model.RankingDomainModel
 import dev.fizcode.ranking.domain.repository.RankingRepository
@@ -12,7 +12,7 @@ import dev.fizcode.common.settings.current
 import dev.fizcode.common.settings.includesNsfw
 
 internal class RankingRepositoryImpl(
-    private val animeService: DashboardAnimeService,
+    private val animeService: MalAnimeService,
     private val rankingDomainMapper: RankingDomainMapper,
     private val nsfwFilterProvider: NsfwFilterProvider
 ) : RankingRepository {
@@ -23,7 +23,7 @@ internal class RankingRepositoryImpl(
         fields: String
     ): DomainNetworkState<RankingDomainModel> = processResponse {
         val nsfwFilter = nsfwFilterProvider.current()
-        val response = animeService.fetchTopRankingAnime(
+        val response = animeService.fetchRanking(
             rankingType = rankingType,
             limit = limit,
             fields = fields,

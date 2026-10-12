@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.fizcode.datasource"
+    namespace = "dev.fizcode.mal"
 }
 
 dependencies {
@@ -14,4 +14,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(projects.core.network)
     implementation(projects.core.common)
+
+    testImplementation(libs.junit)
 }
