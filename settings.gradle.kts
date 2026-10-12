@@ -48,6 +48,7 @@ include(":feature:search:api")
 include(":feature:search:impl")
 
 include(":core:common")
+include(":core:database")
 include(":core:datasource")
 include(":core:datastore")
 include(":core:designsystem")

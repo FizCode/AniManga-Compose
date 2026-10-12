@@ -1,4 +1,4 @@
-package dev.fizcode.datasource.utils
+package dev.fizcode.database.util
 
 internal object Constant {
     const val ANIMANGA_DB_NAME = "animanga_db"

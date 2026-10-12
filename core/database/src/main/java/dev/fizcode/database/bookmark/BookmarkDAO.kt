@@ -1,15 +1,14 @@
-package dev.fizcode.datasource.local.dao
+package dev.fizcode.database.bookmark
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import dev.fizcode.datasource.local.model.BookmarkEntity
-import dev.fizcode.datasource.utils.Constant
+import dev.fizcode.database.util.Constant
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface BookmarkDAO {
+internal interface BookmarkDAO {
 
     @Query("SELECT EXISTS(SELECT 1 FROM ${Constant.BOOKMARK_TABLE} WHERE media_id = :mediaId)")
     fun getIsBookmarked(mediaId: Int): Flow<Boolean>
@@ -22,5 +21,4 @@ interface BookmarkDAO {
 
     @Query("DELETE FROM ${Constant.BOOKMARK_TABLE} WHERE media_id = :mediaId")
     suspend fun deleteBookmark(mediaId: Int): Int
-
 }

@@ -1,12 +1,12 @@
-package dev.fizcode.datasource.local.model
+package dev.fizcode.database.bookmark
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import dev.fizcode.datasource.utils.Constant
+import dev.fizcode.database.util.Constant
 
 @Entity(tableName = Constant.BOOKMARK_TABLE)
-data class BookmarkEntity(
+internal data class BookmarkEntity(
     @PrimaryKey @ColumnInfo(name = "media_id") val mediaId: Int,
     @ColumnInfo(name = "media_type") val mediaType: String,
     @ColumnInfo(name = "poster_path") val posterPath: String,
@@ -16,7 +16,7 @@ data class BookmarkEntity(
     @ColumnInfo(name = "status") val status: String,
     @ColumnInfo(name = "studio") val studio: String,
     @ColumnInfo(name = "genres") val genres: String,
-    /** The other titles of the media, see [encodeSynonyms]. Empty for bookmarks saved before they existed. */
+    /** The synonyms in one column, see [BookmarkLocalDataSourceImpl]. */
     @ColumnInfo(name = "title_synonyms", defaultValue = "''") val titleSynonyms: String = "",
     @ColumnInfo(name = "title_japanese", defaultValue = "''") val titleJapanese: String = "",
     @ColumnInfo(name = "title_english", defaultValue = "''") val titleEnglish: String = ""

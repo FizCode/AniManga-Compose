@@ -15,7 +15,7 @@ dependencies {
 
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
-    implementation(projects.core.datasource)
+    implementation(projects.core.database)
     implementation(projects.core.navigation)
 
     implementation(libs.androidx.room.paging)

@@ -1,7 +1,6 @@
 package dev.fizcode.mediadetails.di
 
 import dev.fizcode.common.util.DiConstant
-import dev.fizcode.datasource.local.AniMangaDatabase
 import dev.fizcode.mediadetails.data.mapper.AniListDomainMapper
 import dev.fizcode.mediadetails.data.mapper.AnimeDetailsDomainMapper
 import dev.fizcode.mediadetails.data.mapper.BookmarkDomainMapper
@@ -74,7 +73,7 @@ private fun mediaDetailsRepositoryModule() = module {
         MediaDetailsRepositoryImpl(
             animeDetailsService = get(),
             aniListService = get(),
-            bookmarkDao = get<AniMangaDatabase>().bookmarkDao(),
+            bookmarkLocalDataSource = get(),
             animeDetailsDomainMapper = get(),
             aniListDomainMapper = get(),
             bookmarkDomainMapper = get(),

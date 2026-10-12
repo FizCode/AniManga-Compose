@@ -16,7 +16,7 @@ dependencies {
 
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
-    implementation(projects.core.datasource)
+    implementation(projects.core.database)
     implementation(projects.core.datastore)
     implementation(projects.core.navigation)
     implementation(projects.core.network)

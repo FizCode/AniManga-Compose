@@ -1,13 +1,11 @@
 package dev.fizcode.bookmark.data.mapper
 
 import dev.fizcode.bookmark.data.model.BookmarkDomainModel
-import dev.fizcode.datasource.local.model.BookmarkEntity
-import dev.fizcode.common.settings.AlternativeTitles
-import dev.fizcode.datasource.local.model.decodeSynonyms
+import dev.fizcode.database.bookmark.BookmarkRecord
 
 internal class BookmarkDomainMapper {
 
-    internal fun mapToBookmarkDomainModel(entity: List<BookmarkEntity>?) = entity.orEmpty().map {
+    internal fun mapToBookmarkDomainModel(records: List<BookmarkRecord>) = records.map {
         BookmarkDomainModel(
             mediaId = it.mediaId,
             mediaType = it.mediaType,
@@ -18,11 +16,7 @@ internal class BookmarkDomainMapper {
             status = it.status,
             studio = it.studio,
             genres = it.genres,
-            alternativeTitles = AlternativeTitles(
-                synonyms = decodeSynonyms(it.titleSynonyms),
-                japanese = it.titleJapanese,
-                english = it.titleEnglish
-            )
+            alternativeTitles = it.alternativeTitles
         )
     }
 

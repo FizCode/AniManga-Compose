@@ -2,7 +2,7 @@ package dev.fizcode.mediadetails.data.repository
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.base.callhandler.processResponse
-import dev.fizcode.datasource.local.dao.BookmarkDAO
+import dev.fizcode.database.bookmark.BookmarkLocalDataSource
 import dev.fizcode.mediadetails.data.mapper.AniListDomainMapper
 import dev.fizcode.mediadetails.data.mapper.AnimeDetailsDomainMapper
 import dev.fizcode.mediadetails.data.mapper.BookmarkDomainMapper
@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.Flow
 internal class MediaDetailsRepositoryImpl(
     private val animeDetailsService: MediaDetailsService,
     private val aniListService: AniListService,
-    private val bookmarkDao: BookmarkDAO,
+    private val bookmarkLocalDataSource: BookmarkLocalDataSource,
     private val animeDetailsDomainMapper: AnimeDetailsDomainMapper,
     private val aniListDomainMapper: AniListDomainMapper,
     private val bookmarkDomainMapper: BookmarkDomainMapper
@@ -66,15 +66,15 @@ internal class MediaDetailsRepositoryImpl(
     }
 
     override fun isBookmarked(animeId: Int): Flow<Boolean> =
-        bookmarkDao.getIsBookmarked(mediaId = animeId)
+        bookmarkLocalDataSource.isBookmarked(mediaId = animeId)
 
 
     override suspend fun bookmarkMedia(bookmarkEntity: BookmarkDomainModel): Long =
-        bookmarkDao.setBookmark(
-            bookmarkEntity = bookmarkDomainMapper.mapTopBookmarkEntity(data = bookmarkEntity)
+        bookmarkLocalDataSource.saveBookmark(
+            record = bookmarkDomainMapper.mapToBookmarkRecord(data = bookmarkEntity)
         )
 
-    override suspend fun deleteBookmark(mediaId: Int): Int = bookmarkDao.deleteBookmark(mediaId)
+    override suspend fun deleteBookmark(mediaId: Int): Int = bookmarkLocalDataSource.deleteBookmark(mediaId)
 
 }
 

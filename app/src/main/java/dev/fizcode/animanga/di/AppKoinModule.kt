@@ -2,7 +2,7 @@ package dev.fizcode.animanga.di
 
 import dev.fizcode.anime.di.animeKoinModule
 import dev.fizcode.bookmark.di.bookmarkKoinModule
-import dev.fizcode.datasource.local.di.localDataSourceKoinModule
+import dev.fizcode.database.di.databaseKoinModule
 import dev.fizcode.datasource.remote.di.remoteDataSourceKoinModule
 import dev.fizcode.datastore.di.DatastoreKoinModule
 import dev.fizcode.manga.di.mangaKoinModule
@@ -39,7 +39,7 @@ internal fun featureModule() = module {
 internal fun coreModule() = module {
     includes(
         DatastoreKoinModule,
-        localDataSourceKoinModule(),
+        databaseKoinModule(),
         networkModule(),
         remoteDataSourceKoinModule()
     )

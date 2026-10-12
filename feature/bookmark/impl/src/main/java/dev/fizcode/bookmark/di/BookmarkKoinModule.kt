@@ -5,7 +5,6 @@ import dev.fizcode.bookmark.data.repository.BookmarkRepositoryImpl
 import dev.fizcode.bookmark.domain.repository.BookmarkRepository
 import dev.fizcode.bookmark.presentation.BookmarkViewModel
 import dev.fizcode.bookmark.presentation.mapper.BookmarkUiMapper
-import dev.fizcode.datasource.local.AniMangaDatabase
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -34,7 +33,7 @@ private fun bookmarkDomainMapperModule() = module {
 private fun bookmarkRepositoryModule() = module {
     single<BookmarkRepository> {
         BookmarkRepositoryImpl(
-            bookmarkDAO = get<AniMangaDatabase>().bookmarkDao(),
+            bookmarkLocalDataSource = get(),
             bookmarkDomainMapper = get()
         )
     }
