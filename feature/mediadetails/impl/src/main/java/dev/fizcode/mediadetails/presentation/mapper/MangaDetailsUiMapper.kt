@@ -105,15 +105,21 @@ internal class MangaDetailsUiMapper {
         characters: List<CastDomainModel>
     ): ImmutableList<MangaCharacterUiModel> = characters.sortedWith(
         compareBy({ it.role.lowercase() != Constant.SORT_MAIN }, { it.character.id })
-    ).take(MAX_CHARACTERS).map {
-        MangaCharacterUiModel(
-            characterId = it.character.id,
-            name = it.character.name,
-            image = it.character.images.jpg.imageUrl,
-            role = it.role,
-            url = it.character.url
-        )
-    }.toImmutableList()
+    ).take(MAX_CHARACTERS).map { it.toCharacterUiModel() }.toImmutableList()
+
+    /** A page of the full character list, in the order AniList sends it. */
+    internal fun mapToCharacterPage(
+        characters: List<CastDomainModel>
+    ): ImmutableList<MangaCharacterUiModel> =
+        characters.map { it.toCharacterUiModel() }.toImmutableList()
+
+    private fun CastDomainModel.toCharacterUiModel() = MangaCharacterUiModel(
+        characterId = character.id,
+        name = character.name,
+        image = character.images.jpg.imageUrl,
+        role = role,
+        url = character.url
+    )
 
     private fun volumeAndChapter(mal: MalMangaDetailsDomainModel) =
         "${Constant.VOLUME} ${countOrUnknown(mal.numVolumes)} " +

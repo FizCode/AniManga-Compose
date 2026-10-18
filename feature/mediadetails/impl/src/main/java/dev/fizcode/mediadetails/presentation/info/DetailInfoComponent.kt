@@ -42,6 +42,8 @@ fun DetailInfoComponent(
     cast: UiState<ImmutableList<AnimeCastUiModel>>,
     staff: UiState<ImmutableList<AnimeStaffUiModel>>,
     onRetryCastAndStaff: () -> Unit,
+    onMoreCastClick: () -> Unit,
+    onMoreStaffClick: () -> Unit,
     onClickShare: (String) -> Unit
 ) {
     val tabItems = TabContents.entries
@@ -95,7 +97,8 @@ fun DetailInfoComponent(
                         castUiModel = cast,
                         staffUiModel = staff,
                         onRetry = onRetryCastAndStaff,
-                        onMoreClick = {},
+                        onMoreCastClick = onMoreCastClick,
+                        onMoreStaffClick = onMoreStaffClick,
                         onCastImageClick = {}
                     )
 
@@ -116,6 +119,8 @@ private fun DetailInfoComponentPreview() {
             cast = UiState.Success(MediaDetailsPreviewData.animeCast),
             staff = UiState.Success(MediaDetailsPreviewData.animeStaff),
             onRetryCastAndStaff = {},
+            onMoreCastClick = {},
+            onMoreStaffClick = {},
             onClickShare = {}
         )
     }
@@ -130,6 +135,8 @@ private fun DetailInfoComponentLoadingPreview() {
             cast = UiState.Loading,
             staff = UiState.Loading,
             onRetryCastAndStaff = {},
+            onMoreCastClick = {},
+            onMoreStaffClick = {},
             onClickShare = {}
         )
     }

@@ -146,6 +146,7 @@ internal class AnimeDetailsUiMapper {
     }.toImmutableList()
 
 
+    /** The main characters first, and only the first few for the details tab. */
     internal fun mapToAnimeCastUiModel(
         voiceActors: List<CastDomainModel>
     ): ImmutableList<AnimeCastUiModel> = voiceActors.sortedWith(
@@ -153,32 +154,43 @@ internal class AnimeDetailsUiMapper {
             { it.role.lowercase() != Constant.SORT_MAIN },
             { it.character.id }
         )
-    ).take(10).map {
-        AnimeCastUiModel(
-            characterId = it.character.id,
-            character = it.character.name,
-            characterImage = it.character.images.jpg.imageUrl,
-            characterRole = it.role,
-            characterUrl = it.character.url,
-            voiceActorId = it.voiceActors.person.id,
-            voiceActorName = it.voiceActors.person.name,
-            voiceActorImage = it.voiceActors.person.images.jpg.imageUrl,
-            voiceActorLang = it.voiceActors.language,
-            voiceActorUrl = it.voiceActors.person.url
-        )
-    }.toImmutableList()
+    ).take(10).map { it.toCastUiModel() }.toImmutableList()
+
+    /** A page of the full cast list, in the order AniList sends it. */
+    internal fun mapToAnimeCastPage(
+        voiceActors: List<CastDomainModel>
+    ): ImmutableList<AnimeCastUiModel> = voiceActors.map { it.toCastUiModel() }.toImmutableList()
 
     internal fun mapToStaffUiModel(
         staffData: List<StaffDomainModel>
-    ): ImmutableList<AnimeStaffUiModel> = staffData.map {
-        AnimeStaffUiModel(
-            staffId = it.person.id,
-            name = it.person.name,
-            role = it.positions.toStringWithComma(),
-            image = it.person.images.jpg.imageUrl,
-            url = it.person.url
-        )
-    }.take(10).toImmutableList()
+    ): ImmutableList<AnimeStaffUiModel> =
+        staffData.map { it.toStaffUiModel() }.take(10).toImmutableList()
+
+    /** A page of the full staff list, in the order AniList sends it. */
+    internal fun mapToStaffPage(
+        staffData: List<StaffDomainModel>
+    ): ImmutableList<AnimeStaffUiModel> = staffData.map { it.toStaffUiModel() }.toImmutableList()
+
+    private fun CastDomainModel.toCastUiModel() = AnimeCastUiModel(
+        characterId = character.id,
+        character = character.name,
+        characterImage = character.images.jpg.imageUrl,
+        characterRole = role,
+        characterUrl = character.url,
+        voiceActorId = voiceActors.person.id,
+        voiceActorName = voiceActors.person.name,
+        voiceActorImage = voiceActors.person.images.jpg.imageUrl,
+        voiceActorLang = voiceActors.language,
+        voiceActorUrl = voiceActors.person.url
+    )
+
+    private fun StaffDomainModel.toStaffUiModel() = AnimeStaffUiModel(
+        staffId = person.id,
+        name = person.name,
+        role = positions.toStringWithComma(),
+        image = person.images.jpg.imageUrl,
+        url = person.url
+    )
 
     private fun malRatingLabel(rating: String): String = MAL_RATINGS[rating] ?: rating
 

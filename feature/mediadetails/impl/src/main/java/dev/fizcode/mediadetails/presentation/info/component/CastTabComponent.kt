@@ -41,7 +41,8 @@ internal fun CastTabComponent(
     castUiModel: UiState<ImmutableList<AnimeCastUiModel>>,
     staffUiModel: UiState<ImmutableList<AnimeStaffUiModel>>,
     onRetry: () -> Unit,
-    onMoreClick: () -> Unit,
+    onMoreCastClick: () -> Unit,
+    onMoreStaffClick: () -> Unit,
     onCastImageClick: () -> Unit
 ) = Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
     when (castUiModel) {
@@ -56,7 +57,7 @@ internal fun CastTabComponent(
         is UiState.Success -> {
             SectionContainer(
                 title = Constant.CHARACTERS_AND_VA,
-                onMoreClick = onMoreClick
+                onMoreClick = onMoreCastClick
             ) {
                 castUiModel.data.forEach { data ->
                     CharacterCast(
@@ -82,7 +83,7 @@ internal fun CastTabComponent(
         is UiState.Success -> {
             SectionContainer(
                 title = Constant.STAFF,
-                onMoreClick = onMoreClick
+                onMoreClick = onMoreStaffClick
             ) {
                 staffUiModel.data.forEach { data ->
                     Staffs(
@@ -182,7 +183,8 @@ private fun CastTabPreviewContent(
             castUiModel = cast,
             staffUiModel = staff,
             onRetry = {},
-            onMoreClick = {},
+            onMoreCastClick = {},
+            onMoreStaffClick = {},
             onCastImageClick = {}
         )
     }

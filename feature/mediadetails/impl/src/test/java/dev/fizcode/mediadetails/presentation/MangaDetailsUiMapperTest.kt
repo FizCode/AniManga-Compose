@@ -117,4 +117,19 @@ class MangaDetailsUiMapperTest {
 
         assertEquals(listOf(2, 3, 1), characters.map { it.characterId })
     }
+
+    @Test
+    fun `a page of the characters keeps every entry in the order it came`() {
+        fun cast(id: Int, role: String) = CastDomainModel(
+            character = CastDomainModel.Character(id = id, name = "C$id"),
+            role = role
+        )
+
+        val characters = mapper.mapToCharacterPage(
+            listOf(cast(1, "Supporting"), cast(3, "Main")) + List(30) { cast(it + 10, "Main") }
+        )
+
+        assertEquals(32, characters.size)
+        assertEquals(listOf(1, 3), characters.take(2).map { it.characterId })
+    }
 }
