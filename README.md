@@ -123,19 +123,6 @@ The Google Play build is the `prodRelease` bundle:
 ./gradlew :app:bundleProdRelease
 ```
 
-### Signing
-
-The release build is signed with the upload key when it is available, and left unsigned otherwise.
-Give the key in `keystore.properties` (copy `keystore.properties.example`, the file is not
-committed) or with these environment variables:
-
-```
-ANIMANGA_KEYSTORE_FILE, ANIMANGA_KEYSTORE_PASSWORD, ANIMANGA_KEY_ALIAS, ANIMANGA_KEY_PASSWORD
-```
-
-Never commit a keystore or its passwords. Keep a backup of the upload keystore, and use Play App
-Signing.
-
 ### Fastlane
 
 | Lane | What it does |
