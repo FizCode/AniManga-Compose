@@ -112,7 +112,6 @@ internal class MediaDetailsViewModel(
     }
 
     fun bookmarkMedia(bookmarkData: BookmarkArgument) = viewModelScope.launch {
-        logMemoryUsage("Before Bookmark")
         if (isBookmarked.value) {
             animeRepository.deleteBookmark(mediaId)
             _effect.emit("Media unbookmarked")
@@ -122,14 +121,5 @@ internal class MediaDetailsViewModel(
             )
             _effect.emit("Media bookmarked")
         }
-        logMemoryUsage("After Bookmark")
-    }
-
-    private fun logMemoryUsage(label: String) {
-        // Calling System.gc() is expensive but helps get a more "stable" baseline
-        System.gc()
-        val runtime = Runtime.getRuntime()
-        val usedMemory = runtime.totalMemory() - runtime.freeMemory()
-        println("FizTrace: MemoryComparison [$label]: $usedMemory bytes")
     }
 }
