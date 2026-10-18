@@ -1,7 +1,6 @@
 package dev.fizcode.mediadetails.di
 
 import dev.fizcode.common.util.DiConstant
-import dev.fizcode.datasource.local.AniMangaDatabase
 import dev.fizcode.mediadetails.data.mapper.AniListDomainMapper
 import dev.fizcode.mediadetails.data.mapper.AnimeDetailsDomainMapper
 import dev.fizcode.mediadetails.data.mapper.BookmarkDomainMapper
@@ -22,10 +21,14 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import dev.fizcode.mediadetails.presentation.people.MangaCharactersViewModel
+import dev.fizcode.mediadetails.presentation.people.MediaCastViewModel
+import dev.fizcode.mediadetails.presentation.people.MediaStaffViewModel
 
 fun mediaDetailsKoinModule() = module {
     includes(
         mediaDetailsViewModelModule(),
+        mediaDetailsPeopleViewModelModule(),
         mediaDetailsUiMapperModule(),
         mediaDetailsUseCaseModule(),
         mediaDetailsDomainMapperModule(),
@@ -48,6 +51,18 @@ private fun mediaDetailsViewModelModule() = module {
             mangaRepository = get(),
             mangaDetailsUiMapper = get()
         )
+    }
+}
+
+private fun mediaDetailsPeopleViewModelModule() = module {
+    viewModel { (mediaId: Int) ->
+        MediaCastViewModel(mediaId = mediaId, repository = get(), uiMapper = get())
+    }
+    viewModel { (mediaId: Int) ->
+        MediaStaffViewModel(mediaId = mediaId, repository = get(), uiMapper = get())
+    }
+    viewModel { (mediaId: Int) ->
+        MangaCharactersViewModel(mediaId = mediaId, repository = get(), uiMapper = get())
     }
 }
 
@@ -74,7 +89,7 @@ private fun mediaDetailsRepositoryModule() = module {
         MediaDetailsRepositoryImpl(
             animeDetailsService = get(),
             aniListService = get(),
-            bookmarkDao = get<AniMangaDatabase>().bookmarkDao(),
+            bookmarkLocalDataSource = get(),
             animeDetailsDomainMapper = get(),
             aniListDomainMapper = get(),
             bookmarkDomainMapper = get(),

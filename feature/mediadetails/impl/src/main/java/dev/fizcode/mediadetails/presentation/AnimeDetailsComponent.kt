@@ -45,6 +45,8 @@ internal fun AnimeDetailsComponent(
     selectedImage: (String) -> Unit,
     onRetryDetails: () -> Unit,
     onRetryCastAndStaff: () -> Unit,
+    onMoreCastClick: () -> Unit,
+    onMoreStaffClick: () -> Unit,
     onClickBookmark: (AnimeDetailsUiModel) -> Unit,
     onClickShare: (String) -> Unit
 ) = LazyColumn(
@@ -71,6 +73,8 @@ internal fun AnimeDetailsComponent(
                     cast = animeCast,
                     staff = animeStaff,
                     onRetryCastAndStaff = onRetryCastAndStaff,
+                    onMoreCastClick = onMoreCastClick,
+                    onMoreStaffClick = onMoreStaffClick,
                     onClickShare = onClickShare
                 )
             }
@@ -274,6 +278,8 @@ private fun AnimeDetailsComponentPreview(
             selectedImage = {},
             onRetryDetails = {},
             onRetryCastAndStaff = {},
+            onMoreCastClick = {},
+            onMoreStaffClick = {},
             onClickBookmark = {},
             onClickShare = {}
         )

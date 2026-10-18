@@ -60,7 +60,7 @@ internal fun CharactersTabComponent(
 }
 
 @Composable
-private fun CharacterRow(
+internal fun CharacterRow(
     character: MangaCharacterUiModel,
     onClick: () -> Unit
 ) = Row(

@@ -6,13 +6,13 @@ import dev.fizcode.common.settings.NsfwFilterProvider
 import dev.fizcode.common.settings.allows
 import dev.fizcode.common.settings.current
 import dev.fizcode.common.settings.includesNsfw
-import dev.fizcode.datasource.remote.service.DashboardAnimeService
+import dev.fizcode.mal.service.MalAnimeService
 import dev.fizcode.search.data.mapper.SearchDomainMapper
 import dev.fizcode.search.domain.model.SearchAnimeDomainModel
 import dev.fizcode.search.domain.repository.SearchRepository
 
 internal class SearchRepositoryImpl(
-    private val animeService: DashboardAnimeService,
+    private val animeService: MalAnimeService,
     private val searchDomainMapper: SearchDomainMapper,
     private val nsfwFilterProvider: NsfwFilterProvider
 ) : SearchRepository {
@@ -23,7 +23,7 @@ internal class SearchRepositoryImpl(
         fields: String
     ): DomainNetworkState<SearchAnimeDomainModel> = processResponse {
         val nsfwFilter = nsfwFilterProvider.current()
-        val response = animeService.searchAnime(
+        val response = animeService.search(
             query = query,
             limit = limit,
             fields = fields,

@@ -52,20 +52,20 @@ class BookmarkMappersTest {
     }
 
     @Test
-    fun `domain model maps to entity with comma separated genres`() {
-        val entity = BookmarkDomainMapper().mapTopBookmarkEntity(
+    fun `domain model maps to record with comma separated genres`() {
+        val record = BookmarkDomainMapper().mapToBookmarkRecord(
             AnimeBookmarkUiMapper().mapToBookmarkDomainModel(argument)
         )
 
-        assertEquals(10, entity.mediaId)
-        assertEquals("TV", entity.mediaType)
-        assertEquals("poster", entity.posterPath)
-        assertEquals("8.5", entity.rating)
-        assertEquals("Bleach", entity.title)
-        assertEquals("12 Episodes", entity.episodes)
-        assertEquals("Finished", entity.status)
-        assertEquals("Pierrot", entity.studio)
-        assertEquals("Action, Comedy", entity.genres)
+        assertEquals(10, record.mediaId)
+        assertEquals("TV", record.mediaType)
+        assertEquals("poster", record.posterPath)
+        assertEquals("8.5", record.rating)
+        assertEquals("Bleach", record.title)
+        assertEquals("12 Episodes", record.episodes)
+        assertEquals("Finished", record.status)
+        assertEquals("Pierrot", record.studio)
+        assertEquals("Action, Comedy", record.genres)
     }
 
     @Test
@@ -79,13 +79,11 @@ class BookmarkMappersTest {
             )
         )
 
-        val entity = BookmarkDomainMapper().mapTopBookmarkEntity(
+        val record = BookmarkDomainMapper().mapToBookmarkRecord(
             AnimeBookmarkUiMapper().mapToBookmarkDomainModel(argument.copy(titles = titles))
         )
 
-        assertEquals("Burichi\nBlich", entity.titleSynonyms)
-        assertEquals("ブリーチ", entity.titleJapanese)
-        assertEquals("Bleach EN", entity.titleEnglish)
+        assertEquals(titles.alternative, record.alternativeTitles)
     }
 
     @Test

@@ -2,7 +2,7 @@ package dev.fizcode.mediadetails.data.repository
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.base.callhandler.processResponse
-import dev.fizcode.datasource.local.dao.BookmarkDAO
+import dev.fizcode.database.bookmark.BookmarkLocalDataSource
 import dev.fizcode.mediadetails.data.mapper.AniListDomainMapper
 import dev.fizcode.mediadetails.data.mapper.AnimeDetailsDomainMapper
 import dev.fizcode.mediadetails.data.mapper.BookmarkDomainMapper
@@ -18,11 +18,12 @@ import dev.fizcode.mediadetails.domain.repository.MediaDetailsRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import dev.fizcode.mediadetails.domain.model.PagedResult
 
 internal class MediaDetailsRepositoryImpl(
     private val animeDetailsService: MediaDetailsService,
     private val aniListService: AniListService,
-    private val bookmarkDao: BookmarkDAO,
+    private val bookmarkLocalDataSource: BookmarkLocalDataSource,
     private val animeDetailsDomainMapper: AnimeDetailsDomainMapper,
     private val aniListDomainMapper: AniListDomainMapper,
     private val bookmarkDomainMapper: BookmarkDomainMapper
@@ -65,16 +66,36 @@ internal class MediaDetailsRepositoryImpl(
         aniListDomainMapper.mapToStaffDomainModel(aniListService.fetchStaff(malId = animeId))
     }
 
+    override suspend fun fetchAnimeCastPage(
+        animeId: Int,
+        page: Int,
+        perPage: Int
+    ): DomainNetworkState<PagedResult<CastDomainModel>> = processResponse {
+        aniListDomainMapper.mapToCastPage(
+            aniListService.fetchCastPage(malId = animeId, page = page, perPage = perPage)
+        )
+    }
+
+    override suspend fun fetchAnimeStaffPage(
+        animeId: Int,
+        page: Int,
+        perPage: Int
+    ): DomainNetworkState<PagedResult<StaffDomainModel>> = processResponse {
+        aniListDomainMapper.mapToStaffPage(
+            aniListService.fetchStaffPage(malId = animeId, page = page, perPage = perPage)
+        )
+    }
+
     override fun isBookmarked(animeId: Int): Flow<Boolean> =
-        bookmarkDao.getIsBookmarked(mediaId = animeId)
+        bookmarkLocalDataSource.isBookmarked(mediaId = animeId)
 
 
     override suspend fun bookmarkMedia(bookmarkEntity: BookmarkDomainModel): Long =
-        bookmarkDao.setBookmark(
-            bookmarkEntity = bookmarkDomainMapper.mapTopBookmarkEntity(data = bookmarkEntity)
+        bookmarkLocalDataSource.saveBookmark(
+            record = bookmarkDomainMapper.mapToBookmarkRecord(data = bookmarkEntity)
         )
 
-    override suspend fun deleteBookmark(mediaId: Int): Int = bookmarkDao.deleteBookmark(mediaId)
+    override suspend fun deleteBookmark(mediaId: Int): Int = bookmarkLocalDataSource.deleteBookmark(mediaId)
 
 }
 

@@ -51,7 +51,10 @@ import dev.fizcode.common.settings.MediaTitles
 internal fun MediaDetailsScreen(
     mediaId: Int,
     mediaType: String, // decides which details ui is shown: anime or manga
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    onOpenCast: () -> Unit,
+    onOpenStaff: () -> Unit,
+    onOpenCharacters: () -> Unit
 ) {
     val mediaDetailsViewModel: MediaDetailsViewModel = koinViewModel(key = "$mediaId") {
         parametersOf(mediaId)
@@ -116,6 +119,8 @@ internal fun MediaDetailsScreen(
                     selectedImage = { selectedImage = it },
                     onRetryDetails = mediaDetailsViewModel::retryDetails,
                     onRetryCastAndStaff = mediaDetailsViewModel::retryCastAndStaff,
+                    onMoreCastClick = onOpenCast,
+                    onMoreStaffClick = onOpenStaff,
                     onClickShare = onClickShare,
                     onClickBookmark = { animeMediaDetails ->
                         mediaDetailsViewModel.bookmarkMedia(
@@ -138,6 +143,7 @@ internal fun MediaDetailsScreen(
                     selectedImage = { selectedImage = it },
                     onRetryDetails = mediaDetailsViewModel::retryMangaDetails,
                     onRetryCharacters = mediaDetailsViewModel::retryMangaCharacters,
+                    onMoreCharactersClick = onOpenCharacters,
                     onClickShare = onClickShare,
                     onClickBookmark = { mangaMediaDetails ->
                         mediaDetailsViewModel.bookmarkMedia(
@@ -262,6 +268,8 @@ private fun AnimeDetailsScreenPreview() {
                 selectedImage = {},
                 onRetryDetails = {},
                 onRetryCastAndStaff = {},
+                onMoreCastClick = {},
+                onMoreStaffClick = {},
                 onClickBookmark = {},
                 onClickShare = {}
             )
@@ -289,6 +297,7 @@ private fun MangaDetailsScreenPreview() {
                 selectedImage = {},
                 onRetryDetails = {},
                 onRetryCharacters = {},
+                onMoreCharactersClick = {},
                 onClickBookmark = {},
                 onClickShare = {}
             )
@@ -317,6 +326,8 @@ private fun AnimeDetailsScreenLoadingPreview() {
                 selectedImage = {},
                 onRetryDetails = {},
                 onRetryCastAndStaff = {},
+                onMoreCastClick = {},
+                onMoreStaffClick = {},
                 onClickBookmark = {},
                 onClickShare = {}
             )
@@ -344,6 +355,7 @@ private fun MangaDetailsScreenLoadingPreview() {
                 selectedImage = {},
                 onRetryDetails = {},
                 onRetryCharacters = {},
+                onMoreCharactersClick = {},
                 onClickBookmark = {},
                 onClickShare = {}
             )

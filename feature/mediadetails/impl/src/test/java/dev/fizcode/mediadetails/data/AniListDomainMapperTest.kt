@@ -8,6 +8,7 @@ import dev.fizcode.mediadetails.data.response.AniListStaffResponse
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import dev.fizcode.mediadetails.data.response.AniListPageInfo
 
 class AniListDomainMapperTest {
 
@@ -184,5 +185,45 @@ class AniListDomainMapperTest {
 
         assertTrue(details.producers.isEmpty())
         assertTrue(details.themes.isEmpty())
+    }
+
+    @Test
+    fun `cast page tells whether there is a next page`() {
+        val withNext = AniListCastResponse(
+            data = AniListCastResponse.Data(
+                media = AniListCastResponse.Media(
+                    characters = AniListCastResponse.Characters(
+                        pageInfo = AniListPageInfo(hasNextPage = true),
+                        edges = listOf(AniListCastResponse.Edge(role = "MAIN", node = person(1, "A")))
+                    )
+                )
+            )
+        )
+
+        val page = mapper.mapToCastPage(withNext)
+
+        assertEquals(listOf(1), page.items.map { it.character.id })
+        assertTrue(page.hasNextPage)
+        assertEquals(false, mapper.mapToCastPage(castResponse()).hasNextPage)
+    }
+
+    @Test
+    fun `staff page tells whether there is a next page`() {
+        val withNext = AniListStaffResponse(
+            data = AniListStaffResponse.Data(
+                media = AniListStaffResponse.Media(
+                    staff = AniListStaffResponse.Staff(
+                        pageInfo = AniListPageInfo(hasNextPage = true),
+                        edges = listOf(AniListStaffResponse.Edge(role = "Director", node = person(2, "B")))
+                    )
+                )
+            )
+        )
+
+        val page = mapper.mapToStaffPage(withNext)
+
+        assertEquals(listOf(2), page.items.map { it.person.id })
+        assertTrue(page.hasNextPage)
+        assertEquals(false, mapper.mapToStaffPage(staffResponse()).hasNextPage)
     }
 }

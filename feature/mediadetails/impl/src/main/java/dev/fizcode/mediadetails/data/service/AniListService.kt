@@ -31,10 +31,30 @@ internal class AniListService(
 
     suspend fun fetchStaff(malId: Int): AniListStaffResponse = query(STAFF_QUERY, malId)
 
-    private suspend inline fun <reified Response> query(query: String, malId: Int): Response =
+    /** One page of the characters of an anime, [perPage] is at most 50 for AniList. */
+    suspend fun fetchCastPage(malId: Int, page: Int, perPage: Int): AniListCastResponse =
+        query(CAST_PAGE_QUERY, malId, page, perPage)
+
+    suspend fun fetchStaffPage(malId: Int, page: Int, perPage: Int): AniListStaffResponse =
+        query(STAFF_PAGE_QUERY, malId, page, perPage)
+
+    suspend fun fetchMangaCharactersPage(malId: Int, page: Int, perPage: Int): AniListCastResponse =
+        query(MANGA_CHARACTERS_PAGE_QUERY, malId, page, perPage)
+
+    private suspend inline fun <reified Response> query(
+        query: String,
+        malId: Int,
+        page: Int? = null,
+        perPage: Int? = null
+    ): Response =
         client.post(GRAPHQL_PATH) {
             contentType(ContentType.Application.Json)
-            setBody(GraphQlRequest(query = query, variables = GraphQlVariables(idMal = malId)))
+            setBody(
+                GraphQlRequest(
+                    query = query,
+                    variables = GraphQlVariables(idMal = malId, page = page, perPage = perPage)
+                )
+            )
         }.body()
 
     @Serializable
@@ -45,7 +65,10 @@ internal class AniListService(
 
     @Serializable
     private data class GraphQlVariables(
-        val idMal: Int
+        val idMal: Int,
+        // Left out of the request when null, the queries without a page do not declare them.
+        val page: Int? = null,
+        val perPage: Int? = null
     )
 
     private companion object {
@@ -92,6 +115,49 @@ internal class AniListService(
                     role
                     node { $PERSON_FIELDS }
                     voiceActors(language: JAPANESE) { $PERSON_FIELDS }
+                  }
+                }
+              }
+            }
+        """
+
+        const val MANGA_CHARACTERS_PAGE_QUERY = """
+            query(${'$'}idMal: Int, ${'$'}page: Int, ${'$'}perPage: Int) {
+              Media(idMal: ${'$'}idMal, type: MANGA) {
+                characters(page: ${'$'}page, perPage: ${'$'}perPage, sort: [ROLE, RELEVANCE]) {
+                  pageInfo { hasNextPage }
+                  edges {
+                    role
+                    node { $PERSON_FIELDS }
+                  }
+                }
+              }
+            }
+        """
+
+        const val CAST_PAGE_QUERY = """
+            query(${'$'}idMal: Int, ${'$'}page: Int, ${'$'}perPage: Int) {
+              Media(idMal: ${'$'}idMal, type: ANIME) {
+                characters(page: ${'$'}page, perPage: ${'$'}perPage, sort: [ROLE, RELEVANCE]) {
+                  pageInfo { hasNextPage }
+                  edges {
+                    role
+                    node { $PERSON_FIELDS }
+                    voiceActors(language: JAPANESE) { $PERSON_FIELDS }
+                  }
+                }
+              }
+            }
+        """
+
+        const val STAFF_PAGE_QUERY = """
+            query(${'$'}idMal: Int, ${'$'}page: Int, ${'$'}perPage: Int) {
+              Media(idMal: ${'$'}idMal, type: ANIME) {
+                staff(page: ${'$'}page, perPage: ${'$'}perPage, sort: [RELEVANCE]) {
+                  pageInfo { hasNextPage }
+                  edges {
+                    role
+                    node { $PERSON_FIELDS }
                   }
                 }
               }

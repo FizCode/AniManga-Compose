@@ -13,6 +13,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import dev.fizcode.mediadetails.domain.model.PagedResult
 
 class FetchAnimeDetailsUseCaseTest {
 
@@ -35,6 +36,12 @@ class FetchAnimeDetailsUseCaseTest {
 
         override suspend fun fetchAnimeStaff(animeId: Int) =
             DomainNetworkState.Empty as DomainNetworkState<List<StaffDomainModel>>
+
+        override suspend fun fetchAnimeCastPage(animeId: Int, page: Int, perPage: Int) =
+            DomainNetworkState.Empty as DomainNetworkState<PagedResult<CastDomainModel>>
+
+        override suspend fun fetchAnimeStaffPage(animeId: Int, page: Int, perPage: Int) =
+            DomainNetworkState.Empty as DomainNetworkState<PagedResult<StaffDomainModel>>
 
         override fun isBookmarked(animeId: Int): Flow<Boolean> = flowOf(false)
         override suspend fun bookmarkMedia(bookmarkEntity: BookmarkDomainModel): Long = 0L

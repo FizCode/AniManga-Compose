@@ -24,6 +24,10 @@ internal object Constant {
     const val CHARACTERS_UNAVAILABLE = "Characters are unavailable right now."
     const val MANGA_EXTENDED_INFO_UNAVAILABLE = "Favorites and themes are unavailable right now."
     const val CHAPTER = "Ch."
+    const val EMPTY_CHARACTERS = "No characters found."
+    const val EMPTY_STAFF = "No staff found."
+    const val LOAD_MORE_FAILED = "More could not be loaded."
+    const val PAGE_LOAD_MORE_THRESHOLD = 8
     const val UNKNOWN = "Unknown"
     const val UNKNOWN_COUNT = "??"
     const val VOLUME = "Vol."

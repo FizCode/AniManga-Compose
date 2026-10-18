@@ -32,6 +32,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
+import dev.fizcode.mediadetails.domain.model.PagedResult
 
 class MediaDetailsViewModelTest {
 
@@ -64,6 +65,12 @@ class MediaDetailsViewModelTest {
 
         override suspend fun fetchAnimeStaff(animeId: Int) = staffResult
 
+        override suspend fun fetchAnimeCastPage(animeId: Int, page: Int, perPage: Int) =
+            DomainNetworkState.Empty as DomainNetworkState<PagedResult<CastDomainModel>>
+
+        override suspend fun fetchAnimeStaffPage(animeId: Int, page: Int, perPage: Int) =
+            DomainNetworkState.Empty as DomainNetworkState<PagedResult<StaffDomainModel>>
+
         override fun isBookmarked(animeId: Int): Flow<Boolean> = bookmarked
 
         override suspend fun bookmarkMedia(bookmarkEntity: BookmarkDomainModel): Long {
@@ -90,6 +97,9 @@ class MediaDetailsViewModelTest {
         }
 
         override suspend fun fetchMangaCharacters(mangaId: Int) = charactersResult
+
+        override suspend fun fetchMangaCharactersPage(mangaId: Int, page: Int, perPage: Int) =
+            DomainNetworkState.Empty as DomainNetworkState<PagedResult<CastDomainModel>>
     }
 
     private val repository = FakeMediaDetailsRepository()

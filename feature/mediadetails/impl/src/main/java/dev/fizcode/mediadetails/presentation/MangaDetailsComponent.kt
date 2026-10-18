@@ -30,6 +30,7 @@ internal fun MangaDetailsComponent(
     selectedImage: (String) -> Unit,
     onRetryDetails: () -> Unit,
     onRetryCharacters: () -> Unit,
+    onMoreCharactersClick: () -> Unit,
     onClickBookmark: (MangaDetailsUiModel) -> Unit,
     onClickShare: (String) -> Unit
 ) = LazyColumn(
@@ -55,6 +56,7 @@ internal fun MangaDetailsComponent(
                     infoUiModel = mangaDetails.data.mangaDetailsInfoUiModel,
                     characters = characters,
                     onRetryCharacters = onRetryCharacters,
+                    onMoreCharactersClick = onMoreCharactersClick,
                     onClickShare = onClickShare
                 )
             }
@@ -86,6 +88,7 @@ private fun MangaDetailsComponentPreview(
             selectedImage = {},
             onRetryDetails = {},
             onRetryCharacters = {},
+            onMoreCharactersClick = {},
             onClickBookmark = {},
             onClickShare = {}
         )

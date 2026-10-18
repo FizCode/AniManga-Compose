@@ -216,4 +216,30 @@ class AnimeDetailsUiMapperTest {
         assertEquals("Apr 2024 to ?", ongoing.animeDetailsInfoUiModel.animeInfo.aired)
         assertEquals("Jul 8, 2016", single.animeDetailsInfoUiModel.animeInfo.aired)
     }
+
+    @Test
+    fun `a page of the cast keeps every entry in the order it came`() {
+        val result = mapper.mapToAnimeCastPage(
+            listOf(cast(5, "Supporting"), cast(1, "Main"), cast(9, "Background")) + List(15) { cast(it + 20, "Main") }
+        )
+
+        assertEquals(18, result.size)
+        assertEquals(listOf(5, 1, 9), result.take(3).map { it.characterId })
+        assertEquals("Japanese", result.first().voiceActorLang)
+    }
+
+    @Test
+    fun `a page of the staff keeps every entry`() {
+        val staff = List(12) {
+            StaffDomainModel(
+                person = StaffDomainModel.Person(id = it, name = "Staff $it"),
+                positions = listOf("Director")
+            )
+        }
+
+        val result = mapper.mapToStaffPage(staff)
+
+        assertEquals((0..11).toList(), result.map { it.staffId })
+        assertEquals("Director", result.first().role)
+    }
 }

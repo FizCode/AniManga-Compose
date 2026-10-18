@@ -11,6 +11,7 @@ import dev.fizcode.mediadetails.domain.model.CastDomainModel
 import dev.fizcode.mediadetails.domain.model.StaffDomainModel
 import dev.fizcode.mediadetails.util.Constant
 import java.net.URLEncoder
+import dev.fizcode.mediadetails.domain.model.PagedResult
 
 /**
  * Maps AniList responses to the details, cast and staff domain models.
@@ -74,6 +75,16 @@ internal class AniListDomainMapper {
                     ?: CastDomainModel.VoiceActor()
             )
         }
+
+    fun mapToCastPage(response: AniListCastResponse): PagedResult<CastDomainModel> = PagedResult(
+        items = mapToCastDomainModel(response),
+        hasNextPage = response.data?.media?.characters?.pageInfo?.hasNextPage ?: false
+    )
+
+    fun mapToStaffPage(response: AniListStaffResponse): PagedResult<StaffDomainModel> = PagedResult(
+        items = mapToStaffDomainModel(response),
+        hasNextPage = response.data?.media?.staff?.pageInfo?.hasNextPage ?: false
+    )
 
     fun mapToStaffDomainModel(
         response: AniListStaffResponse
