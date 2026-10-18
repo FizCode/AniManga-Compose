@@ -13,6 +13,7 @@ import dev.fizcode.mediadetails.domain.model.MangaDetailsDomainModel
 import dev.fizcode.mediadetails.domain.repository.MangaDetailsRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import dev.fizcode.mediadetails.domain.model.PagedResult
 
 internal class MangaDetailsRepositoryImpl(
     private val detailsService: MediaDetailsService,
@@ -52,6 +53,16 @@ internal class MangaDetailsRepositoryImpl(
         mangaId: Int
     ): DomainNetworkState<List<CastDomainModel>> = processResponse {
         aniListDomainMapper.mapToCastDomainModel(aniListService.fetchMangaCharacters(malId = mangaId))
+    }
+
+    override suspend fun fetchMangaCharactersPage(
+        mangaId: Int,
+        page: Int,
+        perPage: Int
+    ): DomainNetworkState<PagedResult<CastDomainModel>> = processResponse {
+        aniListDomainMapper.mapToCastPage(
+            aniListService.fetchMangaCharactersPage(malId = mangaId, page = page, perPage = perPage)
+        )
     }
 }
 

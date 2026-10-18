@@ -28,6 +28,13 @@ internal data class AniListPerson(
     )
 }
 
+/** Whether an AniList connection has more pages, only sent when it is asked for. */
+@Serializable
+internal data class AniListPageInfo(
+    @SerialName("hasNextPage")
+    val hasNextPage: Boolean? = null
+)
+
 /** Characters with their Japanese voice actors, from the AniList `Media.characters` field. */
 @Serializable
 internal data class AniListCastResponse(
@@ -48,6 +55,8 @@ internal data class AniListCastResponse(
 
     @Serializable
     data class Characters(
+        @SerialName("pageInfo")
+        val pageInfo: AniListPageInfo? = null,
         @SerialName("edges")
         val edges: List<Edge>? = null
     )
@@ -83,6 +92,8 @@ internal data class AniListStaffResponse(
 
     @Serializable
     data class Staff(
+        @SerialName("pageInfo")
+        val pageInfo: AniListPageInfo? = null,
         @SerialName("edges")
         val edges: List<Edge>? = null
     )

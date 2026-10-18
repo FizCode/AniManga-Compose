@@ -18,6 +18,7 @@ import dev.fizcode.mediadetails.domain.repository.MediaDetailsRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import dev.fizcode.mediadetails.domain.model.PagedResult
 
 internal class MediaDetailsRepositoryImpl(
     private val animeDetailsService: MediaDetailsService,
@@ -63,6 +64,26 @@ internal class MediaDetailsRepositoryImpl(
         animeId: Int
     ): DomainNetworkState<List<StaffDomainModel>> = processResponse {
         aniListDomainMapper.mapToStaffDomainModel(aniListService.fetchStaff(malId = animeId))
+    }
+
+    override suspend fun fetchAnimeCastPage(
+        animeId: Int,
+        page: Int,
+        perPage: Int
+    ): DomainNetworkState<PagedResult<CastDomainModel>> = processResponse {
+        aniListDomainMapper.mapToCastPage(
+            aniListService.fetchCastPage(malId = animeId, page = page, perPage = perPage)
+        )
+    }
+
+    override suspend fun fetchAnimeStaffPage(
+        animeId: Int,
+        page: Int,
+        perPage: Int
+    ): DomainNetworkState<PagedResult<StaffDomainModel>> = processResponse {
+        aniListDomainMapper.mapToStaffPage(
+            aniListService.fetchStaffPage(malId = animeId, page = page, perPage = perPage)
+        )
     }
 
     override fun isBookmarked(animeId: Int): Flow<Boolean> =
