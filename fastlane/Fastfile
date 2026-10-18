@@ -27,18 +27,42 @@ platform :android do
     gradle(task: "clean assembleDevRelease")
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+  desc "Build the signed Play bundle and check that it can be uploaded"
+  lane :bundle do
+    ensure_release_signing
+    gradle(task: "clean bundleProdRelease")
   end
 
-  desc "Deploy a new version to the Google Play"
+  desc "Upload a new build to the Google Play internal testing track"
+  lane :internal do
+    bundle
+    upload_to_play_store(
+      track: "internal",
+      aab: lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH],
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
+  desc "Promote the internal testing build to production"
   lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+    UI.user_error!("Set PLAY_STORE_JSON_KEY_FILE first") if ENV["PLAY_STORE_JSON_KEY_FILE"].to_s.empty?
+    upload_to_play_store(
+      track: "internal",
+      track_promote_to: "production",
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
+  # A release build without the upload key would be rejected by Google Play.
+  private_lane :ensure_release_signing do
+    missing = %w[ANIMANGA_KEYSTORE_FILE ANIMANGA_KEYSTORE_PASSWORD ANIMANGA_KEY_ALIAS ANIMANGA_KEY_PASSWORD]
+                .select { |name| ENV[name].to_s.empty? } unless File.exist?("../keystore.properties")
+    UI.user_error!("Release signing is not set up, missing: #{missing.join(', ')}") unless missing.to_a.empty?
   end
 end

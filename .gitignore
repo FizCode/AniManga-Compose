@@ -13,3 +13,12 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Release signing: the upload key and its passwords must never be committed
+keystore.properties
+*.jks
+*.keystore
+/keystore/
+
+# Kotlin compiler session data
+.kotlin/

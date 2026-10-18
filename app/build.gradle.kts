@@ -1,4 +1,5 @@
 import dev.fizcode.convention.AniMangaBuildType
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.animanga.android.application)
@@ -6,6 +7,17 @@ plugins {
     alias(libs.plugins.animanga.android.application.flavors)
     alias(libs.plugins.android.application)
 }
+
+// The upload key of the release build. It is read from `keystore.properties` (not committed, see
+// `keystore.properties.example`) or from the environment, so it never ends up in the repository.
+// Without it the release build is left unsigned, which is fine for local builds.
+val keystoreProperties = Properties().apply {
+    rootProject.file("keystore.properties").takeIf { it.exists() }?.inputStream()?.use(::load)
+}
+
+fun signingValue(property: String, environment: String): String? =
+    (keystoreProperties.getProperty(property) ?: System.getenv(environment))
+        ?.takeIf { it.isNotBlank() }
 
 android {
     namespace = "dev.fizcode.animanga"
@@ -21,12 +33,30 @@ android {
         }
     }
 
+    signingConfigs {
+        val storeFile = signingValue("storeFile", "ANIMANGA_KEYSTORE_FILE")
+        val storePassword = signingValue("storePassword", "ANIMANGA_KEYSTORE_PASSWORD")
+        val keyAlias = signingValue("keyAlias", "ANIMANGA_KEY_ALIAS")
+        val keyPassword = signingValue("keyPassword", "ANIMANGA_KEY_PASSWORD")
+
+        if (storeFile != null && storePassword != null && keyAlias != null && keyPassword != null) {
+            create("release") {
+                this.storeFile = rootProject.file(storeFile)
+                this.storePassword = storePassword
+                this.keyAlias = keyAlias
+                this.keyPassword = keyPassword
+            }
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix = AniMangaBuildType.DEBUG.applicationIdSuffix
         }
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = signingConfigs.findByName("release")
             applicationIdSuffix = AniMangaBuildType.RELEASE.applicationIdSuffix
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

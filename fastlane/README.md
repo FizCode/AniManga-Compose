@@ -31,13 +31,21 @@ Runs all the tests
 
 Development Release
 
-### android beta
+### android bundle
 
 ```sh
-[bundle exec] fastlane android beta
+[bundle exec] fastlane android bundle
 ```
 
-Submit a new Beta Build to Crashlytics Beta
+Build the signed Play bundle and check that it can be uploaded
+
+### android internal
+
+```sh
+[bundle exec] fastlane android internal
+```
+
+Upload a new build to the Google Play internal testing track
 
 ### android deploy
 
@@ -45,7 +53,7 @@ Submit a new Beta Build to Crashlytics Beta
 [bundle exec] fastlane android deploy
 ```
 
-Deploy a new version to the Google Play
+Promote the internal testing build to production
 
 ----
 
