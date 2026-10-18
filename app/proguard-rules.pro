@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Navigation 3 saves the back stack with the class name of every route and finds the class again by
+# that name when the app is restored after its process was killed, so routes must not be stripped.
+-keep class * implements androidx.navigation3.runtime.NavKey { *; }

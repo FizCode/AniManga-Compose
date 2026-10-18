@@ -24,15 +24,10 @@ jobs:
         with:
           ruby-version: '3.1'
           bundler-cache: true
-      - name: Create local.properties
-        run: |
-          echo "sdk.dir=$ANDROID_HOME" > local.properties
-          echo "X_MAL_CLIENT_ID=${{ secrets.X_MAL_CLIENT_ID }}" >> local.properties
-      - name: Verify local.properties
-        run: |
-          echo "Contents of local.properties:"
-          cat local.properties
       - uses: maierj/fastlane-action@v3.1.0
+        env:
+          # Read by the build as an environment variable, so it is never written to a file or a log.
+          X_MAL_CLIENT_ID: ${{ secrets.X_MAL_CLIENT_ID }}
         with:
           lane: 'devRelease'
       - uses: actions/upload-artifact@v4

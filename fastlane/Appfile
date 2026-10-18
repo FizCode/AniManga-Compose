@@ -1,2 +1,5 @@
-json_key_file("") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
-package_name("dev.fizcode.animanga") # e.g. com.krausefx.app
+# The service account key that is allowed to upload to Google Play, see
+# https://docs.fastlane.tools/actions/supply/#setup. Keep the file out of the repository and give
+# its path in PLAY_STORE_JSON_KEY_FILE.
+json_key_file(ENV["PLAY_STORE_JSON_KEY_FILE"] || "")
+package_name("dev.fizcode.animanga")
