@@ -1,6 +1,6 @@
 package dev.fizcode.mediadetails.presentation
 
-import dev.fizcode.common.util.DEEPLINK_BASE
+import dev.fizcode.mediadetails.navigation.DEEPLINK_BASE
 import java.net.URLEncoder
 
 private const val DETAILS_PATH = "details"

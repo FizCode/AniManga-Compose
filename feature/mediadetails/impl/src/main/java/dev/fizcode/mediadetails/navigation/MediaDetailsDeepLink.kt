@@ -2,7 +2,6 @@ package dev.fizcode.mediadetails.navigation
 
 import android.net.Uri
 import androidx.core.net.toUri
-import dev.fizcode.common.util.DEEPLINK_BASE
 import dev.fizcode.mediadetails.api.MediaDetailsRoute
 
 private const val DETAILS_PATH = "details"

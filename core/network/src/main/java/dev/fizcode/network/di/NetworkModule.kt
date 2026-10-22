@@ -8,6 +8,6 @@ import org.koin.dsl.module
 fun networkModule() = module {
     singleOf(::provideCuckerInterceptorModule)
     singleOf(::provideChuckerOkHttpClient)
-    single(named(Constant.NAMED_MAL)) { provideMalKtorHttpClientModule(get()) }
-    single(named(Constant.NAMED_ANILIST)) { provideAniListKtorHttpClient(get()) }
+    single(named(NetworkQualifier.MAL)) { provideMalKtorHttpClientModule(get()) }
+    single(named(NetworkQualifier.ANILIST)) { provideAniListKtorHttpClient(get()) }
 }
