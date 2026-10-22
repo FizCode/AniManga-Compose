@@ -62,10 +62,7 @@ internal fun SearchResultComponent(
         }
     )
 
-    is UiState.ErrorRedirectResponse -> SearchErrorComponent(result.message, modifier)
-    is UiState.ErrorClientRequest -> SearchErrorComponent(result.message, modifier)
-    is UiState.ErrorServerResponse -> SearchErrorComponent(result.message, modifier)
-    is UiState.ErrorException -> SearchErrorComponent(result.message, modifier)
+    is UiState.Error -> SearchErrorComponent(result.message, modifier)
 }
 
 @Composable
@@ -111,4 +108,4 @@ private fun SearchResultComponentEmptyPreview() =
 
 @Preview(showBackground = true)
 @Composable
-private fun SearchResultComponentErrorPreview() = SearchResultPreviewContent(UiState.ErrorException(message = "Something went wrong. Please try again."))
+private fun SearchResultComponentErrorPreview() = SearchResultPreviewContent(UiState.Error(message = "Something went wrong. Please try again."))

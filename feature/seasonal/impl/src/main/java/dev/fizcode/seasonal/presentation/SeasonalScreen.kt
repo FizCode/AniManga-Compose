@@ -175,7 +175,7 @@ private fun SeasonalScreenErrorPreview() {
             season = Season.WINTER,
             year = 2026,
             years = persistentListOf(2027, 2026, 2025),
-            result = UiState.ErrorException(message = "Something went wrong. Please try again."),
+            result = UiState.Error(message = "Something went wrong. Please try again."),
             onSeasonSelect = {},
             onYearSelect = {},
             onCardClick = { _, _ -> },

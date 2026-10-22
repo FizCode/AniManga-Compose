@@ -171,7 +171,7 @@ private fun MangaScreenErrorPreview() {
             queryState = rememberTextFieldState(),
             type = MangaType.ALL,
             sort = MangaSort.RANKING,
-            result = UiState.ErrorException(message = "Something went wrong. Please try again."),
+            result = UiState.Error(message = "Something went wrong. Please try again."),
             onTypeSelect = {},
             onSortSelect = {},
             onRetry = {},

@@ -300,7 +300,7 @@ private fun AnimeDetailsComponentLoadingPreview() = AnimeDetailsComponentPreview
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun AnimeDetailsComponentErrorPreview() = AnimeDetailsComponentPreview(
-    animeDetails = UiState.ErrorException(message = "Something went wrong. Please try again."),
+    animeDetails = UiState.Error(message = "Something went wrong. Please try again."),
     animeCast = UiState.Loading,
     animeStaff = UiState.Loading
 )
@@ -308,7 +308,7 @@ private fun AnimeDetailsComponentErrorPreview() = AnimeDetailsComponentPreview(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun AnimeDetailsComponentCastErrorPreview() {
-    val error = UiState.ErrorException(message = "Couldn't load the cast.")
+    val error = UiState.Error(message = "Couldn't load the cast.")
     AnimeDetailsComponentPreview(
         animeDetails = UiState.Success(MediaDetailsPreviewData.anime),
         animeCast = error,

@@ -205,6 +205,6 @@ private fun CastTabLoadingPreview() = CastTabPreviewContent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun CastTabErrorPreview() = CastTabPreviewContent(
-    cast = UiState.ErrorException(message = "Something went wrong. Please try again."),
-    staff = UiState.ErrorException(message = "Something went wrong. Please try again.")
+    cast = UiState.Error(message = "Something went wrong. Please try again."),
+    staff = UiState.Error(message = "Something went wrong. Please try again.")
 )

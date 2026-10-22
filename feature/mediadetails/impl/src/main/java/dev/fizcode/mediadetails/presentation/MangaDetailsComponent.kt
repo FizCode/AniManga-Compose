@@ -112,7 +112,7 @@ private fun MangaDetailsComponentLoadingPreview() = MangaDetailsComponentPreview
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun MangaDetailsComponentErrorPreview() = MangaDetailsComponentPreview(
-    mangaDetails = UiState.ErrorException(message = "Something went wrong. Please try again."),
+    mangaDetails = UiState.Error(message = "Something went wrong. Please try again."),
     characters = UiState.Loading
 )
 
@@ -120,5 +120,5 @@ private fun MangaDetailsComponentErrorPreview() = MangaDetailsComponentPreview(
 @Composable
 private fun MangaDetailsComponentCharactersErrorPreview() = MangaDetailsComponentPreview(
     mangaDetails = UiState.Success(MediaDetailsPreviewData.manga),
-    characters = UiState.ErrorException(message = "Couldn't load the characters.")
+    characters = UiState.Error(message = "Couldn't load the characters.")
 )

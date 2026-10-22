@@ -94,7 +94,7 @@ internal class PagedListViewModelTest {
     fun `a failing first page is an error and retry loads it again`() = runBlocking {
         pages.results[1] = DomainNetworkState.ErrorNetwork(message = "offline")
         val vm = NumbersViewModel(pages)
-        vm.state.awaitValue { it is UiState.ErrorException }
+        vm.state.awaitValue { it is UiState.Error }
 
         pages.results[1] = page(1, hasNext = false)
         vm.retry()

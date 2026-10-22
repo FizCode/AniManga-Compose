@@ -97,8 +97,8 @@ class SearchViewModelTest {
 
         vm.type("bleach")
 
-        val state = vm.searchResult.awaitValue { it is UiState.ErrorException }
-        assertEquals("boom", (state as UiState.ErrorException).message)
+        val state = vm.searchResult.awaitValue { it is UiState.Error }
+        assertEquals("boom", (state as UiState.Error).message)
         job.cancel()
     }
 

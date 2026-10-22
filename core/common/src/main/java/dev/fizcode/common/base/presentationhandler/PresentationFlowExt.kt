@@ -3,9 +3,6 @@ package dev.fizcode.common.base.presentationhandler
 import dev.fizcode.common.base.callhandler.DomainLocalState
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.base.callhandler.UiState
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.plugins.RedirectResponseException
-import io.ktor.client.plugins.ServerResponseException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -33,7 +30,7 @@ import kotlinx.coroutines.flow.stateIn
  * - Emits:
  *   - [UiState.Success] with the mapped result if successful,
  *   - [UiState.Empty] if the domain result was empty,
- *   - [UiState.Error*] variants depending on the exception type.
+ *   - [UiState.Error] carrying the error type and HTTP code.
  * - Flow runs on [Dispatchers.IO].
  * - The resulting [StateFlow] is scoped to [scope] and controlled via [started].
  *
@@ -81,12 +78,8 @@ inline fun <Domain, UiModel> asUiStateFlow(
  * ### Behavior:
  * - [DomainNetworkState.Success] → mapped to [UiState.Success] using [mapper].
  * - [DomainNetworkState.Empty] → mapped to [UiState.Empty].
- * - [DomainNetworkState.ErrorNetwork] → mapped to one of the error variants in [UiState],
- *   based on the actual exception type:
- *     - [RedirectResponseException] → [UiState.ErrorRedirectResponse]
- *     - [ClientRequestException] → [UiState.ErrorClientRequest]
- *     - [ServerResponseException] → [UiState.ErrorServerResponse]
- *     - Other or null → [UiState.ErrorException]
+ * - [DomainNetworkState.ErrorNetwork] → mapped to [UiState.Error], keeping its message, type,
+ *   HTTP code and exception.
  *
  * @param mapper Function to transform the domain model [T] into a UI model [R].
  * @return A [UiState] representing loading success, emptiness, or categorized error.
@@ -94,14 +87,7 @@ inline fun <Domain, UiModel> asUiStateFlow(
 fun <T, R> DomainNetworkState<T>.toUiState(mapper: (T) -> R): UiState<R> = when (this) {
     is DomainNetworkState.Success -> UiState.Success(mapper(data))
     is DomainNetworkState.Empty -> UiState.Empty
-    is DomainNetworkState.ErrorNetwork -> {
-        when (val e = exception) {
-            is RedirectResponseException -> UiState.ErrorRedirectResponse(e, message)
-            is ClientRequestException -> UiState.ErrorClientRequest(e, message)
-            is ServerResponseException -> UiState.ErrorServerResponse(e, message)
-            else -> UiState.ErrorException(e, message)
-        }
-    }
+    is DomainNetworkState.ErrorNetwork -> UiState.Error(message, type, code, exception)
 }
 
 /**
@@ -117,7 +103,7 @@ fun <T, R> DomainNetworkState<T>.toUiState(mapper: (T) -> R): UiState<R> = when 
  *   - [UiState.Loading] on collection start.
  *   - [UiState.Success] with mapped data if [DomainLocalState.Success].
  *   - [UiState.Empty] if [DomainLocalState.Empty].
- *   - [UiState.ErrorException] if [DomainLocalState.Error].
+ *   - [UiState.Error] if [DomainLocalState.Error].
  * - Runs on [Dispatchers.IO].
  * - Shares the result using [stateIn] with lifecycle control via [started].
  *
@@ -146,7 +132,7 @@ inline fun <Domain, UiModel> asUiStateFlowDbCall(
                     is DomainLocalState.Success -> emit(UiState.Success(mapper(state.data)))
                     is DomainLocalState.Empty -> emit(UiState.Empty)
                     is DomainLocalState.Error -> emit(
-                        UiState.ErrorException(state.exception, state.message)
+                        UiState.Error(message = state.message, cause = state.exception)
                     )
                 }
             }

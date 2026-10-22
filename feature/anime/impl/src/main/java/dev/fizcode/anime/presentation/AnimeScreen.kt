@@ -191,9 +191,9 @@ private fun AnimeScreenEmptyPreview() {
 private fun AnimeScreenErrorPreview() {
     AniMangaAnimeAndMangaInfoTheme {
         AnimeScreenContent(
-            currentSeason = UiState.ErrorException(message = "Something went wrong. Please try again."),
-            topAiring = UiState.ErrorException(message = "Something went wrong. Please try again."),
-            topRanking = UiState.ErrorException(message = "Something went wrong. Please try again."),
+            currentSeason = UiState.Error(message = "Something went wrong. Please try again."),
+            topAiring = UiState.Error(message = "Something went wrong. Please try again."),
+            topRanking = UiState.Error(message = "Something went wrong. Please try again."),
             onCardClick = { _, _ -> }
         )
     }

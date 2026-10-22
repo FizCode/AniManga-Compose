@@ -180,7 +180,7 @@ private fun CastListEmptyPreview() = PeoplePreview {
 @Composable
 private fun CastListErrorPreview() = PeoplePreview {
     CastListContent(
-        state = UiState.ErrorException(message = "Something went wrong. Please try again."),
+        state = UiState.Error(message = "Something went wrong. Please try again."),
         onBackClick = {}, onLoadMore = {}, onRetry = {}
     )
 }

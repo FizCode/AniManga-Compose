@@ -145,9 +145,9 @@ class AnimeViewModelTest {
         val vm = viewModel()
         val job = vm.currentSeason.onEach { }.launchIn(this)
 
-        val state = vm.currentSeason.awaitValue { it is UiState.ErrorException }
+        val state = vm.currentSeason.awaitValue { it is UiState.Error }
 
-        assertEquals("boom", (state as UiState.ErrorException).message)
+        assertEquals("boom", (state as UiState.Error).message)
         job.cancel()
     }
 
