@@ -3,7 +3,6 @@ package dev.fizcode.mediadetails.presentation.info.component
 import dev.fizcode.designsystem.component.other.UnavailableNotice
 import dev.fizcode.mediadetails.presentation.isError
 import dev.fizcode.mediadetails.util.Constant as MediaDetailsConstant
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.icon.CustomIcon
-import dev.fizcode.designsystem.util.base.shimmerBrush
+import dev.fizcode.designsystem.util.base.shimmer
 import dev.fizcode.mediadetails.presentation.info.model.AnimeCastUiModel
 import dev.fizcode.mediadetails.presentation.info.model.AnimeStaffUiModel
 import dev.fizcode.mediadetails.presentation.info.util.Constant
@@ -147,7 +146,6 @@ internal fun SectionContainer(
 internal fun SectionContainerShimmer(
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val shimmer = shimmerBrush()
     Column(Modifier.padding(16.dp)) {
         Box(
             modifier = Modifier
@@ -160,7 +158,7 @@ internal fun SectionContainerShimmer(
                     .clip(RoundedCornerShape(16.dp))
                     .fillMaxWidth()
                     .height(24.dp)
-                    .background(shimmer)
+                    .shimmer()
             )
         }
         Column(

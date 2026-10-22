@@ -23,7 +23,7 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import coil.compose.AsyncImage
 import dev.fizcode.designsystem.icon.CustomIcon
-import dev.fizcode.designsystem.util.base.shimmerBackground
+import dev.fizcode.designsystem.util.base.shimmer
 import dev.fizcode.mediadetails.util.Constant
 
 @Composable
@@ -49,7 +49,7 @@ internal fun PopUpImage(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
-                .shimmerBackground(),
+                .shimmer(),
             contentScale = ContentScale.Fit
         )
         TextButton(
