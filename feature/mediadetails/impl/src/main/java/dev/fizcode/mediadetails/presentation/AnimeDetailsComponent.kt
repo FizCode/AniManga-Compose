@@ -29,7 +29,6 @@ import dev.fizcode.mediadetails.presentation.info.model.AnimeCastUiModel
 import dev.fizcode.mediadetails.presentation.info.model.AnimeStaffUiModel
 import dev.fizcode.mediadetails.presentation.info.DetailInfoComponent
 import dev.fizcode.mediadetails.presentation.model.AnimeDetailsUiModel
-import dev.fizcode.mediadetails.util.Constant
 import kotlinx.collections.immutable.ImmutableList
 import dev.fizcode.common.settings.MediaTitles
 

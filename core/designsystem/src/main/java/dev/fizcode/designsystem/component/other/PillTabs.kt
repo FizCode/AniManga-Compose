@@ -1,4 +1,4 @@
-package dev.fizcode.manga.presentation.component
+package dev.fizcode.designsystem.component.other
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -20,16 +22,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.fizcode.manga.presentation.model.MangaType
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.util.base.shimmer
 
 /**
- * Horizontally scrolling tabs, one per [MangaType]. The [selected] tab gets a highlighted pill.
+ * Horizontally scrolling tabs, one per entry of [items]. The [selected] tab gets a highlighted pill.
  */
 @Composable
-internal fun MangaTypeTabs(
-    selected: MangaType,
-    onSelect: (MangaType) -> Unit,
+fun <T> PillTabs(
+    items: List<T>,
+    selected: T,
+    label: (T) -> String,
+    onSelect: (T) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -39,8 +43,8 @@ internal fun MangaTypeTabs(
             .selectableGroup(),
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        MangaType.entries.forEach { type ->
-            val isSelected = type == selected
+        items.forEach { item ->
+            val isSelected = item == selected
             Box(
                 modifier = Modifier
                     .clip(CircleShape)
@@ -51,34 +55,56 @@ internal fun MangaTypeTabs(
                     .selectable(
                         selected = isSelected,
                         role = Role.Tab,
-                        onClick = { onSelect(type) }
+                        onClick = { onSelect(item) }
                     )
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                    .padding(horizontal = 12.dp, vertical = 6.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     style = MaterialTheme.typography.titleMedium,
                     color = if (isSelected) MaterialTheme.colorScheme.onSecondaryContainer
                     else MaterialTheme.colorScheme.primary,
-                    text = type.label
+                    text = label(item)
                 )
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+/** Loading skeleton matching the layout of [PillTabs], one placeholder per entry of [labels]. */
 @Composable
-private fun MangaTypeTabsPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
-        MangaTypeTabs(selected = MangaType.ALL, onSelect = {})
+fun PillTabsShimmer(labels: List<String>, modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState(), enabled = false),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        labels.forEach { label ->
+            Box(
+                modifier = Modifier
+                    .width((label.length * 9 + 32).dp)
+                    .height(44.dp)
+                    .clip(CircleShape)
+                    .shimmer()
+            )
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun MangaTypeTabsOtherSelectedPreview() {
+private fun PillTabsPreview() {
     AniMangaAnimeAndMangaInfoTheme {
-        MangaTypeTabs(selected = MangaType.OTHER, onSelect = {})
+        val items = listOf("All", "Manga", "Novel")
+        PillTabs(items = items, selected = items.first(), label = { it }, onSelect = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PillTabsShimmerPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        PillTabsShimmer(labels = listOf("All", "Manga", "Novel"))
     }
 }

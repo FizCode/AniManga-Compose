@@ -3,6 +3,7 @@ package dev.fizcode.designsystem.component.card
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.util.Constant
 
 /**
- * Empty-state placeholder: a centered illustration with an optional description below it.
+ * Empty-state placeholder: a centered illustration (both axes, it fills the available space) with an optional description below it.
  *
  * @param modifier modifier applied to the root column.
  * @param desc message shown under the illustration, nothing is rendered when empty.
@@ -30,8 +31,8 @@ fun EmptyCardComponent(
     desc: String = ""
 ) = Column(
     modifier = modifier
+        .fillMaxSize()
         .padding(16.dp)
-        .fillMaxWidth()
         .clip(RoundedCornerShape(16.dp)),
     verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
     horizontalAlignment = Alignment.CenterHorizontally

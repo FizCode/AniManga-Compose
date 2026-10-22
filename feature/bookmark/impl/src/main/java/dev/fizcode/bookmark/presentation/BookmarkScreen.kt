@@ -99,7 +99,12 @@ private fun BookmarkScreenContent(
             if (bookmarks is UiState.Loading) {
                 PillTabsShimmer(labels = BookmarkTab.entries.map { it.label })
             } else {
-                BookmarkTabs(selected = tab, onSelect = onTabSelect)
+                PillTabs(
+                    items = BookmarkTab.entries,
+                    selected = tab,
+                    label = { it.label },
+                    onSelect = onTabSelect
+                )
             }
             Spacer(Modifier.height(8.dp))
             BookmarkItemComponent(

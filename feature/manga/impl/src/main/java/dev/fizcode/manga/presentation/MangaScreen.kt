@@ -1,5 +1,6 @@
 package dev.fizcode.manga.presentation
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -17,9 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fizcode.common.base.callhandler.UiState
+import dev.fizcode.designsystem.component.other.PillTabs
 import dev.fizcode.manga.presentation.component.MangaHeader
 import dev.fizcode.manga.presentation.component.MangaListComponent
-import dev.fizcode.manga.presentation.component.MangaTypeTabs
 import dev.fizcode.manga.presentation.model.MangaSort
 import dev.fizcode.manga.presentation.model.MangaType
 import dev.fizcode.manga.presentation.model.MangaUiModel
@@ -94,7 +95,12 @@ private fun MangaScreenContent(
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(Modifier.height(8.dp))
-            MangaTypeTabs(selected = type, onSelect = onTypeSelect)
+            PillTabs(
+                items = MangaType.entries,
+                selected = type,
+                label = { it.label },
+                onSelect = onTypeSelect
+            )
             Spacer(Modifier.height(8.dp))
             MangaListComponent(
                 result = result,

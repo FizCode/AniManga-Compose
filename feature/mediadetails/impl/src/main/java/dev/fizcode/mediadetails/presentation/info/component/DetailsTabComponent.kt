@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.fizcode.common.util.extensions.orDash
 import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.mediadetails.presentation.info.model.AnimeDetails
 import dev.fizcode.mediadetails.presentation.info.util.Constant
@@ -79,7 +80,7 @@ private fun ExpandableTitles(
 
     val items = remember(synonym, japanese, english) {
         persistentListOf(
-            Constant.SYNONYM to synonym,
+            Constant.SYNONYM to synonym.orDash(),
             Constant.JAPANESE to japanese,
             Constant.ENGLISH to english
         )

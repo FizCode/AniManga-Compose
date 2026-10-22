@@ -54,7 +54,7 @@ internal fun SeasonTabs(
                         role = Role.Tab,
                         onClick = { onSelect(season) }
                     )
-                    .padding(vertical = 12.dp),
+                    .padding(vertical = 10.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
