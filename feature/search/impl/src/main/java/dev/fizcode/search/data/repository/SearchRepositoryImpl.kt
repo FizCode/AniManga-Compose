@@ -1,7 +1,7 @@
 package dev.fizcode.search.data.repository
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
-import dev.fizcode.common.base.callhandler.processResponse
+import dev.fizcode.network.processResponse
 import dev.fizcode.common.settings.NsfwFilterProvider
 import dev.fizcode.common.settings.allows
 import dev.fizcode.common.settings.current

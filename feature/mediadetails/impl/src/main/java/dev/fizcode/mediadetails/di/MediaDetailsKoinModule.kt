@@ -1,6 +1,6 @@
 package dev.fizcode.mediadetails.di
 
-import dev.fizcode.common.util.DiConstant
+import dev.fizcode.network.di.NetworkQualifier
 import dev.fizcode.mediadetails.data.mapper.AniListDomainMapper
 import dev.fizcode.mediadetails.data.mapper.AnimeDetailsDomainMapper
 import dev.fizcode.mediadetails.data.mapper.BookmarkDomainMapper
@@ -109,9 +109,9 @@ private fun mediaDetailsMangaRepositoryModule() = module {
 }
 
 private fun mediaDetailsServiceModule() = module {
-    factory { MediaDetailsService(get(named(DiConstant.NAMED_MAL))) }
+    factory { MediaDetailsService(get(named(NetworkQualifier.MAL))) }
 }
 
 private fun mediaDetailsAniListModule() = module {
-    factory { AniListService(get(named(DiConstant.NAMED_ANILIST))) }
+    factory { AniListService(get(named(NetworkQualifier.ANILIST))) }
 }

@@ -17,7 +17,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import dev.fizcode.designsystem.util.base.shimmerBackground
+import dev.fizcode.designsystem.util.base.shimmer
 import dev.fizcode.mediadetails.presentation.header.util.Constant
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
@@ -36,7 +36,7 @@ internal fun DetailMediaTitle(
     AsyncImage(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
-            .shimmerBackground()
+            .shimmer()
             .width(124.dp)
             .height(178.dp),
         contentScale = ContentScale.Crop,

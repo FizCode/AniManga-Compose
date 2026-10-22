@@ -152,9 +152,9 @@ class MediaDetailsViewModelTest {
         val vm = viewModel()
         val job = vm.animeStaff.onEach { }.launchIn(this)
 
-        val state = vm.animeStaff.awaitValue { it is UiState.ErrorException }
+        val state = vm.animeStaff.awaitValue { it is UiState.Error }
 
-        assertEquals("boom", (state as UiState.ErrorException).message)
+        assertEquals("boom", (state as UiState.Error).message)
         job.cancel()
     }
 
@@ -164,7 +164,7 @@ class MediaDetailsViewModelTest {
         val vm = viewModel()
         val job = vm.animeDetails.onEach { }.launchIn(this)
 
-        vm.animeDetails.awaitValue { it is UiState.ErrorException }
+        vm.animeDetails.awaitValue { it is UiState.Error }
         job.cancel()
     }
 
@@ -216,7 +216,7 @@ class MediaDetailsViewModelTest {
         repository.detailsResult = DomainNetworkState.ErrorNetwork(message = "offline")
         val vm = viewModel()
         val job = vm.animeDetails.onEach { }.launchIn(this)
-        vm.animeDetails.awaitValue { it is UiState.ErrorException }
+        vm.animeDetails.awaitValue { it is UiState.Error }
         assertEquals(1, repository.detailsCalls)
 
         vm.retryDetails()
@@ -235,8 +235,8 @@ class MediaDetailsViewModelTest {
             vm.animeCast.onEach { }.launchIn(this),
             vm.animeStaff.onEach { }.launchIn(this)
         )
-        vm.animeCast.awaitValue { it is UiState.ErrorException }
-        vm.animeDetails.awaitValue { it is UiState.ErrorException }
+        vm.animeCast.awaitValue { it is UiState.Error }
+        vm.animeDetails.awaitValue { it is UiState.Error }
 
         vm.retryCastAndStaff()
 

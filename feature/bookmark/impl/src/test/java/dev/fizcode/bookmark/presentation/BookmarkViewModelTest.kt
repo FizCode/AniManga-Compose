@@ -81,9 +81,9 @@ class BookmarkViewModelTest {
         val vm = viewModel(flowOf(DomainLocalState.Error(failure)))
         val job = vm.bookmarks.onEach { }.launchIn(this)
 
-        val state = vm.bookmarks.awaitValue { it is UiState.ErrorException }
+        val state = vm.bookmarks.awaitValue { it is UiState.Error }
 
-        assertEquals(failure, (state as UiState.ErrorException).error)
+        assertEquals(failure, (state as UiState.Error).cause)
         assertEquals("db down", state.message)
         job.cancel()
     }

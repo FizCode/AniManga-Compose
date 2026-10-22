@@ -1,7 +1,7 @@
 package dev.fizcode.mediadetails.data.repository
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
-import dev.fizcode.common.base.callhandler.processResponse
+import dev.fizcode.network.processResponse
 import dev.fizcode.mediadetails.data.mapper.AniListDomainMapper
 import dev.fizcode.mediadetails.data.mapper.MangaDetailsDomainMapper
 import dev.fizcode.mediadetails.data.service.AniListService

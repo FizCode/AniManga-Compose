@@ -41,7 +41,7 @@ import dev.fizcode.designsystem.component.lazylist.GenreChip
 import dev.fizcode.designsystem.icon.CustomIcon.ROUND_STAR_RATE
 import dev.fizcode.designsystem.theme.YellowGold
 import dev.fizcode.designsystem.util.Constant.Component
-import dev.fizcode.designsystem.util.base.shimmerBackground
+import dev.fizcode.designsystem.util.base.shimmer
 import dev.fizcode.designsystem.util.highlightQuery
 
 /**
@@ -64,7 +64,7 @@ private fun PosterImage(
     AsyncImage(
         modifier = modifier
             .clip(PosterShape)
-            .then(if (loaded) Modifier else Modifier.shimmerBackground()),
+            .then(if (loaded) Modifier else Modifier.shimmer()),
         contentScale = ContentScale.Crop,
         contentDescription = Component.CARD_IMAGE,
         model = request,

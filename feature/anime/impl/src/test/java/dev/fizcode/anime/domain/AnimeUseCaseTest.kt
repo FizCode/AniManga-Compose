@@ -8,7 +8,7 @@ import dev.fizcode.anime.domain.usecase.FetchSeasonalAnimeUseCase
 import dev.fizcode.anime.domain.usecase.FetchTopAiringAnimeUseCase
 import dev.fizcode.anime.domain.usecase.FetchTopRankingAnimeUseCase
 import dev.fizcode.common.base.callhandler.DomainNetworkState
-import dev.fizcode.common.util.SeasonHelper
+import dev.fizcode.mal.util.SeasonHelper
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

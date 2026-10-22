@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import dev.fizcode.designsystem.util.base.shimmerBackground
+import dev.fizcode.designsystem.util.base.shimmer
 import dev.fizcode.mediadetails.presentation.header.util.Constant
 import kotlinx.collections.immutable.ImmutableList
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
@@ -43,7 +43,7 @@ internal fun SliderLargeImage(
             AsyncImage(
                 modifier = Modifier
                     .maskClip(MaterialTheme.shapes.small)
-                    .shimmerBackground()
+                    .shimmer()
                     .height(202.dp)
                     .clickable { onPictureClick(largePictures[index]) },
                 contentScale = ContentScale.Crop,
@@ -58,7 +58,7 @@ internal fun SliderLargeImage(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(202.dp)
-                .shimmerBackground()
+                .shimmer()
                 .clickable { onPictureClick(pictures.first()) },
             contentScale = ContentScale.Crop,
             contentDescription = Constant.SLIDER_IMAGES,

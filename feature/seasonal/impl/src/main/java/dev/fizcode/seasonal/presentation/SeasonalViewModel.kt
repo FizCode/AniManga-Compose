@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.common.base.presentationhandler.toUiState
-import dev.fizcode.common.util.SeasonHelper
+import dev.fizcode.mal.util.SeasonHelper
 import dev.fizcode.seasonal.domain.usecase.FetchSeasonalAnimeUseCase
 import dev.fizcode.seasonal.presentation.mapper.SeasonalUiMapper
 import dev.fizcode.seasonal.presentation.model.Season

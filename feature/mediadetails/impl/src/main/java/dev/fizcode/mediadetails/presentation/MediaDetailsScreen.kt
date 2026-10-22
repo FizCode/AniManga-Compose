@@ -44,7 +44,7 @@ import dev.fizcode.mediadetails.presentation.mapper.MangaBookmarkMapper.mapToBoo
 import dev.fizcode.mediadetails.util.Constant
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
-import dev.fizcode.common.settings.LocalTitleStyle
+import dev.fizcode.designsystem.theme.LocalTitleStyle
 import dev.fizcode.common.settings.MediaTitles
 
 @Composable

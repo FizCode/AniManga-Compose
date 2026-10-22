@@ -104,7 +104,7 @@ class RankingViewModelTest {
         repository.result = DomainNetworkState.ErrorNetwork(message = "offline")
         val vm = viewModel()
         val job = vm.rankingResult.onEach { }.launchIn(this)
-        vm.rankingResult.awaitValue { it is UiState.ErrorException }
+        vm.rankingResult.awaitValue { it is UiState.Error }
         assertEquals(1, repository.requestedTypes.size)
 
         vm.retry()

@@ -1,6 +1,5 @@
 package dev.fizcode.designsystem.component.shimmer
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.fizcode.designsystem.util.base.shimmerBrush
+import dev.fizcode.designsystem.util.base.shimmer
 
 /**
  * Loading skeleton matching the layout of [MovieCardSimple].
@@ -25,7 +24,6 @@ import dev.fizcode.designsystem.util.base.shimmerBrush
 @Composable
 fun MovieCardSimpleShimmer() {
     val clipRounded8 = RoundedCornerShape(8.dp)
-    val shimmer = shimmerBrush()
     Column(
         modifier = Modifier
             .clip(clipRounded8)
@@ -35,7 +33,7 @@ fun MovieCardSimpleShimmer() {
         Box(
             modifier = Modifier
                 .clip(clipRounded8)
-                .background(shimmer)
+                .shimmer()
                 .fillMaxWidth()
                 .height(178.dp)
         )
@@ -45,7 +43,7 @@ fun MovieCardSimpleShimmer() {
                 .fillMaxWidth()
                 .height(42.dp)
                 .clip(clipRounded8)
-                .background(shimmer)
+                .shimmer()
         )
     }
 }
@@ -56,7 +54,6 @@ fun MovieCardSimpleShimmer() {
 @Composable
 fun MovieCardSmallShimmer() {
     val clipRounded8 = RoundedCornerShape(8.dp)
-    val shimmer = shimmerBrush()
     Row(
         modifier = Modifier
             .clip(clipRounded8)
@@ -67,7 +64,7 @@ fun MovieCardSmallShimmer() {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(6.dp))
-                .background(shimmer)
+                .shimmer()
                 .size(100.dp)
         )
         Column(
@@ -78,21 +75,21 @@ fun MovieCardSmallShimmer() {
                     .fillMaxWidth()
                     .height(24.dp)
                     .clip(clipRounded8)
-                    .background(shimmer)
+                    .shimmer()
             )
             Box(
                 modifier = Modifier
                     .width(150.dp)
                     .height(16.dp)
                     .clip(clipRounded8)
-                    .background(shimmer)
+                    .shimmer()
             )
             Box(
                 modifier = Modifier
                     .width(100.dp)
                     .height(16.dp)
                     .clip(clipRounded8)
-                    .background(shimmer)
+                    .shimmer()
             )
             Spacer(modifier = Modifier.height(6.dp))
             Box(
@@ -100,7 +97,7 @@ fun MovieCardSmallShimmer() {
                     .fillMaxWidth()
                     .height(24.dp)
                     .clip(clipRounded8)
-                    .background(shimmer)
+                    .shimmer()
             )
         }
     }
@@ -116,7 +113,6 @@ fun MovieCardLargeShimmer(
     modifier: Modifier = Modifier,
 ) {
     val clipRounded8 = RoundedCornerShape(8.dp)
-    val shimmer = shimmerBrush()
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
@@ -127,7 +123,7 @@ fun MovieCardLargeShimmer(
         Box(
             modifier = Modifier
                 .clip(clipRounded8)
-                .background(shimmer)
+                .shimmer()
                 .width(114.dp)
                 .height(164.dp)
         )
@@ -137,7 +133,7 @@ fun MovieCardLargeShimmer(
                     .fillMaxWidth()
                     .height(48.dp)
                     .clip(clipRounded8)
-                    .background(shimmer)
+                    .shimmer()
             )
             Spacer(modifier = Modifier.height(2.dp))
             Box(
@@ -145,7 +141,7 @@ fun MovieCardLargeShimmer(
                     .width(170.dp)
                     .height(18.dp)
                     .clip(clipRounded8)
-                    .background(shimmer)
+                    .shimmer()
             )
             Box(
                 modifier = Modifier
@@ -153,14 +149,14 @@ fun MovieCardLargeShimmer(
                     .width(140.dp)
                     .height(16.dp)
                     .clip(clipRounded8)
-                    .background(shimmer)
+                    .shimmer()
             )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp)
                     .clip(clipRounded8)
-                    .background(shimmer)
+                    .shimmer()
             )
             Spacer(modifier = Modifier.height(4.dp))
             Box(
@@ -168,7 +164,7 @@ fun MovieCardLargeShimmer(
                     .fillMaxWidth()
                     .height(24.dp)
                     .clip(clipRounded8)
-                    .background(shimmer)
+                    .shimmer()
             )
         }
     }

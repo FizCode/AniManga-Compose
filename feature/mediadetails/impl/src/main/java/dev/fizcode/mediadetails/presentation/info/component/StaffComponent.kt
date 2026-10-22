@@ -1,6 +1,5 @@
 package dev.fizcode.mediadetails.presentation.info.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,8 +18,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import dev.fizcode.designsystem.util.base.shimmerBrush
-import dev.fizcode.designsystem.util.base.shimmerBackground
+import dev.fizcode.designsystem.util.base.shimmer
 import dev.fizcode.mediadetails.presentation.info.model.AnimeStaffUiModel
 import dev.fizcode.mediadetails.presentation.info.util.Constant
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
@@ -38,7 +36,7 @@ internal fun Staffs(
     AsyncImage(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
-            .shimmerBackground()
+            .shimmer()
             .width(50.dp)
             .height(72.dp),
         contentScale = ContentScale.Crop,
@@ -67,12 +65,11 @@ internal fun Staffs(
 
 @Composable
 internal fun StaffShimmer() {
-    val shimmer = shimmerBrush()
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
-                .background(shimmer)
+                .shimmer()
                 .width(50.dp)
                 .height(72.dp)
         )
@@ -84,13 +81,13 @@ internal fun StaffShimmer() {
                 modifier = Modifier
                     .width(136.dp)
                     .height(14.dp)
-                    .background(shimmer),
+                    .shimmer(),
             )
             Box(
                 modifier = Modifier
                     .width(64.dp)
                     .height(14.dp)
-                    .background(shimmer),
+                    .shimmer(),
             )
         }
     }

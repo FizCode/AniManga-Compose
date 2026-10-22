@@ -1,8 +1,8 @@
 package dev.fizcode.mediadetails.domain.usecase
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
-import dev.fizcode.common.util.AnimeFieldsConstant
-import dev.fizcode.common.util.extensions.fieldsPicker
+import dev.fizcode.mal.util.AnimeFieldsConstant
+import dev.fizcode.mal.util.fieldsPicker
 import dev.fizcode.mediadetails.domain.model.AnimeDetailsDomainModel
 import dev.fizcode.mediadetails.domain.repository.MediaDetailsRepository
 

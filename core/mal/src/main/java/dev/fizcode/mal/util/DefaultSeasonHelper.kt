@@ -1,4 +1,4 @@
-package dev.fizcode.common.util
+package dev.fizcode.mal.util
 
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.number

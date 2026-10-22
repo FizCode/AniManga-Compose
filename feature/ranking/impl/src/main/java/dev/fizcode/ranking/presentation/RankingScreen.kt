@@ -131,5 +131,5 @@ private fun RankingScreenEmptyPreview() = RankingScreenPreviewContent(UiState.Em
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun RankingScreenErrorPreview() = RankingScreenPreviewContent(
-    UiState.ErrorException(message = "Something went wrong. Please try again.")
+    UiState.Error(message = "Something went wrong. Please try again.")
 )

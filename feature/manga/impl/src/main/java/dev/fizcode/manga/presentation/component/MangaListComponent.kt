@@ -20,7 +20,7 @@ import dev.fizcode.manga.presentation.model.MangaUiModel
 import dev.fizcode.manga.presentation.model.dummyMangaUiModel
 import dev.fizcode.manga.util.Constant
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
-import dev.fizcode.common.settings.LocalTitleStyle
+import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 @Composable
 internal fun MangaListComponent(
@@ -62,10 +62,7 @@ internal fun MangaListComponent(
         desc = if (isFiltering) Constant.EMPTY_QUERY_RESULT else Constant.EMPTY_RESULT
     )
 
-    is UiState.ErrorRedirectResponse -> MangaError(result.message, onRetry, modifier)
-    is UiState.ErrorClientRequest -> MangaError(result.message, onRetry, modifier)
-    is UiState.ErrorServerResponse -> MangaError(result.message, onRetry, modifier)
-    is UiState.ErrorException -> MangaError(result.message, onRetry, modifier)
+    is UiState.Error -> MangaError(result.message, onRetry, modifier)
 }
 
 @Composable
@@ -116,4 +113,4 @@ private fun MangaListComponentEmptyFilterPreview() =
 
 @Preview(showBackground = true)
 @Composable
-private fun MangaListComponentErrorPreview() = MangaListPreviewContent(UiState.ErrorException(message = "Something went wrong. Please try again."))
+private fun MangaListComponentErrorPreview() = MangaListPreviewContent(UiState.Error(message = "Something went wrong. Please try again."))

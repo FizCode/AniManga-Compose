@@ -20,7 +20,7 @@ import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.ranking.presentation.model.RankingUiModel
 import dev.fizcode.ranking.presentation.model.dummyRankingUiModel
 import dev.fizcode.ranking.util.Constant
-import dev.fizcode.common.settings.LocalTitleStyle
+import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 /**
  * The ranking list for each [UiState]. Every [query] match inside a card title is highlighted.
@@ -66,10 +66,7 @@ internal fun RankingListComponent(
         desc = if (query.isNotBlank()) Constant.EMPTY_QUERY_RESULT else Constant.EMPTY_RESULT
     )
 
-    is UiState.ErrorRedirectResponse -> RankingError(result.message, onRetry, modifier)
-    is UiState.ErrorClientRequest -> RankingError(result.message, onRetry, modifier)
-    is UiState.ErrorServerResponse -> RankingError(result.message, onRetry, modifier)
-    is UiState.ErrorException -> RankingError(result.message, onRetry, modifier)
+    is UiState.Error -> RankingError(result.message, onRetry, modifier)
 }
 
 @Composable
@@ -128,5 +125,5 @@ private fun RankingListComponentEmptySearchPreview() =
 @Preview(showBackground = true)
 @Composable
 private fun RankingListComponentErrorPreview() = RankingListPreviewContent(
-    UiState.ErrorException(message = "Something went wrong. Please try again.")
+    UiState.Error(message = "Something went wrong. Please try again.")
 )

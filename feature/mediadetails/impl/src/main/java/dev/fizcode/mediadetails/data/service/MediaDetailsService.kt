@@ -1,6 +1,6 @@
 package dev.fizcode.mediadetails.data.service
 
-import dev.fizcode.common.util.CommonConstant
+import dev.fizcode.mal.util.CommonConstant
 import dev.fizcode.mediadetails.data.response.MalAnimeDetailsResponse
 import dev.fizcode.mediadetails.data.response.MalMangaDetailsResponse
 import io.ktor.client.HttpClient

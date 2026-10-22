@@ -20,7 +20,7 @@ import dev.fizcode.seasonal.presentation.model.SeasonalUiModel
 import dev.fizcode.seasonal.presentation.model.dummySeasonalUiModel
 import dev.fizcode.seasonal.util.Constant
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
-import dev.fizcode.common.settings.LocalTitleStyle
+import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 @Composable
 internal fun SeasonalListComponent(
@@ -62,10 +62,7 @@ internal fun SeasonalListComponent(
         desc = if (isFiltering) Constant.EMPTY_QUERY_RESULT else Constant.EMPTY_RESULT
     )
 
-    is UiState.ErrorRedirectResponse -> SeasonalError(result.message, onRetry, modifier)
-    is UiState.ErrorClientRequest -> SeasonalError(result.message, onRetry, modifier)
-    is UiState.ErrorServerResponse -> SeasonalError(result.message, onRetry, modifier)
-    is UiState.ErrorException -> SeasonalError(result.message, onRetry, modifier)
+    is UiState.Error -> SeasonalError(result.message, onRetry, modifier)
 }
 
 @Composable
@@ -116,4 +113,4 @@ private fun SeasonalListComponentEmptyFilterPreview() =
 
 @Preview(showBackground = true)
 @Composable
-private fun SeasonalListComponentErrorPreview() = SeasonalListPreviewContent(UiState.ErrorException(message = "Something went wrong. Please try again."))
+private fun SeasonalListComponentErrorPreview() = SeasonalListPreviewContent(UiState.Error(message = "Something went wrong. Please try again."))

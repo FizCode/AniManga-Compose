@@ -1,4 +1,4 @@
-package dev.fizcode.common.util
+package dev.fizcode.mal.util
 
 object RankingTypeConstant {
 

@@ -13,8 +13,8 @@ import dev.fizcode.anime.presentation.AnimeViewModel
 import dev.fizcode.anime.presentation.mapper.SeasonalAnimeUiMapper
 import dev.fizcode.anime.presentation.mapper.TopAiringAnimeUiMapper
 import dev.fizcode.anime.presentation.mapper.TopRankingAnimeUiMapper
-import dev.fizcode.common.util.DefaultSeasonHelper
-import dev.fizcode.common.util.SeasonHelper
+import dev.fizcode.mal.util.DefaultSeasonHelper
+import dev.fizcode.mal.util.SeasonHelper
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind

@@ -1,8 +1,8 @@
 package dev.fizcode.ranking.domain.usecase
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
-import dev.fizcode.common.util.AnimeFieldsConstant
-import dev.fizcode.common.util.extensions.fieldsPicker
+import dev.fizcode.mal.util.AnimeFieldsConstant
+import dev.fizcode.mal.util.fieldsPicker
 import dev.fizcode.ranking.domain.model.RankingDomainModel
 import dev.fizcode.ranking.domain.repository.RankingRepository
 

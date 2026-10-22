@@ -3,10 +3,10 @@ package dev.fizcode.anime.domain.usecase
 import dev.fizcode.anime.domain.model.SeasonalAnimeDomainModel
 import dev.fizcode.anime.domain.repository.AnimeRepository
 import dev.fizcode.common.base.callhandler.DomainNetworkState
-import dev.fizcode.common.util.AnimeFieldsConstant
-import dev.fizcode.common.util.AnimeSortingConstant
-import dev.fizcode.common.util.SeasonHelper
-import dev.fizcode.common.util.extensions.fieldsPicker
+import dev.fizcode.mal.util.AnimeFieldsConstant
+import dev.fizcode.mal.util.AnimeSortingConstant
+import dev.fizcode.mal.util.SeasonHelper
+import dev.fizcode.mal.util.fieldsPicker
 
 internal class FetchSeasonalAnimeUseCase(
     private val animeRepository: AnimeRepository,

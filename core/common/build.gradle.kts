@@ -1,7 +1,5 @@
 plugins {
     alias(libs.plugins.animanga.android.library)
-    alias(libs.plugins.animanga.android.library.compose)
-    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -10,13 +8,7 @@ android {
 
 dependencies {
 
-    implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.collections.immutable)
-
-    implementation(projects.core.network)
-
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
 }

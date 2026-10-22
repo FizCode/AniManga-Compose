@@ -41,11 +41,12 @@ android {
 
 dependencies {
 
+    implementation(projects.core.common)
+
     api(libs.ktor.client.core)
-    api(libs.ktor.client.android)
-    api(libs.ktor.client.okhttp)
-    api(libs.ktor.serialization.kotlinx.json)
-    api(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.content.negotiation)
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.core)

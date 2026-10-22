@@ -1,6 +1,6 @@
 package dev.fizcode.seasonal.presentation.model
 
-import dev.fizcode.common.util.RankingTypeConstant
+import dev.fizcode.mal.util.RankingTypeConstant
 
 /** A MAL anime season: [apiValue] is the path segment sent to the API, [label] is shown on the tab. */
 internal enum class Season(val apiValue: String, val label: String) {

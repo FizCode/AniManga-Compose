@@ -10,6 +10,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -17,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.Group
 import androidx.compose.ui.graphics.vector.Path
-import androidx.compose.ui.graphics.vector.RenderVectorGroup
 import androidx.compose.ui.graphics.vector.VectorComposable
 import androidx.compose.ui.graphics.vector.VectorConfig
 import androidx.compose.ui.graphics.vector.VectorGroup
@@ -66,15 +66,22 @@ private val GearsByShadowGroup = listOf(LeftGear, RightGear).associateBy { it.sh
 private const val GEAR_SHADOW_COLOR = 0xFFE0E0E0L
 private const val GEAR_LAYER_STEP = 0.5f
 
+/** The blue of the illustration's "504" digits, "!!" marks, plants, trousers and hourglass, which [AnimangaGatewayTimeoutIllustration] replaces. */
+private val IllustrationAccent = SolidColor(Color(0xFF0061A4))
+
 /**
  * The gateway timeout illustration with its "504 error gateway time out" text floating up and down,
  * the "!!" above the person blinking twice every few seconds as if they are panicking,
  * and its two gears turning in opposite directions (left one clockwise, right one counter-clockwise).
+ *
+ * @param accentColor replaces the illustration's blue accents, including their translucent tints.
+ * Defaults to the theme's primary color.
  */
 @Composable
 fun AnimangaGatewayTimeoutIllustration(
     modifier: Modifier = Modifier,
-    contentDescription: String? = null
+    contentDescription: String? = null,
+    accentColor: Color = MaterialTheme.colorScheme.primary
 ) {
     val image = gatewayTimeout
     val offsetY by rememberInfiniteTransition(label = "gatewayTimeoutFloat").animateFloat(
@@ -133,18 +140,18 @@ fun AnimangaGatewayTimeoutIllustration(
             when {
                 node is VectorGroup && node.name in GearsByGroup -> {
                     val gear = GearsByGroup.getValue(node.name)
-                    SpinningGear(node, gear, gearFaces[gear.group], gearAngle)
+                    SpinningGear(node, gear, gearFaces[gear.group], gearAngle, accentColor)
                 }
 
                 node is VectorGroup && node.name in GearsByShadowGroup -> {
                     val gear = GearsByShadowGroup.getValue(node.name)
                     val face = gearFaces[gear.group]
-                    if (face == null) RenderVectorGroup(node) else SpinningGearShadow(gear, face, gearAngle)
+                    if (face == null) RenderConfiguredGroup(node, emptyMap(), accentColor) else SpinningGearShadow(gear, face, gearAngle)
                 }
 
-                node is VectorGroup && node.name == PANIC_MARKS_GROUP -> BlinkingMarks(node, panicAlpha)
-                node is VectorGroup -> RenderConfiguredGroup(node, configs)
-                node is VectorPath -> RenderVectorPath(node)
+                node is VectorGroup && node.name == PANIC_MARKS_GROUP -> BlinkingMarks(node, panicAlpha, accentColor)
+                node is VectorGroup -> RenderConfiguredGroup(node, configs, accentColor)
+                node is VectorPath -> RenderVectorPath(node, accentColor)
             }
         }
     }
@@ -168,8 +175,8 @@ private fun VectorGroup.gearFace(gear: Gear): VectorPath? {
  */
 @Composable
 @VectorComposable
-private fun SpinningGear(group: VectorGroup, gear: Gear, face: VectorPath?, angle: Float) {
-    if (face == null) return RenderVectorGroup(group)
+private fun SpinningGear(group: VectorGroup, gear: Gear, face: VectorPath?, angle: Float, accentColor: Color) {
+    if (face == null) return RenderConfiguredGroup(group, emptyMap(), accentColor)
     GearLayers(gear, face, angle, from = gear.thickness, to = 0f, sideColor = GEAR_SIDE_COLOR)
 }
 
@@ -219,12 +226,13 @@ private fun GearLayers(gear: Gear, face: VectorPath, angle: Float, from: Float, 
 }
 
 /**
- * Draws [group] with the overrides from [configs], which [RenderVectorGroup] only applies to the
- * groups nested inside the one it is given, never to that group itself.
+ * Draws [group] with the overrides from [configs] and the accent paths recolored to [accentColor].
+ * It walks the group itself instead of using `RenderVectorGroup`, which cannot recolor paths and
+ * applies [configs] only to the groups nested inside the one it is given, never to that group.
  */
 @Composable
 @VectorComposable
-private fun RenderConfiguredGroup(group: VectorGroup, configs: Map<String, VectorConfig>) {
+private fun RenderConfiguredGroup(group: VectorGroup, configs: Map<String, VectorConfig>, accentColor: Color) {
     val translationY = configs[group.name]
         ?.getOrDefault(VectorProperty.TranslateY, group.translationY)
         ?: group.translationY
@@ -239,25 +247,31 @@ private fun RenderConfiguredGroup(group: VectorGroup, configs: Map<String, Vecto
         translationY = translationY,
         clipPathData = group.clipPathData
     ) {
-        RenderVectorGroup(group, configs)
+        group.forEach { node ->
+            when (node) {
+                is VectorGroup -> RenderConfiguredGroup(node, configs, accentColor)
+                is VectorPath -> RenderVectorPath(node, accentColor)
+            }
+        }
     }
 }
 
 @Composable
 @VectorComposable
-private fun RenderVectorPath(path: VectorPath, alpha: Float = 1f) = Path(
+private fun RenderVectorPath(path: VectorPath, accentColor: Color, alpha: Float = 1f) = Path(
     pathData = path.pathData,
     pathFillType = path.pathFillType,
-    fill = path.fill,
+    fill = if (path.fill == IllustrationAccent) SolidColor(accentColor) else path.fill,
     fillAlpha = path.fillAlpha * alpha
 )
 
 /** Draws the paths of [group] with their opacity multiplied by [alpha]. */
 @Composable
 @VectorComposable
-private fun BlinkingMarks(group: VectorGroup, alpha: Float) {
+private fun BlinkingMarks(group: VectorGroup, alpha: Float, accentColor: Color) {
     group.forEach { node ->
-        if (node is VectorPath) RenderVectorPath(node, alpha) else if (node is VectorGroup) RenderVectorGroup(node)
+        if (node is VectorPath) RenderVectorPath(node, accentColor, alpha)
+        else if (node is VectorGroup) RenderConfiguredGroup(node, emptyMap(), accentColor)
     }
 }
 

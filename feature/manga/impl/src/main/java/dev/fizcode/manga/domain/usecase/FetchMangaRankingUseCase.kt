@@ -1,8 +1,8 @@
 package dev.fizcode.manga.domain.usecase
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
-import dev.fizcode.common.util.MangaFieldsConstant
-import dev.fizcode.common.util.extensions.fieldsPicker
+import dev.fizcode.mal.util.MangaFieldsConstant
+import dev.fizcode.mal.util.fieldsPicker
 import dev.fizcode.manga.domain.model.MangaDomainModel
 import dev.fizcode.manga.domain.repository.MangaRepository
 

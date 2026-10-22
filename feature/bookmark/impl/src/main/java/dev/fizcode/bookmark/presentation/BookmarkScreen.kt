@@ -24,12 +24,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fizcode.bookmark.presentation.component.BookmarkItemComponent
-import dev.fizcode.bookmark.presentation.component.BookmarkTabs
-import dev.fizcode.bookmark.presentation.component.BookmarkTabsShimmer
 import dev.fizcode.bookmark.presentation.model.BookmarkTab
 import dev.fizcode.bookmark.presentation.model.BookmarkUiModel
 import dev.fizcode.bookmark.util.Constant
 import dev.fizcode.common.base.callhandler.UiState
+import dev.fizcode.designsystem.component.other.PillTabs
+import dev.fizcode.designsystem.component.other.PillTabsShimmer
 import dev.fizcode.designsystem.component.other.SearchTextFieldComponent
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import kotlinx.collections.immutable.persistentListOf
@@ -97,9 +97,14 @@ private fun BookmarkScreenContent(
         ) {
             Spacer(Modifier.height(8.dp))
             if (bookmarks is UiState.Loading) {
-                BookmarkTabsShimmer()
+                PillTabsShimmer(labels = BookmarkTab.entries.map { it.label })
             } else {
-                BookmarkTabs(selected = tab, onSelect = onTabSelect)
+                PillTabs(
+                    items = BookmarkTab.entries,
+                    selected = tab,
+                    label = { it.label },
+                    onSelect = onTabSelect
+                )
             }
             Spacer(Modifier.height(8.dp))
             BookmarkItemComponent(

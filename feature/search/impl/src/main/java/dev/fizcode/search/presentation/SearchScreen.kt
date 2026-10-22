@@ -131,7 +131,7 @@ private fun SearchScreenErrorPreview() {
     AniMangaAnimeAndMangaInfoTheme {
         SearchScreenContent(
             queryState = rememberTextFieldState(initialText = "Ble"),
-            searchResult = UiState.ErrorException(message = "Something went wrong. Please try again."),
+            searchResult = UiState.Error(message = "Something went wrong. Please try again."),
             onCardClick = { _, _ -> }
         )
     }

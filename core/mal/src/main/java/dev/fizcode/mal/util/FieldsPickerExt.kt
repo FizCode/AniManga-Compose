@@ -1,6 +1,5 @@
-package dev.fizcode.common.util.extensions
+package dev.fizcode.mal.util
 
-import dev.fizcode.common.util.InternalConstant
 
 /**
  * Builds a comma-separated string of field names for use with MyAnimeList API's `fields` parameter.
@@ -15,4 +14,4 @@ import dev.fizcode.common.util.InternalConstant
  * ```
  */
 fun fieldsPicker(vararg fields: String): String =
-    fields.joinToString(InternalConstant.COMMA)
+    fields.joinToString(",")

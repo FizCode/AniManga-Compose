@@ -18,7 +18,7 @@ import dev.fizcode.designsystem.component.card.MovieCardSmall
 import dev.fizcode.designsystem.component.shimmer.MovieCardSmallShimmer
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import kotlinx.collections.immutable.persistentListOf
-import dev.fizcode.common.settings.LocalTitleStyle
+import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 /**
  * The bookmark list for each [UiState]; [emptyMessage] is shown when there is nothing to list.

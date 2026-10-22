@@ -12,9 +12,11 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.common)
+
     api(libs.androidx.compose.material3)
     api(libs.androidx.compose.ui.graphics)
-    api(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.tooling)
     api(libs.androidx.compose.ui.tooling.preview)
 
     // Material Extended Icon & Fonts

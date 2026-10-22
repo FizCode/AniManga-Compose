@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.other.UnavailableNotice
-import dev.fizcode.designsystem.util.base.shimmerBackground
+import dev.fizcode.designsystem.util.base.shimmer
 import dev.fizcode.mediadetails.presentation.info.model.MangaCharacterUiModel
 import dev.fizcode.mediadetails.presentation.info.util.Constant
 import dev.fizcode.mediadetails.presentation.isError
@@ -70,7 +70,7 @@ internal fun CharacterRow(
     AsyncImage(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
-            .shimmerBackground()
+            .shimmer()
             .width(50.dp)
             .height(72.dp),
         contentScale = ContentScale.Crop,
@@ -122,5 +122,5 @@ private fun CharactersTabLoadingPreview() = CharactersTabPreviewContent(UiState.
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun CharactersTabErrorPreview() = CharactersTabPreviewContent(
-    UiState.ErrorException(message = "Something went wrong. Please try again.")
+    UiState.Error(message = "Something went wrong. Please try again.")
 )

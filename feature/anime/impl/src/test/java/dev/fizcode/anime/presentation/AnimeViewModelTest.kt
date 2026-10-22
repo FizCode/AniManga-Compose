@@ -17,7 +17,7 @@ import dev.fizcode.anime.presentation.mapper.TopAiringAnimeUiMapper
 import dev.fizcode.anime.presentation.mapper.TopRankingAnimeUiMapper
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.base.callhandler.UiState
-import dev.fizcode.common.util.SeasonHelper
+import dev.fizcode.mal.util.SeasonHelper
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
@@ -145,9 +145,9 @@ class AnimeViewModelTest {
         val vm = viewModel()
         val job = vm.currentSeason.onEach { }.launchIn(this)
 
-        val state = vm.currentSeason.awaitValue { it is UiState.ErrorException }
+        val state = vm.currentSeason.awaitValue { it is UiState.Error }
 
-        assertEquals("boom", (state as UiState.ErrorException).message)
+        assertEquals("boom", (state as UiState.Error).message)
         job.cancel()
     }
 

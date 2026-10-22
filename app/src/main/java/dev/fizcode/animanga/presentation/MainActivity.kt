@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 import androidx.compose.runtime.CompositionLocalProvider
-import dev.fizcode.common.settings.LocalTitleStyle
+import dev.fizcode.designsystem.theme.LocalTitleStyle
 import dev.fizcode.common.settings.TitleStyle
 
 class MainActivity : ComponentActivity() {
