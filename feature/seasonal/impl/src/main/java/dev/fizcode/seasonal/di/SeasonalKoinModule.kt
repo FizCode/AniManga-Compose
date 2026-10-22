@@ -1,7 +1,7 @@
 package dev.fizcode.seasonal.di
 
-import dev.fizcode.common.util.DefaultSeasonHelper
-import dev.fizcode.common.util.SeasonHelper
+import dev.fizcode.mal.util.DefaultSeasonHelper
+import dev.fizcode.mal.util.SeasonHelper
 import dev.fizcode.seasonal.data.mapper.SeasonalDomainMapper
 import dev.fizcode.seasonal.data.repository.SeasonalRepositoryImpl
 import dev.fizcode.seasonal.domain.repository.SeasonalRepository

@@ -1,6 +1,6 @@
 package dev.fizcode.mal.service
 
-import dev.fizcode.common.util.CommonConstant
+import dev.fizcode.mal.util.CommonConstant
 import dev.fizcode.mal.response.MalListResponse
 import dev.fizcode.mal.response.MalMangaNode
 import io.ktor.client.HttpClient

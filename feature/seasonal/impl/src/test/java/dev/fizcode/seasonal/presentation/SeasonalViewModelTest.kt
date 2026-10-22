@@ -4,7 +4,7 @@ import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.snapshots.Snapshot
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.base.callhandler.UiState
-import dev.fizcode.common.util.SeasonHelper
+import dev.fizcode.mal.util.SeasonHelper
 import dev.fizcode.seasonal.MainDispatcherRule
 import dev.fizcode.seasonal.awaitValue
 import dev.fizcode.seasonal.domain.model.SeasonalDomainModel
