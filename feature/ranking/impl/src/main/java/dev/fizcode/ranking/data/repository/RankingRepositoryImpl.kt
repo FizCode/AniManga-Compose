@@ -1,7 +1,7 @@
 package dev.fizcode.ranking.data.repository
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
-import dev.fizcode.common.base.callhandler.processResponse
+import dev.fizcode.network.processResponse
 import dev.fizcode.mal.service.MalAnimeService
 import dev.fizcode.ranking.data.mapper.RankingDomainMapper
 import dev.fizcode.ranking.domain.model.RankingDomainModel

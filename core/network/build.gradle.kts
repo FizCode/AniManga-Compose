@@ -41,6 +41,8 @@ android {
 
 dependencies {
 
+    implementation(projects.core.common)
+
     api(libs.ktor.client.core)
     api(libs.ktor.client.android)
     api(libs.ktor.client.okhttp)

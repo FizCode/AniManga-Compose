@@ -1,7 +1,7 @@
 package dev.fizcode.seasonal.data.repository
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
-import dev.fizcode.common.base.callhandler.processResponse
+import dev.fizcode.network.processResponse
 import dev.fizcode.mal.service.MalAnimeService
 import dev.fizcode.seasonal.data.mapper.SeasonalDomainMapper
 import dev.fizcode.seasonal.domain.model.SeasonalDomainModel

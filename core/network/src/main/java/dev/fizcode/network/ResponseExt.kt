@@ -1,5 +1,6 @@
-package dev.fizcode.common.base.callhandler
+package dev.fizcode.network
 
+import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.util.ErrorType
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.plugins.ClientRequestException
