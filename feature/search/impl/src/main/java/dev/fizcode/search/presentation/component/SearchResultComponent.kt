@@ -19,7 +19,7 @@ import dev.fizcode.search.presentation.model.SearchResultUiModel
 import dev.fizcode.search.presentation.model.dummySearchResultUiModel
 import dev.fizcode.search.util.Constant
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
-import dev.fizcode.common.settings.LocalTitleStyle
+import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 @Composable
 internal fun SearchResultComponent(

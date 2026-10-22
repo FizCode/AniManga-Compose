@@ -1,10 +1,6 @@
 package dev.fizcode.common.settings
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.compositionLocalOf
-
 /** The other titles a media can have next to its default one. */
-@Immutable
 data class AlternativeTitles(
     val synonyms: List<String> = emptyList(),
     val japanese: String = "",
@@ -12,7 +8,6 @@ data class AlternativeTitles(
 )
 
 /** Every title of a media, so the one the user picked in the settings can be shown. */
-@Immutable
 data class MediaTitles(
     val default: String,
     val alternative: AlternativeTitles = AlternativeTitles()
@@ -31,6 +26,3 @@ data class MediaTitles(
         (listOf(default, alternative.japanese, alternative.english) + alternative.synonyms)
             .any { it.contains(query.trim(), ignoreCase = true) }
 }
-
-/** The title style the user picked in the settings, provided once at the root of the app. */
-val LocalTitleStyle = compositionLocalOf { TitleStyle.DEFAULT }

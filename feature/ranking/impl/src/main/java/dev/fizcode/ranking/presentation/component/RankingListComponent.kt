@@ -20,7 +20,7 @@ import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.ranking.presentation.model.RankingUiModel
 import dev.fizcode.ranking.presentation.model.dummyRankingUiModel
 import dev.fizcode.ranking.util.Constant
-import dev.fizcode.common.settings.LocalTitleStyle
+import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 /**
  * The ranking list for each [UiState]. Every [query] match inside a card title is highlighted.

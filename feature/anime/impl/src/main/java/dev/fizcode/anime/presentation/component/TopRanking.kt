@@ -15,7 +15,7 @@ import dev.fizcode.designsystem.component.card.MovieCardSmall
 import dev.fizcode.designsystem.component.shimmer.MovieCardSmallShimmer
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import dev.fizcode.common.settings.LocalTitleStyle
+import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 @Composable
 internal fun TopRanking(

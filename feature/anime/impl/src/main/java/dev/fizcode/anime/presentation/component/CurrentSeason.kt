@@ -17,7 +17,7 @@ import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.MovieCardLarge
 import dev.fizcode.designsystem.component.shimmer.MovieCardLargeShimmer
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
-import dev.fizcode.common.settings.LocalTitleStyle
+import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 @Composable
 internal fun CurrentSeason(

@@ -18,7 +18,7 @@ import dev.fizcode.mediadetails.presentation.header.anime.SliderLargeImage
 import kotlinx.collections.immutable.persistentListOf
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
-import dev.fizcode.common.settings.LocalTitleStyle
+import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 @Composable
 fun DetailHeaderComponent(

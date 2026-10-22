@@ -20,7 +20,7 @@ import dev.fizcode.manga.presentation.model.MangaUiModel
 import dev.fizcode.manga.presentation.model.dummyMangaUiModel
 import dev.fizcode.manga.util.Constant
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
-import dev.fizcode.common.settings.LocalTitleStyle
+import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 @Composable
 internal fun MangaListComponent(

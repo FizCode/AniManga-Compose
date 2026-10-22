@@ -20,7 +20,7 @@ import dev.fizcode.seasonal.presentation.model.SeasonalUiModel
 import dev.fizcode.seasonal.presentation.model.dummySeasonalUiModel
 import dev.fizcode.seasonal.util.Constant
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
-import dev.fizcode.common.settings.LocalTitleStyle
+import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 @Composable
 internal fun SeasonalListComponent(
