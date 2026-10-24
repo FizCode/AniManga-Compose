@@ -1,6 +1,6 @@
 # AniManga Info
 
-[![AniManga Info CI](https://github.com/FizCode/AniManga/actions/workflows/fastlane_ci.yml/badge.svg)](https://github.com/FizCode/AniManga/actions/workflows/fastlane_ci.yml)
+[![AniManga Info CI](https://github.com/FizCode/AniManga-Compose/actions/workflows/fastlane_ci.yml/badge.svg)](https://github.com/FizCode/AniManga-Compose/actions/workflows/fastlane_ci.yml)
 
 An Android app to browse anime and manga, built with Jetpack Compose. All data comes from
 [MyAnimeList](https://myanimelist.net) and [AniList](https://anilist.co). The app is a programming
