@@ -51,6 +51,8 @@ dependencies {
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.core)
 
+    testImplementation(libs.junit)
+
     // Chucker
     debugImplementation(libs.chucker.library)
     releaseImplementation(libs.chucker.library.no.op)
