@@ -1,6 +1,5 @@
 package dev.fizcode.mediadetails.data.mapper
 
-import dev.fizcode.common.util.extensions.orDash
 import dev.fizcode.common.util.extensions.orZero
 import dev.fizcode.mediadetails.data.response.MalAnimeDetailsResponse
 import dev.fizcode.mediadetails.data.response.MalMangaDetailsResponse
@@ -38,7 +37,7 @@ internal class MangaDetailsDomainMapper {
             background = response.background.orEmpty(),
             endDate = response.endDate.orEmpty(),
             genres = response.genres.orEmpty().map {
-                Genre(id = it.id.orZero(), name = it.name.orDash())
+                Genre(id = it.id.orZero(), name = it.name.orEmpty())
             },
             id = response.id.orZero(),
             mainPicture = response.mainPicture.toDomainModel(),

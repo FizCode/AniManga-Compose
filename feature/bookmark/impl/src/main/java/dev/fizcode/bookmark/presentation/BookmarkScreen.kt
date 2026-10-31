@@ -2,13 +2,13 @@ package dev.fizcode.bookmark.presentation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,7 +16,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -24,31 +26,39 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fizcode.bookmark.presentation.component.BookmarkItemComponent
+import dev.fizcode.bookmark.presentation.model.BookmarkIntent
 import dev.fizcode.bookmark.presentation.model.BookmarkTab
 import dev.fizcode.bookmark.presentation.model.BookmarkUiModel
+import dev.fizcode.bookmark.presentation.model.BookmarkUiState
 import dev.fizcode.bookmark.util.Constant
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.other.PillTabs
 import dev.fizcode.designsystem.component.other.PillTabsShimmer
 import dev.fizcode.designsystem.component.other.SearchTextFieldComponent
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
-import kotlinx.collections.immutable.persistentListOf
-import org.koin.androidx.compose.koinViewModel
 import dev.fizcode.designsystem.util.DashboardTopBarHeight
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.distinctUntilChanged
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun BookmarkScreen(
     onCardClick: (mediaType: String, mediaId: Int) -> Unit
 ) {
     val bookmarkViewModel: BookmarkViewModel = koinViewModel()
-    val bookmarks by bookmarkViewModel.visibleBookmarks.collectAsStateWithLifecycle()
-    val tab by bookmarkViewModel.selectedTab.collectAsStateWithLifecycle()
+    val uiState by bookmarkViewModel.uiState.collectAsStateWithLifecycle()
+    val queryState = rememberTextFieldState(initialText = uiState.query)
+
+    LaunchedEffect(queryState) {
+        snapshotFlow { queryState.text.toString() }
+            .distinctUntilChanged()
+            .collect { bookmarkViewModel.onIntent(BookmarkIntent.QueryChanged(it)) }
+    }
 
     BookmarkScreenContent(
-        queryState = bookmarkViewModel.queryState,
-        tab = tab,
-        bookmarks = bookmarks,
-        onTabSelect = bookmarkViewModel::selectTab,
+        queryState = queryState,
+        uiState = uiState,
+        onTabSelect = { bookmarkViewModel.onIntent(BookmarkIntent.SelectTab(it)) },
         onCardClick = onCardClick
     )
 }
@@ -57,8 +67,7 @@ internal fun BookmarkScreen(
 @Composable
 private fun BookmarkScreenContent(
     queryState: TextFieldState,
-    tab: BookmarkTab,
-    bookmarks: UiState<List<BookmarkUiModel>>,
+    uiState: BookmarkUiState,
     onTabSelect: (BookmarkTab) -> Unit,
     onCardClick: (mediaType: String, mediaId: Int) -> Unit
 ) {
@@ -96,23 +105,23 @@ private fun BookmarkScreenContent(
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(Modifier.height(8.dp))
-            if (bookmarks is UiState.Loading) {
+            if (uiState.bookmarks is UiState.Loading) {
                 PillTabsShimmer(labels = BookmarkTab.entries.map { it.label })
             } else {
                 PillTabs(
                     items = BookmarkTab.entries,
-                    selected = tab,
+                    selected = uiState.tab,
                     label = { it.label },
                     onSelect = onTabSelect
                 )
             }
             Spacer(Modifier.height(8.dp))
             BookmarkItemComponent(
-                cardItem = bookmarks,
-                emptyMessage = if (queryState.text.isNotBlank()) {
+                cardItem = uiState.bookmarks,
+                emptyMessage = if (uiState.query.isNotEmpty()) {
                     Constant.EMPTY_QUERY_RESULT
                 } else {
-                    Constant.EMPTY_BOOKMARK_FORMAT.format(tab.emptyLabel)
+                    Constant.EMPTY_BOOKMARK_FORMAT.format(uiState.tab.emptyLabel)
                 },
                 onCardClick = onCardClick
             )
@@ -139,8 +148,7 @@ private fun BookmarkScreenPreviewContent(
     AniMangaAnimeAndMangaInfoTheme {
         BookmarkScreenContent(
             queryState = rememberTextFieldState(),
-            tab = tab,
-            bookmarks = bookmarks,
+            uiState = BookmarkUiState(tab = tab, allBookmarks = bookmarks),
             onTabSelect = {},
             onCardClick = { _, _ -> }
         )

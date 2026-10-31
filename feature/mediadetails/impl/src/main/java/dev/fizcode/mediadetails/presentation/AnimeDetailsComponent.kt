@@ -45,7 +45,7 @@ internal fun AnimeDetailsComponent(
     onRetryCastAndStaff: () -> Unit,
     onMoreCastClick: () -> Unit,
     onMoreStaffClick: () -> Unit,
-    onClickBookmark: (AnimeDetailsUiModel) -> Unit,
+    onClickBookmark: () -> Unit,
     onClickShare: (String) -> Unit
 ) = LazyColumn(
     modifier = Modifier
@@ -62,7 +62,7 @@ internal fun AnimeDetailsComponent(
                     isBookmarked = isBookmarked,
                     header = animeDetails.data.animeDetailsHeaderUiModel,
                     onPictureClick = selectedImage,
-                    onClickBookmark = { onClickBookmark(animeDetails.data) }
+                    onClickBookmark = onClickBookmark
                 )
             }
             item {

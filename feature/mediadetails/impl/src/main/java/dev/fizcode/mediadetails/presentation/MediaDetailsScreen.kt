@@ -39,8 +39,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
-import dev.fizcode.mediadetails.presentation.mapper.AnimeBookmarkMapper.mapToBookmarkArgs
-import dev.fizcode.mediadetails.presentation.mapper.MangaBookmarkMapper.mapToBookmarkArgs
+import dev.fizcode.mediadetails.presentation.model.MediaDetailsEffect
+import dev.fizcode.mediadetails.presentation.model.MediaDetailsIntent
 import dev.fizcode.mediadetails.util.Constant
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -56,15 +56,15 @@ internal fun MediaDetailsScreen(
     onOpenStaff: () -> Unit,
     onOpenCharacters: () -> Unit
 ) {
+    val mediaKind = remember(mediaType) { MediaKind.from(mediaType) }
     val mediaDetailsViewModel: MediaDetailsViewModel = koinViewModel(key = "$mediaId") {
-        parametersOf(mediaId)
+        parametersOf(mediaId, mediaType)
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val mediaKind = remember(mediaType) { MediaKind.from(mediaType) }
-    val isBookmarked by mediaDetailsViewModel.isBookmarked.collectAsStateWithLifecycle()
+    val uiState by mediaDetailsViewModel.uiState.collectAsStateWithLifecycle()
 
     // The title bar and the share text show the title in the style the user picked.
     val titleStyle = LocalTitleStyle.current
@@ -92,7 +92,11 @@ internal fun MediaDetailsScreen(
 
     LaunchedEffect(mediaDetailsViewModel.effect, lifecycleOwner) {
         mediaDetailsViewModel.effect.collect { effect ->
-            snackbarHostState.showSnackbar(message = effect)
+            val message = when (effect) {
+                MediaDetailsEffect.Bookmarked -> Constant.BOOKMARKED
+                MediaDetailsEffect.Unbookmarked -> Constant.UNBOOKMARKED
+            }
+            snackbarHostState.showSnackbar(message = message)
         }
     }
 
@@ -105,51 +109,40 @@ internal fun MediaDetailsScreen(
     ) { observerModifier ->
         when (mediaKind) {
             MediaKind.ANIME -> {
-                val animeDetails by mediaDetailsViewModel.animeDetails.collectAsStateWithLifecycle()
-                val animeCast by mediaDetailsViewModel.animeCast.collectAsStateWithLifecycle()
-                val animeStaff by mediaDetailsViewModel.animeStaff.collectAsStateWithLifecycle()
-
                 AnimeDetailsComponent(
                     modifier = observerModifier,
-                    isBookmarked = isBookmarked,
-                    animeDetails = animeDetails,
-                    animeCast = animeCast,
-                    animeStaff = animeStaff,
+                    isBookmarked = uiState.isBookmarked,
+                    animeDetails = uiState.animeDetails,
+                    animeCast = uiState.animeCast,
+                    animeStaff = uiState.animeStaff,
                     headerTitle = { headerTitles = it },
                     selectedImage = { selectedImage = it },
-                    onRetryDetails = mediaDetailsViewModel::retryDetails,
-                    onRetryCastAndStaff = mediaDetailsViewModel::retryCastAndStaff,
+                    onRetryDetails = { mediaDetailsViewModel.onIntent(MediaDetailsIntent.RetryDetails) },
+                    onRetryCastAndStaff = {
+                        mediaDetailsViewModel.onIntent(MediaDetailsIntent.RetryCastAndStaff)
+                    },
                     onMoreCastClick = onOpenCast,
                     onMoreStaffClick = onOpenStaff,
                     onClickShare = onClickShare,
-                    onClickBookmark = { animeMediaDetails ->
-                        mediaDetailsViewModel.bookmarkMedia(
-                            animeMediaDetails.mapToBookmarkArgs(mediaId)
-                        )
-                    }
+                    onClickBookmark = { mediaDetailsViewModel.onIntent(MediaDetailsIntent.ToggleBookmark) }
                 )
             }
 
             MediaKind.MANGA -> {
-                val mangaDetails by mediaDetailsViewModel.mangaDetails.collectAsStateWithLifecycle()
-                val mangaCharacters by mediaDetailsViewModel.mangaCharacters.collectAsStateWithLifecycle()
-
                 MangaDetailsComponent(
                     modifier = observerModifier,
-                    isBookmarked = isBookmarked,
-                    mangaDetails = mangaDetails,
-                    characters = mangaCharacters,
+                    isBookmarked = uiState.isBookmarked,
+                    mangaDetails = uiState.mangaDetails,
+                    characters = uiState.mangaCharacters,
                     headerTitle = { headerTitles = it },
                     selectedImage = { selectedImage = it },
-                    onRetryDetails = mediaDetailsViewModel::retryMangaDetails,
-                    onRetryCharacters = mediaDetailsViewModel::retryMangaCharacters,
+                    onRetryDetails = { mediaDetailsViewModel.onIntent(MediaDetailsIntent.RetryMangaDetails) },
+                    onRetryCharacters = {
+                        mediaDetailsViewModel.onIntent(MediaDetailsIntent.RetryMangaCharacters)
+                    },
                     onMoreCharactersClick = onOpenCharacters,
                     onClickShare = onClickShare,
-                    onClickBookmark = { mangaMediaDetails ->
-                        mediaDetailsViewModel.bookmarkMedia(
-                            mangaMediaDetails.mapToBookmarkArgs(mediaId)
-                        )
-                    }
+                    onClickBookmark = { mediaDetailsViewModel.onIntent(MediaDetailsIntent.ToggleBookmark) }
                 )
             }
         }

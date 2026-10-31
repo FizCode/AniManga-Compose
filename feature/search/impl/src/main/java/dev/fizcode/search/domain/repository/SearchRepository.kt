@@ -7,8 +7,7 @@ internal interface SearchRepository {
 
     suspend fun searchAnime(
         query: String,
-        limit: Int,
-        fields: String
+        limit: Int
     ): DomainNetworkState<SearchAnimeDomainModel>
 
 }

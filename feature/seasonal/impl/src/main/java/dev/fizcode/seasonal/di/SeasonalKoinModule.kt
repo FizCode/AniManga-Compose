@@ -45,5 +45,5 @@ private fun seasonalRepositoryModule() = module {
 }
 
 private fun seasonalHelperModule() = module {
-    singleOf(::DefaultSeasonHelper) bind SeasonHelper::class
+    single<SeasonHelper> { DefaultSeasonHelper() }
 }

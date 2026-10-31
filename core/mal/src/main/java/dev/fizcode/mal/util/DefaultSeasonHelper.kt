@@ -6,18 +6,20 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
-class DefaultSeasonHelper : SeasonHelper {
+@OptIn(ExperimentalTime::class)
+class DefaultSeasonHelper(
+    private val clock: Clock = Clock.System,
+    private val timeZone: () -> TimeZone = TimeZone::currentSystemDefault
+) : SeasonHelper {
 
-    /** Read on every call so the season stays correct in a long-lived process. */
-    @OptIn(ExperimentalTime::class)
     private val localDate
-        get() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        get() = clock.now().toLocalDateTime(timeZone())
 
-    override fun getCurrentSeason(): String = when (localDate.month.number) {
-        12, 1, 2 -> RankingTypeConstant.WINTER
-        3, 4, 5 -> RankingTypeConstant.SPRING
-        6, 7, 8 -> RankingTypeConstant.SUMMER
-        else -> RankingTypeConstant.FALL
+    override fun getCurrentSeason(): Season = when (localDate.month.number) {
+        12, 1, 2 -> Season.WINTER
+        3, 4, 5 -> Season.SPRING
+        6, 7, 8 -> Season.SUMMER
+        else -> Season.FALL
     }
 
     override fun getCurrentYearForSeason(): Int = localDate.run {

@@ -48,6 +48,8 @@ import dev.fizcode.settings.presentation.component.SettingsItem
 import dev.fizcode.settings.presentation.component.SettingsSection
 import dev.fizcode.settings.presentation.component.ThemeDialog
 import dev.fizcode.settings.presentation.model.PendingFilterChange
+import dev.fizcode.settings.presentation.model.SettingsIntent
+import dev.fizcode.settings.presentation.model.SettingsUiState
 import dev.fizcode.settings.presentation.model.description
 import dev.fizcode.settings.presentation.model.icon
 import dev.fizcode.settings.presentation.model.label
@@ -67,9 +69,9 @@ internal fun SettingsScreen(
         uiState = uiState,
         version = remember { context.appVersion() },
         onBackClick = onBackClick,
-        onThemeChange = settingsViewModel::setThemeMode,
-        onTitleStyleChange = settingsViewModel::setTitleStyle,
-        onNsfwFilterChange = settingsViewModel::setNsfwFilter,
+        onThemeChange = { settingsViewModel.onIntent(SettingsIntent.SetThemeMode(it)) },
+        onTitleStyleChange = { settingsViewModel.onIntent(SettingsIntent.SetTitleStyle(it)) },
+        onNsfwFilterChange = { settingsViewModel.onIntent(SettingsIntent.SetNsfwFilter(it)) },
         onOpenLink = { url -> context.openLink(url) }
     )
 }

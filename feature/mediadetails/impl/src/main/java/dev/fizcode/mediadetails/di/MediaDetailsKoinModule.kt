@@ -40,9 +40,10 @@ fun mediaDetailsKoinModule() = module {
 }
 
 private fun mediaDetailsViewModelModule() = module {
-    viewModel { (mediaId: Int) ->
+    viewModel { (mediaId: Int, mediaType: String) ->
         MediaDetailsViewModel(
             mediaId = mediaId,
+            mediaType = mediaType,
             animeDetailsUseCase = get(),
             animeRepository = get(),
             animeDetailsUiMapper = get(),

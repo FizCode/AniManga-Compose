@@ -31,13 +31,3 @@ fun Int?.orZero() = this ?: 0
  * @return the double value or 0.0 if the value is null.
  */
 fun Double?.orZero() = this ?: 0.0
-
-/**
- * Returns a single list of dash ("-") if the list is null or empty,
- * otherwise returns the string representation of the list.
- *
- * This is useful for displaying fallback text when dealing with optional or empty lists.
- *
- * @return a list of single string dash ("-") if the list is null or empty.
- */
-fun List<String>?.orDashList(): List<String> = if (this.isNullOrEmpty()) listOf("-") else this

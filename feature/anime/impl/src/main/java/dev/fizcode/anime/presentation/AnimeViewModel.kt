@@ -1,24 +1,16 @@
 package dev.fizcode.anime.presentation
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dev.fizcode.anime.domain.usecase.AnimeUseCaseGroup
 import dev.fizcode.anime.presentation.mapper.SeasonalAnimeUiMapper
 import dev.fizcode.anime.presentation.mapper.TopAiringAnimeUiMapper
 import dev.fizcode.anime.presentation.mapper.TopRankingAnimeUiMapper
-import dev.fizcode.anime.presentation.model.SeasonalUiModel
-import dev.fizcode.anime.presentation.model.TopAiringUiModel
-import dev.fizcode.anime.presentation.model.TopRankingUiModel
+import dev.fizcode.anime.presentation.model.AnimeIntent
+import dev.fizcode.anime.presentation.model.AnimeUiState
 import dev.fizcode.anime.util.Constant
-import dev.fizcode.common.base.callhandler.UiState
-import dev.fizcode.common.base.presentationhandler.asUiStateFlow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import dev.fizcode.common.base.mvi.MviViewModel
 import dev.fizcode.common.settings.NsfwFilterProvider
 import dev.fizcode.common.settings.changes
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.merge
 
 internal class AnimeViewModel(
@@ -27,46 +19,39 @@ internal class AnimeViewModel(
     private val topAiringUiMapper: TopAiringAnimeUiMapper,
     private val topRankingUiMapper: TopRankingAnimeUiMapper,
     nsfwFilterProvider: NsfwFilterProvider
-) : ViewModel() {
+) : MviViewModel<AnimeUiState, AnimeIntent, Nothing>(AnimeUiState()) {
 
-    private val _refreshTrigger = MutableSharedFlow<Unit>(replay = 0)
+    private val refreshes = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
 
-    /** Pull to refresh, and a new NSFW level which changes what the lists contain. */
-    private val reloadTrigger = merge(_refreshTrigger, nsfwFilterProvider.changes())
+    init {
+        val reloads = merge(refreshes, nsfwFilterProvider.changes())
 
-    private var _refreshing = MutableStateFlow(false)
-    val refreshing: MutableStateFlow<Boolean> = _refreshing
-    fun refresh() = viewModelScope.launch {
-        _refreshing.emit(true)
-        _refreshTrigger.emit(Unit)
+        loadSection(
+            reloads = reloads,
+            mapper = seasonalUiMapper::mapToSeasonalAnimeUiModel,
+            call = { animeUseCaseGroup.fetchSeasonAnimeUseCase(Constant.LIMIT_5) },
+            reduce = { copy(currentSeason = it).settled() }
+        )
+        loadSection(
+            reloads = reloads,
+            mapper = topAiringUiMapper::mapToAiringAnimeUiModel,
+            call = { animeUseCaseGroup.fetchTopAiringAnimeUseCase(Constant.LIMIT_5) },
+            reduce = { copy(topAiring = it).settled() }
+        )
+        loadSection(
+            reloads = reloads,
+            mapper = topRankingUiMapper::mapToTopRankingAnimeUiModel,
+            call = { animeUseCaseGroup.fetchTopRankingAnimeUseCase(Constant.LIMIT_10) },
+            reduce = { copy(topRanking = it).settled() }
+        )
     }
 
-    fun shouldNotRefresh() = viewModelScope.launch {
-        _refreshing.emit(false)
+    override fun onIntent(intent: AnimeIntent) {
+        when (intent) {
+            AnimeIntent.Refresh -> {
+                setState { refreshing() }
+                refreshes.tryEmit(Unit)
+            }
+        }
     }
-
-    val currentSeason: StateFlow<UiState<List<SeasonalUiModel>>> = asUiStateFlow(
-        scope = viewModelScope,
-        domain = { animeUseCaseGroup.fetchSeasonAnimeUseCase(Constant.LIMIT_5) },
-        mapper = { data -> seasonalUiMapper.mapToSeasonalAnimeUiModel(data) },
-        retrigger = reloadTrigger,
-        started = SharingStarted.Lazily
-    )
-
-    val topAiring: StateFlow<UiState<List<TopAiringUiModel>>> = asUiStateFlow(
-        scope = viewModelScope,
-        domain = { animeUseCaseGroup.fetchTopAiringAnimeUseCase(Constant.LIMIT_5) },
-        mapper = { data -> topAiringUiMapper.mapToAiringAnimeUiModel(data) },
-        retrigger = reloadTrigger,
-        started = SharingStarted.Lazily
-    )
-
-    val topRanking: StateFlow<UiState<List<TopRankingUiModel>>> = asUiStateFlow(
-        scope = viewModelScope,
-        domain = { animeUseCaseGroup.fetchTopRankingAnimeUseCase(Constant.LIMIT_10) },
-        mapper = { data -> topRankingUiMapper.mapToTopRankingAnimeUiModel(data) },
-        retrigger = reloadTrigger,
-        started = SharingStarted.Lazily
-    )
-
 }

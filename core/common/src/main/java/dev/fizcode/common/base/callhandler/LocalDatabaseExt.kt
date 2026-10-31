@@ -2,7 +2,6 @@ package dev.fizcode.common.base.callhandler
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 /**
@@ -25,20 +24,9 @@ import kotlinx.coroutines.flow.map
  * @param block A lambda that returns a [Flow] from a local database (e.g., Room DAO).
  * @return A [Flow] of [DomainLocalState], reflecting the status of the local operation.
  */
-inline fun <T> processDatabaseCall(
-    crossinline block: () -> Flow<T>
-): Flow<DomainLocalState<T>> = flow {
+fun <T> processDatabaseCall(block: () -> Flow<T>): Flow<DomainLocalState<T>> =
     block()
         .map<T, DomainLocalState<T>> { data ->
-            val isEmpty = when (data) {
-                is Collection<*> -> data.isEmpty()
-                is Map<*, *> -> data.isEmpty()
-                is String -> data.isBlank()
-                null -> true
-                else -> false
-            }
-            if (isEmpty) DomainLocalState.Empty else DomainLocalState.Success(data)
+            if (isEmptyResult(data)) DomainLocalState.Empty else DomainLocalState.Success(data)
         }
         .catch { e -> emit(DomainLocalState.Error(e as? Exception)) }
-        .collect { emit(it) }
-}

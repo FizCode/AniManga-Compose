@@ -242,4 +242,21 @@ class AnimeDetailsUiMapperTest {
         assertEquals((0..11).toList(), result.map { it.staffId })
         assertEquals("Director", result.first().role)
     }
+
+    @Test
+    fun `blank genre, studio and source names show a dash`() {
+        val blank = mal.copy(
+            genres = listOf(Genre(id = 1, name = "")),
+            studios = listOf(Studio(id = 11, name = "")),
+            source = ""
+        )
+
+        val ui = mapper.mapToAnimeDetailsUiModel(AnimeDetailsDomainModel(blank, aniListDomainModel = null))
+
+        val info = ui.animeDetailsInfoUiModel.animeInfo
+        assertEquals("-", info.source.name)
+        assertEquals("-", info.genre.single().name)
+        assertEquals("-", info.studios.single().name)
+        assertEquals("-", ui.animeDetailsHeaderUiModel.studio)
+    }
 }

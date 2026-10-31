@@ -8,6 +8,7 @@ import dev.fizcode.anime.domain.usecase.FetchSeasonalAnimeUseCase
 import dev.fizcode.anime.domain.usecase.FetchTopAiringAnimeUseCase
 import dev.fizcode.anime.domain.usecase.FetchTopRankingAnimeUseCase
 import dev.fizcode.common.base.callhandler.DomainNetworkState
+import dev.fizcode.mal.util.Season
 import dev.fizcode.mal.util.SeasonHelper
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -29,34 +30,31 @@ class AnimeUseCaseTest {
             year: Int,
             season: String,
             sortBy: String,
-            limit: Int,
-            fields: String
+            limit: Int
         ): DomainNetworkState<SeasonalAnimeDomainModel> {
-            seasonArgs = listOf(year, season, sortBy, limit, fields)
+            seasonArgs = listOf(year, season, sortBy, limit)
             return seasonResult
         }
 
         override suspend fun fetchTopAiringAnime(
             rankingType: String,
-            limit: Int,
-            fields: String
+            limit: Int
         ): DomainNetworkState<TopAiringDomainModel> {
-            airingArgs = listOf(rankingType, limit, fields)
+            airingArgs = listOf(rankingType, limit)
             return airingResult
         }
 
         override suspend fun fetchTopRankingAnime(
             rankingType: String,
-            limit: Int,
-            fields: String
+            limit: Int
         ): DomainNetworkState<TopRankingDomainModel> {
-            rankingArgs = listOf(rankingType, limit, fields)
+            rankingArgs = listOf(rankingType, limit)
             return rankingResult
         }
     }
 
     private class FakeSeasonHelper : SeasonHelper {
-        override fun getCurrentSeason() = "fall"
+        override fun getCurrentSeason() = Season.FALL
         override fun getCurrentYearForSeason() = 2025
         override fun getCurrentYear() = 2025
     }
@@ -71,7 +69,6 @@ class AnimeUseCaseTest {
         assertEquals(2025, args[0])
         assertEquals("fall", args[1])
         assertEquals(5, args[3])
-        assertTrue((args[4] as String).isNotBlank())
         assertEquals(repository.seasonResult, result)
     }
 
@@ -81,7 +78,6 @@ class AnimeUseCaseTest {
 
         val args = repository.airingArgs!!
         assertEquals(5, args[1])
-        assertTrue((args[2] as String).isNotBlank())
         assertEquals(repository.airingResult, result)
     }
 
@@ -91,7 +87,6 @@ class AnimeUseCaseTest {
 
         val args = repository.rankingArgs!!
         assertEquals(10, args[1])
-        assertTrue((args[2] as String).isNotBlank())
         assertEquals(repository.rankingResult, result)
     }
 

@@ -1,18 +1,6 @@
 package dev.fizcode.mediadetails.presentation
 
-import dev.fizcode.mediadetails.navigation.DEEPLINK_BASE
-import java.net.URLEncoder
-
-private const val DETAILS_PATH = "details"
-
-/**
- * The link that opens the media details screen of [mediaId], the inverse of
- * `Uri.toMediaDetailsRouteOrNull()`. [mediaType] is percent-encoded as it can contain spaces.
- */
-internal fun mediaDetailsDeepLink(mediaType: String, mediaId: Int): String {
-    val encodedType = URLEncoder.encode(mediaType, Charsets.UTF_8.name()).replace("+", "%20")
-    return "$DEEPLINK_BASE/$DETAILS_PATH/$encodedType/$mediaId"
-}
+import dev.fizcode.mediadetails.navigation.mediaDetailsDeepLink
 
 /** What the share button sends: the title, the shared [content] and the deep link. */
 internal fun buildShareText(

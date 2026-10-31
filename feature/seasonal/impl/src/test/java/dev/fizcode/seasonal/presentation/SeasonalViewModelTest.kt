@@ -1,9 +1,8 @@
 package dev.fizcode.seasonal.presentation
 
-import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
-import androidx.compose.runtime.snapshots.Snapshot
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.base.callhandler.UiState
+import dev.fizcode.mal.util.Season
 import dev.fizcode.mal.util.SeasonHelper
 import dev.fizcode.seasonal.MainDispatcherRule
 import dev.fizcode.seasonal.awaitValue
@@ -11,9 +10,8 @@ import dev.fizcode.seasonal.domain.model.SeasonalDomainModel
 import dev.fizcode.seasonal.domain.repository.SeasonalRepository
 import dev.fizcode.seasonal.domain.usecase.FetchSeasonalAnimeUseCase
 import dev.fizcode.seasonal.presentation.mapper.SeasonalUiMapper
-import dev.fizcode.seasonal.presentation.model.Season
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import dev.fizcode.seasonal.presentation.model.SeasonalIntent
+import dev.fizcode.seasonal.presentation.model.SeasonalUiModel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -39,15 +37,14 @@ class SeasonalViewModelTest {
             year: Int,
             season: String,
             sortBy: String,
-            limit: Int,
-            fields: String
+            limit: Int
         ): DomainNetworkState<SeasonalDomainModel> {
             requests += year to season
             return DomainNetworkState.Success(SeasonalDomainModel(items))
         }
     }
 
-    private class FakeSeasonHelper(private val season: String) : SeasonHelper {
+    private class FakeSeasonHelper(private val season: Season) : SeasonHelper {
         override fun getCurrentSeason() = season
         override fun getCurrentYearForSeason() = 2026
         override fun getCurrentYear() = 2026
@@ -59,7 +56,7 @@ class SeasonalViewModelTest {
 
     private fun viewModel(
         repository: SeasonalRepository,
-        currentSeason: String = "spring"
+        currentSeason: Season = Season.SPRING
     ) = SeasonalViewModel(
         fetchSeasonalAnimeUseCase = FetchSeasonalAnimeUseCase(repository),
         seasonalUiMapper = SeasonalUiMapper(),
@@ -67,43 +64,41 @@ class SeasonalViewModelTest {
         nsfwFilterProvider = nsfwFilterProvider
     )
 
+    private suspend fun SeasonalViewModel.awaitResult(
+        predicate: (UiState<List<SeasonalUiModel>>) -> Boolean
+    ) = uiState.awaitValue { predicate(it.result) }.result
+
     @Test
     fun `selects the current season and year on start`() {
-        val vm = viewModel(FakeSeasonalRepository(), currentSeason = "fall")
+        val vm = viewModel(FakeSeasonalRepository(), currentSeason = Season.FALL)
 
-        assertEquals(Season.FALL, vm.selectedSeason.value)
-        assertEquals(2026, vm.selectedYear.value)
-        assertEquals(2027, vm.availableYears.first())
+        assertEquals(Season.FALL, vm.uiState.value.season)
+        assertEquals(2026, vm.uiState.value.year)
+        assertEquals(2027, vm.uiState.value.years.first())
     }
 
     @Test
-    fun `loads the current season then reloads when another is selected`() = runBlocking {
+    fun `loads the current season then reloads when another is selected`() = runBlocking<Unit> {
         val repository = FakeSeasonalRepository()
-        val vm = viewModel(repository, currentSeason = "spring")
-        val job = vm.seasonalResult.onEach { }.launchIn(this)
+        val vm = viewModel(repository, currentSeason = Season.SPRING)
 
-        vm.seasonalResult.awaitValue { it is UiState.Success }
-        vm.selectSeason(Season.WINTER)
-        vm.seasonalResult.awaitValue { repository.requests.size == 2 && it is UiState.Success }
-        job.cancel()
+        vm.awaitResult { it is UiState.Success }
+        vm.onIntent(SeasonalIntent.SelectSeason(Season.WINTER))
+        vm.awaitResult { repository.requests.size == 2 && it is UiState.Success }
 
         assertEquals(listOf(2026 to "spring", 2026 to "winter"), repository.requests)
     }
 
     @Test
-    fun `query filters loaded titles and reports empty when nothing matches`() = runBlocking {
+    fun `query filters loaded titles and reports empty when nothing matches`() = runBlocking<Unit> {
         val vm = viewModel(FakeSeasonalRepository())
-        val job = vm.seasonalResult.onEach { }.launchIn(this)
-        vm.seasonalResult.awaitValue { it is UiState.Success }
+        vm.awaitResult { it is UiState.Success }
 
-        vm.queryState.setTextAndPlaceCursorAtEnd("blea")
-        Snapshot.sendApplyNotifications()
-        val filtered = vm.seasonalResult.awaitValue { it is UiState.Success && it.data.size == 1 }
+        vm.onIntent(SeasonalIntent.QueryChanged("blea"))
+        val filtered = vm.awaitResult { it is UiState.Success && it.data.size == 1 }
         assertEquals("Bleach", (filtered as UiState.Success).data.single().title)
 
-        vm.queryState.setTextAndPlaceCursorAtEnd("zzz")
-        Snapshot.sendApplyNotifications()
-        assertTrue(vm.seasonalResult.awaitValue { it is UiState.Empty } is UiState.Empty)
-        job.cancel()
+        vm.onIntent(SeasonalIntent.QueryChanged("zzz"))
+        assertTrue(vm.awaitResult { it is UiState.Empty } is UiState.Empty)
     }
 }

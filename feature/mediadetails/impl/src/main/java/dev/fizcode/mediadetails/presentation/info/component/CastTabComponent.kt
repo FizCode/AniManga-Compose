@@ -1,7 +1,6 @@
 package dev.fizcode.mediadetails.presentation.info.component
 
 import dev.fizcode.designsystem.component.other.UnavailableNotice
-import dev.fizcode.mediadetails.presentation.isError
 import dev.fizcode.mediadetails.util.Constant as MediaDetailsConstant
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -97,7 +96,7 @@ internal fun CastTabComponent(
 
         }
     }
-    if (castUiModel.isError() && staffUiModel.isError()) {
+    if (castUiModel is UiState.Error && staffUiModel is UiState.Error) {
         UnavailableNotice(message = MediaDetailsConstant.CAST_UNAVAILABLE, onRetry = onRetry)
     }
     Spacer(Modifier.height(4.dp))

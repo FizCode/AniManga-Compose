@@ -8,6 +8,7 @@ android {
 
 dependencies {
 
+    api(libs.androidx.lifecycle.viewmodel)
     implementation(libs.kotlinx.collections.immutable)
 
     testImplementation(libs.junit)

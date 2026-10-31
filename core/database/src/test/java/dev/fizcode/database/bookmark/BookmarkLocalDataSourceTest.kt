@@ -45,7 +45,7 @@ class BookmarkLocalDataSourceTest {
         episodes = "12 Episodes",
         status = "Finished",
         studio = "Pierrot",
-        genres = "Action, Comedy",
+        genres = listOf("Action", "Comedy"),
         alternativeTitles = AlternativeTitles(
             synonyms = listOf("Burichi", "Blich"),
             japanese = "ブリーチ",
@@ -65,6 +65,35 @@ class BookmarkLocalDataSourceTest {
         dataSource.saveBookmark(record)
 
         assertEquals("Burichi\nBlich", dao.rows.value.single().titleSynonyms)
+    }
+
+    @Test
+    fun `genres are kept in one comma separated column and split again`() = runBlocking {
+        dataSource.saveBookmark(record)
+
+        assertEquals("Action,Comedy", dao.rows.value.single().genres)
+        assertEquals(listOf("Action", "Comedy"), dataSource.getAllBookmarks().first().single().genres)
+    }
+
+    @Test
+    fun `genres saved with a comma and a space by an older version are still read`() = runBlocking {
+        dao.rows.value = listOf(
+            BookmarkEntity(1, "tv", "p", "8.0", "A", "12 Episodes", "Finished", "Bones", "Action, Slice of Life")
+        )
+
+        assertEquals(
+            listOf("Action", "Slice of Life"),
+            dataSource.getAllBookmarks().first().single().genres
+        )
+    }
+
+    @Test
+    fun `an empty genre column is read as no genres`() = runBlocking {
+        dao.rows.value = listOf(
+            BookmarkEntity(1, "tv", "p", "8.0", "A", "12 Episodes", "Finished", "Bones", "")
+        )
+
+        assertTrue(dataSource.getAllBookmarks().first().single().genres.isEmpty())
     }
 
     @Test

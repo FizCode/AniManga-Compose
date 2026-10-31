@@ -1,6 +1,8 @@
 package dev.fizcode.mediadetails.data.repository
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
+import dev.fizcode.mal.util.MangaFieldsConstant
+import dev.fizcode.mal.util.fieldsPicker
 import dev.fizcode.network.processResponse
 import dev.fizcode.mediadetails.data.mapper.AniListDomainMapper
 import dev.fizcode.mediadetails.data.mapper.MangaDetailsDomainMapper
@@ -15,6 +17,28 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import dev.fizcode.mediadetails.domain.model.PagedResult
 
+private val MANGA_DETAILS_FIELDS = fieldsPicker(
+    MangaFieldsConstant.PICTURES,
+    MangaFieldsConstant.MEDIA_TYPE,
+    MangaFieldsConstant.STATUS,
+    MangaFieldsConstant.NUM_VOLUMES,
+    MangaFieldsConstant.NUM_CHAPTERS,
+    MangaFieldsConstant.AUTHORS,
+    MangaFieldsConstant.SERIALIZATION,
+    MangaFieldsConstant.RANK,
+    MangaFieldsConstant.POPULARITY,
+    MangaFieldsConstant.NUM_LIST_USERS,
+    MangaFieldsConstant.MEAN,
+    MangaFieldsConstant.NUM_SCORING_USERS,
+    MangaFieldsConstant.GENRES,
+    MangaFieldsConstant.ALTERNATIVE_TITLES,
+    MangaFieldsConstant.SYNOPSIS,
+    MangaFieldsConstant.BACKGROUND,
+    MangaFieldsConstant.START_DATE,
+    MangaFieldsConstant.END_DATE,
+    MangaFieldsConstant.RELATED_MANGA
+)
+
 internal class MangaDetailsRepositoryImpl(
     private val detailsService: MediaDetailsService,
     private val aniListService: AniListService,
@@ -23,10 +47,9 @@ internal class MangaDetailsRepositoryImpl(
 ) : MangaDetailsRepository {
 
     override suspend fun fetchMangaDetails(
-        mangaId: Int,
-        fields: String
+        mangaId: Int
     ): DomainNetworkState<MangaDetailsDomainModel> = coroutineScope {
-        val malRequest = async { fetchMalMangaDetails(mangaId = mangaId, fields = fields) }
+        val malRequest = async { fetchMalMangaDetails(mangaId = mangaId, fields = MANGA_DETAILS_FIELDS) }
         val aniListRequest = async { fetchAniListDetails(mangaId = mangaId) }
 
         mergeMalMangaWithOptionalAniList(mal = malRequest.await(), aniList = aniListRequest.await())

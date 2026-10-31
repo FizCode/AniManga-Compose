@@ -59,5 +59,5 @@ private fun animeRepositoryModule() = module {
 }
 
 private fun animeHelperModule() = module {
-    singleOf(::DefaultSeasonHelper) bind SeasonHelper::class
+    single<SeasonHelper> { DefaultSeasonHelper() }
 }

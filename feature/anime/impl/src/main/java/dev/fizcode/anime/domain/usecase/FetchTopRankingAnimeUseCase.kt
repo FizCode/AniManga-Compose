@@ -3,31 +3,15 @@ package dev.fizcode.anime.domain.usecase
 import dev.fizcode.anime.domain.model.TopRankingDomainModel
 import dev.fizcode.anime.domain.repository.AnimeRepository
 import dev.fizcode.common.base.callhandler.DomainNetworkState
-import dev.fizcode.mal.util.AnimeFieldsConstant
 import dev.fizcode.mal.util.RankingTypeConstant
-import dev.fizcode.mal.util.fieldsPicker
 
 internal class FetchTopRankingAnimeUseCase(
     private val animeRepository: AnimeRepository,
 ) {
     suspend operator fun invoke(limit: Int): DomainNetworkState<TopRankingDomainModel> {
-        val fields = fieldsPicker(
-            AnimeFieldsConstant.ALTERNATIVE_TITLES,
-            AnimeFieldsConstant.NSFW,
-            AnimeFieldsConstant.MEDIA_TYPE,
-            AnimeFieldsConstant.MEAN,
-            AnimeFieldsConstant.BROADCAST,
-            AnimeFieldsConstant.STATUS,
-            AnimeFieldsConstant.MEDIA_TYPE,
-            AnimeFieldsConstant.NUM_EPISODES,
-            AnimeFieldsConstant.STUDIOS,
-            AnimeFieldsConstant.GENRES
-        )
-
         return animeRepository.fetchTopRankingAnime(
             rankingType = RankingTypeConstant.ALL,
-            limit = limit,
-            fields = fields
+            limit = limit
         )
     }
 }

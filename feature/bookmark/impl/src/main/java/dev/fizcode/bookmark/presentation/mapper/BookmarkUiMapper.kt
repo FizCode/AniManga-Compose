@@ -2,8 +2,8 @@ package dev.fizcode.bookmark.presentation.mapper
 
 import dev.fizcode.bookmark.data.model.BookmarkDomainModel
 import dev.fizcode.bookmark.presentation.model.BookmarkUiModel
-import dev.fizcode.common.util.extensions.toImmutableList
 import dev.fizcode.common.settings.MediaTitles
+import kotlinx.collections.immutable.toImmutableList
 
 internal class BookmarkUiMapper {
 

@@ -27,7 +27,7 @@ internal class BookmarkLocalDataSourceImpl(
         episodes = episodes,
         status = status,
         studio = studio,
-        genres = genres,
+        genres = decodeGenres(genres),
         alternativeTitles = AlternativeTitles(
             synonyms = decodeSynonyms(titleSynonyms),
             japanese = titleJapanese,
@@ -44,7 +44,7 @@ internal class BookmarkLocalDataSourceImpl(
         episodes = episodes,
         status = status,
         studio = studio,
-        genres = genres,
+        genres = encodeGenres(genres),
         titleSynonyms = encodeSynonyms(alternativeTitles.synonyms),
         titleJapanese = alternativeTitles.japanese,
         titleEnglish = alternativeTitles.english
@@ -57,7 +57,15 @@ internal class BookmarkLocalDataSourceImpl(
     private fun decodeSynonyms(value: String): List<String> =
         value.split(SYNONYM_SEPARATOR).filter { it.isNotBlank() }
 
+    // Genres share one column, separated by a comma. Rows saved with ", " are read the same way.
+    private fun encodeGenres(genres: List<String>): String =
+        genres.filter { it.isNotBlank() }.joinToString(GENRE_SEPARATOR)
+
+    private fun decodeGenres(value: String): List<String> =
+        value.split(GENRE_SEPARATOR).map { it.trim() }.filter { it.isNotEmpty() }
+
     private companion object {
+        const val GENRE_SEPARATOR = ","
         const val SYNONYM_SEPARATOR = "\n"
     }
 }

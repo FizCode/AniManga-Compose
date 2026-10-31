@@ -1,12 +1,14 @@
 package dev.fizcode.network
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
+import dev.fizcode.common.base.callhandler.isEmptyResult
 import dev.fizcode.common.util.ErrorType
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ServerResponseException
 import kotlinx.io.IOException
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Processes a network or domain response and maps it to a standardized [DomainNetworkState].
@@ -29,17 +31,11 @@ inline fun <Response> processResponse(response: () -> Response): DomainNetworkSt
     try {
         val result = response()
 
-        val isEmpty = when (result) {
-            is Collection<*> -> result.isEmpty()
-            is Map<*, *> -> result.isEmpty()
-            is String -> result.isBlank()
-            null -> true
-            else -> false
-        }
-
-        if (isEmpty) DomainNetworkState.Empty
+        if (isEmptyResult(result)) DomainNetworkState.Empty
         else DomainNetworkState.Success(result)
 
+    } catch (e: CancellationException) {
+        throw e
     } catch (e: Exception) {
         /**
          * Maps different exception types to their corresponding error types.

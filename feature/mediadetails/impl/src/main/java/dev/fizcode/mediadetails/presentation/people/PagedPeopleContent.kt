@@ -30,6 +30,7 @@ import dev.fizcode.designsystem.component.card.EmptyCardComponent
 import dev.fizcode.designsystem.component.other.ErrorWithRetry
 import dev.fizcode.designsystem.component.other.UnavailableNotice
 import dev.fizcode.designsystem.icon.CustomIcon
+import dev.fizcode.mediadetails.presentation.people.model.PagedItems
 import dev.fizcode.mediadetails.util.Constant
 
 /**

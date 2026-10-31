@@ -31,7 +31,7 @@ internal fun MangaDetailsComponent(
     onRetryDetails: () -> Unit,
     onRetryCharacters: () -> Unit,
     onMoreCharactersClick: () -> Unit,
-    onClickBookmark: (MangaDetailsUiModel) -> Unit,
+    onClickBookmark: () -> Unit,
     onClickShare: (String) -> Unit
 ) = LazyColumn(
     modifier = Modifier
@@ -48,7 +48,7 @@ internal fun MangaDetailsComponent(
                     isBookmarked = isBookmarked,
                     header = mangaDetails.data.mangaDetailsHeaderUiModel,
                     onPictureClick = selectedImage,
-                    onClickBookmark = { onClickBookmark(mangaDetails.data) }
+                    onClickBookmark = onClickBookmark
                 )
             }
             item {

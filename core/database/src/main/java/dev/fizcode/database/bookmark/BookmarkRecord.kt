@@ -12,6 +12,6 @@ data class BookmarkRecord(
     val episodes: String,
     val status: String,
     val studio: String,
-    val genres: String,
+    val genres: List<String>,
     val alternativeTitles: AlternativeTitles = AlternativeTitles()
 )

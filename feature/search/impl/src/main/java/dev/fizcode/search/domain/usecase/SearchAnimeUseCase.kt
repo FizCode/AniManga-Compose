@@ -1,8 +1,6 @@
 package dev.fizcode.search.domain.usecase
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
-import dev.fizcode.mal.util.AnimeFieldsConstant
-import dev.fizcode.mal.util.fieldsPicker
 import dev.fizcode.search.domain.model.SearchAnimeDomainModel
 import dev.fizcode.search.domain.repository.SearchRepository
 
@@ -14,20 +12,9 @@ internal class SearchAnimeUseCase(
         query: String,
         limit: Int
     ): DomainNetworkState<SearchAnimeDomainModel> {
-        val fields = fieldsPicker(
-            AnimeFieldsConstant.ALTERNATIVE_TITLES,
-            AnimeFieldsConstant.NSFW,
-            AnimeFieldsConstant.MEDIA_TYPE,
-            AnimeFieldsConstant.MEAN,
-            AnimeFieldsConstant.STATUS,
-            AnimeFieldsConstant.NUM_EPISODES,
-            AnimeFieldsConstant.GENRES
-        )
-
         return searchRepository.searchAnime(
             query = query,
-            limit = limit,
-            fields = fields
+            limit = limit
         )
     }
 }

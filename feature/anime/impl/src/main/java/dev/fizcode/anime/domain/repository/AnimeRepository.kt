@@ -11,20 +11,17 @@ internal interface AnimeRepository {
         year: Int,
         season: String,
         sortBy: String,
-        limit: Int,
-        fields: String
+        limit: Int
     ): DomainNetworkState<SeasonalAnimeDomainModel>
 
     suspend fun fetchTopAiringAnime(
         rankingType: String,
-        limit: Int,
-        fields: String
+        limit: Int
     ): DomainNetworkState<TopAiringDomainModel>
 
     suspend fun fetchTopRankingAnime(
         rankingType: String,
-        limit: Int,
-        fields: String
+        limit: Int
     ): DomainNetworkState<TopRankingDomainModel>
 
 }

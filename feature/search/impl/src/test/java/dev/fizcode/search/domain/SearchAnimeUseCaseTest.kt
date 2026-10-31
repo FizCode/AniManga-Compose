@@ -6,7 +6,6 @@ import dev.fizcode.search.domain.repository.SearchRepository
 import dev.fizcode.search.domain.usecase.SearchAnimeUseCase
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class SearchAnimeUseCaseTest {
@@ -16,30 +15,25 @@ class SearchAnimeUseCaseTest {
     ) : SearchRepository {
         var query: String? = null
         var limit: Int? = null
-        var fields: String? = null
 
         override suspend fun searchAnime(
             query: String,
-            limit: Int,
-            fields: String
+            limit: Int
         ): DomainNetworkState<SearchAnimeDomainModel> {
             this.query = query
             this.limit = limit
-            this.fields = fields
             return result
         }
     }
 
     @Test
-    fun `forwards query and limit and requests the list fields`() = runTest {
+    fun `forwards query and limit`() = runTest {
         val repository = FakeSearchRepository(DomainNetworkState.Empty)
 
         SearchAnimeUseCase(repository)(query = "bleach", limit = 20)
 
         assertEquals("bleach", repository.query)
         assertEquals(20, repository.limit)
-        val fields = repository.fields.orEmpty().split(",")
-        assertTrue(fields.isNotEmpty() && fields.all { it.isNotBlank() })
     }
 
     @Test

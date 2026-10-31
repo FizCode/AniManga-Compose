@@ -1,6 +1,8 @@
 package dev.fizcode.seasonal.data.repository
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
+import dev.fizcode.mal.util.AnimeFieldsConstant
+import dev.fizcode.mal.util.fieldsPicker
 import dev.fizcode.network.processResponse
 import dev.fizcode.mal.service.MalAnimeService
 import dev.fizcode.seasonal.data.mapper.SeasonalDomainMapper
@@ -10,6 +12,19 @@ import dev.fizcode.common.settings.NsfwFilterProvider
 import dev.fizcode.common.settings.allows
 import dev.fizcode.common.settings.current
 import dev.fizcode.common.settings.includesNsfw
+
+private val SEASONAL_FIELDS = fieldsPicker(
+    AnimeFieldsConstant.ALTERNATIVE_TITLES,
+    AnimeFieldsConstant.NSFW,
+    AnimeFieldsConstant.MEDIA_TYPE,
+    AnimeFieldsConstant.MEAN,
+    AnimeFieldsConstant.BROADCAST,
+    AnimeFieldsConstant.STATUS,
+    AnimeFieldsConstant.NUM_EPISODES,
+    AnimeFieldsConstant.STUDIOS,
+    AnimeFieldsConstant.SYNOPSIS,
+    AnimeFieldsConstant.GENRES
+)
 
 internal class SeasonalRepositoryImpl(
     private val animeService: MalAnimeService,
@@ -21,8 +36,7 @@ internal class SeasonalRepositoryImpl(
         year: Int,
         season: String,
         sortBy: String,
-        limit: Int,
-        fields: String
+        limit: Int
     ): DomainNetworkState<SeasonalDomainModel> = processResponse {
         val nsfwFilter = nsfwFilterProvider.current()
         val response = animeService.fetchSeason(
@@ -30,7 +44,7 @@ internal class SeasonalRepositoryImpl(
             season = season,
             sortBy = sortBy,
             limit = limit,
-            fields = fields,
+            fields = SEASONAL_FIELDS,
             nsfw = nsfwFilter.includesNsfw
         )
         seasonalDomainMapper.mapToSeasonalAnime(
