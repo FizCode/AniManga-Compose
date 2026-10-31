@@ -1,7 +1,5 @@
 package dev.fizcode.ranking.presentation
 
-import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
-import androidx.compose.runtime.snapshots.Snapshot
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.ranking.MainDispatcherRule
@@ -10,9 +8,9 @@ import dev.fizcode.ranking.domain.model.RankingDomainModel
 import dev.fizcode.ranking.domain.repository.RankingRepository
 import dev.fizcode.ranking.domain.usecase.FetchAnimeRankingUseCase
 import dev.fizcode.ranking.presentation.mapper.RankingUiMapper
+import dev.fizcode.ranking.presentation.model.RankingIntent
 import dev.fizcode.ranking.presentation.model.RankingType
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import dev.fizcode.ranking.presentation.model.RankingUiModel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -40,8 +38,7 @@ class RankingViewModelTest {
 
         override suspend fun fetchAnimeRanking(
             rankingType: String,
-            limit: Int,
-            fields: String
+            limit: Int
         ): DomainNetworkState<RankingDomainModel> {
             requestedTypes += rankingType
             return result
@@ -61,68 +58,62 @@ class RankingViewModelTest {
         }
     )
 
-    @Test
-    fun `asks for the ranking of its type`() = runBlocking {
-        val vm = viewModel(RankingType.TOP_RANKING)
-        val job = vm.rankingResult.onEach { }.launchIn(this)
+    private suspend fun RankingViewModel.awaitResult(
+        predicate: (UiState<List<RankingUiModel>>) -> Boolean
+    ) = uiState.awaitValue { predicate(it.result) }.result
 
-        vm.rankingResult.awaitValue { it is UiState.Success }
+    @Test
+    fun `asks for the ranking of its type`() = runBlocking<Unit> {
+        val vm = viewModel(RankingType.TOP_RANKING)
+
+        vm.awaitResult { it is UiState.Success }
 
         assertEquals(listOf("all"), repository.requestedTypes)
-        job.cancel()
     }
 
     @Test
-    fun `typing filters by title and keeps the original ranks`() = runBlocking {
+    fun `typing filters by title and keeps the original ranks`() = runBlocking<Unit> {
         val vm = viewModel()
-        val job = vm.rankingResult.onEach { }.launchIn(this)
-        vm.rankingResult.awaitValue { it is UiState.Success }
+        vm.awaitResult { it is UiState.Success }
 
-        Snapshot.withMutableSnapshot { vm.queryState.setTextAndPlaceCursorAtEnd("nar") }
-        val state = vm.rankingResult.awaitValue { it is UiState.Success && it.data.size == 1 }
+        vm.onIntent(RankingIntent.QueryChanged("nar"))
+        val state = vm.awaitResult { it is UiState.Success && it.data.size == 1 }
 
         val item = (state as UiState.Success).data.single()
         assertEquals("Naruto", item.title)
         assertEquals(2, item.rank)
-        job.cancel()
     }
 
     @Test
-    fun `no match becomes empty`() = runBlocking {
+    fun `no match becomes empty`() = runBlocking<Unit> {
         val vm = viewModel()
-        val job = vm.rankingResult.onEach { }.launchIn(this)
-        vm.rankingResult.awaitValue { it is UiState.Success }
+        vm.awaitResult { it is UiState.Success }
 
-        Snapshot.withMutableSnapshot { vm.queryState.setTextAndPlaceCursorAtEnd("zzz") }
+        vm.onIntent(RankingIntent.QueryChanged("zzz"))
 
-        vm.rankingResult.awaitValue { it is UiState.Empty }
-        job.cancel()
+        vm.awaitResult { it is UiState.Empty }
     }
 
     @Test
-    fun `retry loads the ranking again`() = runBlocking {
+    fun `retry loads the ranking again`() = runBlocking<Unit> {
         repository.result = DomainNetworkState.ErrorNetwork(message = "offline")
         val vm = viewModel()
-        val job = vm.rankingResult.onEach { }.launchIn(this)
-        vm.rankingResult.awaitValue { it is UiState.Error }
+        vm.awaitResult { it is UiState.Error }
         assertEquals(1, repository.requestedTypes.size)
 
-        vm.retry()
+        vm.onIntent(RankingIntent.Retry)
 
-        vm.rankingResult.awaitValue { repository.requestedTypes.size == 2 }
-        job.cancel()
+        vm.awaitResult { repository.requestedTypes.size == 2 }
     }
 
     @Test
-    fun `picking another nsfw level loads the ranking again`() = runBlocking {
+    fun `picking another nsfw level loads the ranking again`() = runBlocking<Unit> {
         val vm = viewModel()
-        val job = vm.rankingResult.onEach { }.launchIn(this)
-        vm.rankingResult.awaitValue { it is UiState.Success }
+        vm.awaitResult { it is UiState.Success }
         assertEquals(1, repository.requestedTypes.size)
 
         nsfwFilter.value = NsfwFilter.NOT_SAFE
 
-        vm.rankingResult.awaitValue { repository.requestedTypes.size == 2 }
-        job.cancel()
+        vm.awaitResult { repository.requestedTypes.size == 2 }
     }
 }

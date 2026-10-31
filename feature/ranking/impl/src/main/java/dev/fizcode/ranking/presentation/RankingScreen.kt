@@ -11,10 +11,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,9 +26,12 @@ import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.ranking.presentation.component.RankingListComponent
 import dev.fizcode.ranking.presentation.component.RankingTopBar
+import dev.fizcode.ranking.presentation.model.RankingIntent
 import dev.fizcode.ranking.presentation.model.RankingType
 import dev.fizcode.ranking.presentation.model.RankingUiModel
+import dev.fizcode.ranking.presentation.model.RankingUiState
 import dev.fizcode.ranking.presentation.model.dummyRankingUiModel
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -40,15 +45,22 @@ internal fun RankingScreen(
     val rankingViewModel: RankingViewModel = koinViewModel(key = type.name) {
         parametersOf(type.apiValue)
     }
-    val result by rankingViewModel.rankingResult.collectAsStateWithLifecycle()
+    val uiState by rankingViewModel.uiState.collectAsStateWithLifecycle()
+    val queryState = rememberTextFieldState(initialText = uiState.query)
+
+    LaunchedEffect(queryState) {
+        snapshotFlow { queryState.text.toString() }
+            .distinctUntilChanged()
+            .collect { rankingViewModel.onIntent(RankingIntent.QueryChanged(it)) }
+    }
 
     RankingScreenContent(
         title = type.title,
-        queryState = rankingViewModel.queryState,
-        result = result,
+        queryState = queryState,
+        uiState = uiState,
         onBackClick = onBackClick,
         onCardClick = onCardClick,
-        onRetry = rankingViewModel::retry
+        onRetry = { rankingViewModel.onIntent(RankingIntent.Retry) }
     )
 }
 
@@ -57,7 +69,7 @@ internal fun RankingScreen(
 private fun RankingScreenContent(
     title: String,
     queryState: TextFieldState,
-    result: UiState<List<RankingUiModel>>,
+    uiState: RankingUiState,
     onBackClick: () -> Unit,
     onCardClick: (mediaType: String, mediaId: Int) -> Unit,
     onRetry: () -> Unit
@@ -88,8 +100,8 @@ private fun RankingScreenContent(
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding).padding(horizontal = 16.dp)) {
             RankingListComponent(
-                result = result,
-                query = queryState.text.toString(),
+                result = uiState.result,
+                query = uiState.query,
                 onCardClick = onCardClick,
                 onRetry = onRetry
             )
@@ -106,7 +118,7 @@ private fun RankingScreenPreviewContent(
         RankingScreenContent(
             title = RankingType.TOP_AIRING.title,
             queryState = rememberTextFieldState(initialText = query),
-            result = result,
+            uiState = RankingUiState(query = query, ranking = result),
             onBackClick = {},
             onCardClick = { _, _ -> },
             onRetry = {}
