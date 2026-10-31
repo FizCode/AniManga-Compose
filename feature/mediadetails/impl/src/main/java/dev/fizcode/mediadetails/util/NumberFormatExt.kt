@@ -1,4 +1,4 @@
-package dev.fizcode.common.util.extensions
+package dev.fizcode.mediadetails.util
 
 /**
  * Converts an [Int] to a string with comma separators for thousands.
@@ -21,7 +21,7 @@ package dev.fizcode.common.util.extensions
  * @param zeroIsNa If `true`, returns "N/A" when the value is zero. Default is `false`.
  * @return A string representation of the integer with comma separators or "N/A".
  */
-fun Int.toCommaSeparators(zeroIsNa: Boolean = false): String = if (zeroIsNa && this == 0) {
+internal fun Int.toCommaSeparators(zeroIsNa: Boolean = false): String = if (zeroIsNa && this == 0) {
     "N/A"
 } else {
     "%,d".format(this)
@@ -53,7 +53,7 @@ fun Int.toCommaSeparators(zeroIsNa: Boolean = false): String = if (zeroIsNa && t
  * @param zeroIsNa If `true`, returns "N/A" when the value is zero. Default is `false`.
  * @return A formatted compact string representation with "M", "K", or comma separators.
  */
-fun Int.toCompactNumber(zeroIsNa: Boolean = false): String = when {
+internal fun Int.toCompactNumber(zeroIsNa: Boolean = false): String = when {
     this >= 1_000_000 -> {
         val inMillions = this / 1_000_000.0
         val formatted = "%,.1f".format(inMillions)
@@ -82,7 +82,7 @@ fun Int.toCompactNumber(zeroIsNa: Boolean = false): String = when {
  *
  * @return The integer as a string, or "N/A" if the value is zero.
  */
-fun Int.toStringOrNa(): String = if (this == 0) "N/A" else this.toString()
+internal fun Int.toStringOrNa(): String = if (this == 0) "N/A" else this.toString()
 
 /**
  * Converts a [Double] to a string, returning `"N/A"` if the value is zero (`0.0`).
@@ -96,4 +96,4 @@ fun Int.toStringOrNa(): String = if (this == 0) "N/A" else this.toString()
  *
  * @return The double as a string, or "N/A" if the value is 0.0.
  */
-fun Double.toStringOrNa(): String = if (this == 0.0) "N/A" else this.toString()
+internal fun Double.toStringOrNa(): String = if (this == 0.0) "N/A" else this.toString()

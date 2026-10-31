@@ -24,7 +24,6 @@ import dev.fizcode.designsystem.component.other.UnavailableNotice
 import dev.fizcode.designsystem.util.base.shimmer
 import dev.fizcode.mediadetails.presentation.info.model.MangaCharacterUiModel
 import dev.fizcode.mediadetails.presentation.info.util.Constant
-import dev.fizcode.mediadetails.presentation.isError
 import dev.fizcode.mediadetails.util.Constant as MediaDetailsConstant
 import kotlinx.collections.immutable.ImmutableList
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
@@ -51,7 +50,7 @@ internal fun CharactersTabComponent(
             }
         }
 
-        characters.isError() -> UnavailableNotice(
+        characters is UiState.Error -> UnavailableNotice(
             message = MediaDetailsConstant.CHARACTERS_UNAVAILABLE,
             onRetry = onRetry
         )

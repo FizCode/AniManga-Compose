@@ -24,7 +24,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.common.util.extensions.orDash
-import dev.fizcode.common.util.extensions.toStringWithComma
 import dev.fizcode.designsystem.component.other.HyperlinkText
 import dev.fizcode.designsystem.component.other.MultipleHyperlinkText
 import dev.fizcode.mediadetails.presentation.info.model.AnimeInfo
@@ -36,6 +35,7 @@ import dev.fizcode.mediadetails.presentation.info.util.buildMangaInformationList
 import dev.fizcode.mediadetails.presentation.info.util.buildMangaStatisticsList
 import dev.fizcode.mediadetails.presentation.info.util.buildStatisticsList
 import dev.fizcode.mediadetails.presentation.info.util.Constant
+import dev.fizcode.mediadetails.util.toStringWithComma
 import kotlinx.collections.immutable.ImmutableList
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
