@@ -12,8 +12,8 @@ import dev.fizcode.anime.domain.model.TopRankingDomainModel
 import dev.fizcode.anime.presentation.mapper.SeasonalAnimeUiMapper
 import dev.fizcode.anime.presentation.mapper.TopAiringAnimeUiMapper
 import dev.fizcode.anime.presentation.mapper.TopRankingAnimeUiMapper
-import dev.fizcode.common.util.extensions.airingStatus
-import dev.fizcode.common.util.extensions.animeMediaType
+import dev.fizcode.common.media.AiringStatus
+import dev.fizcode.common.media.AnimeMediaType
 import dev.fizcode.common.util.extensions.releaseInfo
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -140,8 +140,8 @@ class TopRankingAnimeUiMapperTest {
 
     @Test
     fun `subtitle handles episode counts`() {
-        val type = animeMediaType("movie")
-        val status = airingStatus("finished_airing")
+        val type = AnimeMediaType.fromApi("movie").label
+        val status = AiringStatus.fromApi("finished_airing").label
 
         assertEquals(
             "$type | $status",

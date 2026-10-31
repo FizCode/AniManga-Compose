@@ -1,7 +1,7 @@
 package dev.fizcode.search.presentation
 
-import dev.fizcode.common.util.extensions.airingStatus
-import dev.fizcode.common.util.extensions.animeMediaType
+import dev.fizcode.common.media.AiringStatus
+import dev.fizcode.common.media.AnimeMediaType
 import dev.fizcode.search.domain.model.SearchAnimeDomainModel
 import dev.fizcode.search.presentation.mapper.SearchUiMapper
 import org.junit.Assert.assertEquals
@@ -53,18 +53,18 @@ class SearchUiMapperTest {
     @Test
     fun `subtitle uses plural episodes`() {
         val ui = mapper.mapToSearchResultUiModel(SearchAnimeDomainModel(listOf(node(numEpisodes = 12)))).single()
-        assertEquals("${animeMediaType("tv")} | 12 Episodes | ${airingStatus("finished_airing")}", ui.subTitle)
+        assertEquals("${AnimeMediaType.fromApi("tv").label} | 12 Episodes | ${AiringStatus.fromApi("finished_airing").label}", ui.subTitle)
     }
 
     @Test
     fun `subtitle uses singular episode`() {
         val ui = mapper.mapToSearchResultUiModel(SearchAnimeDomainModel(listOf(node(numEpisodes = 1)))).single()
-        assertEquals("${animeMediaType("tv")} | 1 Episode | ${airingStatus("finished_airing")}", ui.subTitle)
+        assertEquals("${AnimeMediaType.fromApi("tv").label} | 1 Episode | ${AiringStatus.fromApi("finished_airing").label}", ui.subTitle)
     }
 
     @Test
     fun `subtitle omits episode count when zero`() {
         val ui = mapper.mapToSearchResultUiModel(SearchAnimeDomainModel(listOf(node(numEpisodes = 0)))).single()
-        assertEquals("${animeMediaType("tv")} | ${airingStatus("finished_airing")}", ui.subTitle)
+        assertEquals("${AnimeMediaType.fromApi("tv").label} | ${AiringStatus.fromApi("finished_airing").label}", ui.subTitle)
     }
 }

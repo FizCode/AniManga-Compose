@@ -1,7 +1,7 @@
 package dev.fizcode.search.presentation.mapper
 
-import dev.fizcode.common.util.extensions.airingStatus
-import dev.fizcode.common.util.extensions.animeMediaType
+import dev.fizcode.common.media.AiringStatus
+import dev.fizcode.common.media.AnimeMediaType
 import dev.fizcode.search.domain.model.SearchAnimeDomainModel
 import dev.fizcode.search.presentation.model.SearchResultUiModel
 import dev.fizcode.search.util.Constant
@@ -31,8 +31,8 @@ internal class SearchUiMapper {
         numEpisodes: Int,
         status: String
     ): String {
-        val animeMediaType = animeMediaType(mediaType = mediaType)
-        val airingStatus = airingStatus(status = status)
+        val animeMediaType = AnimeMediaType.fromApi(mediaType).label
+        val airingStatus = AiringStatus.fromApi(status).label
         val episode = when (numEpisodes) {
             0 -> ""
             1 -> "$numEpisodes ${Constant.EPISODE}"

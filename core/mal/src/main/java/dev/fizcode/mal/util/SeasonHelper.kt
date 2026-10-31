@@ -1,7 +1,7 @@
 package dev.fizcode.mal.util
 
 interface SeasonHelper {
-    fun getCurrentSeason(): String
+    fun getCurrentSeason(): Season
     fun getCurrentYearForSeason(): Int
     fun getCurrentYear(): Int
 }
