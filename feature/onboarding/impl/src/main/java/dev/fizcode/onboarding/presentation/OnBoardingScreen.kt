@@ -12,7 +12,10 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +25,8 @@ import dev.fizcode.designsystem.component.pager.PagerPositionDotIndicator
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.onboarding.presentation.component.OnBoardingPage
 import dev.fizcode.onboarding.presentation.component.OnBoardingPagerScreen
+import dev.fizcode.onboarding.presentation.model.OnBoardingEffect
+import dev.fizcode.onboarding.presentation.model.OnBoardingIntent
 import dev.fizcode.onboarding.presentation.util.Constant
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -38,16 +43,19 @@ internal fun OnBoardingScreen(
     onFinished: () -> Unit
 ) {
     val viewModel: OnBoardingViewModel = koinViewModel()
-    val scope = rememberCoroutineScope()
+    val currentOnFinished by rememberUpdatedState(onFinished)
+
+    LaunchedEffect(viewModel) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                OnBoardingEffect.Finished -> currentOnFinished()
+            }
+        }
+    }
 
     OnBoardingScreenContent(
         pages = OnBoardingPage.all,
-        onClickSkip = {
-            scope.launch {
-                viewModel.completeOnBoarding()
-                onFinished()
-            }
-        }
+        onClickSkip = { viewModel.onIntent(OnBoardingIntent.Complete) }
     )
 }
 
