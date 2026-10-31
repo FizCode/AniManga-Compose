@@ -1,48 +1,44 @@
 package dev.fizcode.settings.presentation
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.fizcode.common.settings.NsfwFilter
-import dev.fizcode.common.settings.ThemeMode
-import dev.fizcode.common.settings.TitleStyle
+import dev.fizcode.common.base.mvi.MviViewModel
 import dev.fizcode.settings.domain.repository.SettingsRepository
-import dev.fizcode.settings.util.Constant
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
+import dev.fizcode.settings.presentation.model.SettingsIntent
+import dev.fizcode.settings.presentation.model.SettingsUiState
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-
-internal data class SettingsUiState(
-    val themeMode: ThemeMode = ThemeMode.DEFAULT,
-    val titleStyle: TitleStyle = TitleStyle.DEFAULT,
-    val nsfwFilter: NsfwFilter = NsfwFilter.SAFE
-)
 
 internal class SettingsViewModel(
     private val settingsRepository: SettingsRepository
-) : ViewModel() {
+) : MviViewModel<SettingsUiState, SettingsIntent, Nothing>(SettingsUiState()) {
 
-    val uiState: StateFlow<SettingsUiState> = combine(
-        settingsRepository.themeMode,
-        settingsRepository.titleStyle,
-        settingsRepository.nsfwFilter,
-        ::SettingsUiState
-    ).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(Constant.STOP_TIMEOUT_MILLIS),
-        initialValue = SettingsUiState()
-    )
+    private val writes = Channel<SettingsIntent>(Channel.UNLIMITED)
 
-    fun setThemeMode(value: ThemeMode) {
-        viewModelScope.launch { settingsRepository.setThemeMode(value) }
+    init { initial() }
+
+    private fun initial() {
+        combine(
+            settingsRepository.themeMode,
+            settingsRepository.titleStyle,
+            settingsRepository.nsfwFilter,
+            ::Triple
+        ).collectIntoState { (themeMode, titleStyle, nsfwFilter) ->
+            copy(themeMode = themeMode, titleStyle = titleStyle, nsfwFilter = nsfwFilter)
+        }
+
+        viewModelScope.launch {
+            for (intent in writes) save(intent)
+        }
     }
 
-    fun setTitleStyle(value: TitleStyle) {
-        viewModelScope.launch { settingsRepository.setTitleStyle(value) }
+    override fun onIntent(intent: SettingsIntent) {
+        writes.trySend(intent)
     }
 
-    fun setNsfwFilter(value: NsfwFilter) {
-        viewModelScope.launch { settingsRepository.setNsfwFilter(value) }
+    private suspend fun save(intent: SettingsIntent) = when (intent) {
+        is SettingsIntent.SetThemeMode -> settingsRepository.setThemeMode(intent.value)
+        is SettingsIntent.SetTitleStyle -> settingsRepository.setTitleStyle(intent.value)
+        is SettingsIntent.SetNsfwFilter -> settingsRepository.setNsfwFilter(intent.value)
     }
 }
