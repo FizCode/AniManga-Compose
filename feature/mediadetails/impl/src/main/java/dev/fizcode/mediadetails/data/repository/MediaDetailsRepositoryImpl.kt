@@ -1,6 +1,8 @@
 package dev.fizcode.mediadetails.data.repository
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
+import dev.fizcode.mal.util.AnimeFieldsConstant
+import dev.fizcode.mal.util.fieldsPicker
 import dev.fizcode.network.processResponse
 import dev.fizcode.database.bookmark.BookmarkLocalDataSource
 import dev.fizcode.mediadetails.data.mapper.AniListDomainMapper
@@ -20,6 +22,34 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import dev.fizcode.mediadetails.domain.model.PagedResult
 
+private val ANIME_DETAILS_FIELDS = fieldsPicker(
+    AnimeFieldsConstant.PICTURES,
+    AnimeFieldsConstant.MEDIA_TYPE,
+    AnimeFieldsConstant.STATUS,
+    AnimeFieldsConstant.START_SEASON,
+    AnimeFieldsConstant.NUM_EPISODES,
+    AnimeFieldsConstant.AVERAGE_EPISODE_DURATION,
+    AnimeFieldsConstant.STUDIOS,
+    AnimeFieldsConstant.RANK,
+    AnimeFieldsConstant.POPULARITY,
+    AnimeFieldsConstant.NUM_LIST_USERS,
+    AnimeFieldsConstant.NUM_FAVORITES,
+    AnimeFieldsConstant.OPENING_THEMES,
+    AnimeFieldsConstant.ENDING_THEMES,
+    AnimeFieldsConstant.MEAN,
+    AnimeFieldsConstant.NUM_SCORING_USERS,
+    AnimeFieldsConstant.GENRES,
+    AnimeFieldsConstant.ALTERNATIVE_TITLES,
+    AnimeFieldsConstant.SYNOPSIS,
+    AnimeFieldsConstant.BACKGROUND,
+    AnimeFieldsConstant.START_DATE,
+    AnimeFieldsConstant.END_DATE,
+    AnimeFieldsConstant.BROADCAST,
+    AnimeFieldsConstant.SOURCE,
+    AnimeFieldsConstant.RATING,
+    AnimeFieldsConstant.RELATED_ANIME
+)
+
 internal class MediaDetailsRepositoryImpl(
     private val animeDetailsService: MediaDetailsService,
     private val aniListService: AniListService,
@@ -30,10 +60,9 @@ internal class MediaDetailsRepositoryImpl(
 ) : MediaDetailsRepository {
 
     override suspend fun fetchAnimeDetails(
-        animeId: Int,
-        fields: String
+        animeId: Int
     ): DomainNetworkState<AnimeDetailsDomainModel> = coroutineScope {
-        val malRequest = async { fetchMalAnimeDetails(animeId = animeId, fields = fields) }
+        val malRequest = async { fetchMalAnimeDetails(animeId = animeId, fields = ANIME_DETAILS_FIELDS) }
         val aniListRequest = async { fetchAniListDetails(animeId = animeId) }
 
         mergeMalWithOptionalAniList(mal = malRequest.await(), aniList = aniListRequest.await())

@@ -7,8 +7,7 @@ internal interface RankingRepository {
 
     suspend fun fetchAnimeRanking(
         rankingType: String,
-        limit: Int,
-        fields: String
+        limit: Int
     ): DomainNetworkState<RankingDomainModel>
 
 }

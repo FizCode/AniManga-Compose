@@ -7,8 +7,7 @@ internal interface MangaRepository {
 
     suspend fun fetchMangaRanking(
         rankingType: String,
-        limit: Int,
-        fields: String
+        limit: Int
     ): DomainNetworkState<MangaDomainModel>
 
 }

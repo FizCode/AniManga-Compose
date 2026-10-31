@@ -1,13 +1,9 @@
 package dev.fizcode.mediadetails.presentation.mapper
 
-import dev.fizcode.common.util.extensions.airingStatus
-import dev.fizcode.common.util.extensions.animeMediaType
+import dev.fizcode.common.media.AiringStatus
+import dev.fizcode.common.media.AnimeMediaType
+import dev.fizcode.common.util.extensions.orDash
 import dev.fizcode.common.util.extensions.toCapitalFirstChar
-import dev.fizcode.common.util.extensions.toCommaSeparators
-import dev.fizcode.common.util.extensions.toCompactNumber
-import dev.fizcode.common.util.extensions.toFormattedTime
-import dev.fizcode.common.util.extensions.toStringOrNa
-import dev.fizcode.common.util.extensions.toStringWithComma
 import dev.fizcode.mediadetails.presentation.header.model.AnimeDetailsHeaderUiModel
 import dev.fizcode.mediadetails.presentation.info.model.AnimeCastUiModel
 import dev.fizcode.mediadetails.presentation.info.model.AnimeDataWithLink
@@ -25,6 +21,11 @@ import dev.fizcode.mediadetails.domain.model.MalAnimeDetailsDomainModel
 import dev.fizcode.mediadetails.domain.model.RelatedAnime
 import dev.fizcode.mediadetails.presentation.model.AnimeDetailsUiModel
 import dev.fizcode.mediadetails.util.Constant
+import dev.fizcode.mediadetails.util.toCommaSeparators
+import dev.fizcode.mediadetails.util.toCompactNumber
+import dev.fizcode.mediadetails.util.toFormattedTime
+import dev.fizcode.mediadetails.util.toStringOrNa
+import dev.fizcode.mediadetails.util.toStringWithComma
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import dev.fizcode.common.settings.MediaTitles
@@ -43,12 +44,12 @@ internal class AnimeDetailsUiMapper {
         posterPath = malDomainModel.mainPicture.medium,
         title = malDomainModel.title,
         titles = MediaTitles(malDomainModel.title, malDomainModel.alternativeTitles.toCommon()),
-        mediaType = animeMediaType(malDomainModel.mediaType),
+        mediaType = AnimeMediaType.fromApi(malDomainModel.mediaType).label,
         releaseSeason = malDomainModel.startSeason.season.toCapitalFirstChar() +
                 " ${malDomainModel.startSeason.year}",
-        studio = malDomainModel.studios.toStringWithComma { it.name },
+        studio = malDomainModel.studios.toStringWithComma { it.name.orDash() },
         releaseInfo = episodeInfo(malDomainModel.numEpisodes) +
-                ", ${airingStatus(malDomainModel.status)}",
+                ", ${AiringStatus.fromApi(malDomainModel.status).label}",
         duration = "${malDomainModel.averageEpisodeDuration.toFormattedTime()} per ep.",
         rank = "#${malDomainModel.rank.toCompactNumber()}",
         popularity = "#${malDomainModel.popularity.toCompactNumber()}",
@@ -57,7 +58,7 @@ internal class AnimeDetailsUiMapper {
         score = malDomainModel.mean.toStringOrNa(),
         stars = malDomainModel.mean,
         totalVote = malDomainModel.numScoringUsers.toCompactNumber(),
-        genre = malDomainModel.genres.map { it.name }.toImmutableList(),
+        genre = malDomainModel.genres.map { it.name.orDash() }.toImmutableList(),
     )
 
     private fun AnimeDetailsDomainModel.toInfoUiModel(): AnimeDetailsInfoUiModel =
@@ -95,9 +96,9 @@ internal class AnimeDetailsUiMapper {
         }
 
         return AnimeInfo(
-            type = animeMediaType(mal.mediaType),
+            type = AnimeMediaType.fromApi(mal.mediaType).label,
             episodes = episodeInfo(mal.numEpisodes),
-            status = airingStatus(mal.status),
+            status = AiringStatus.fromApi(mal.status).label,
             aired = MalDateFormatter.range(mal.startDate, mal.endDate),
             premiered = premiered,
             premieredUrl = "https://google.com",
@@ -106,17 +107,17 @@ internal class AnimeDetailsUiMapper {
             }.toImmutableList(),
             studios = mal.studios.map {
                 AnimeDataWithLink(
-                    name = it.name,
+                    name = it.name.orDash(),
                     link = "${Constant.MAL_PRODUCER_URL}${it.id}"
                 )
             }.toImmutableList(),
             source = AnimeDataWithLink(
-                name = mal.source.replace('_', ' ').toCapitalFirstChar(),
+                name = mal.source.orDash().replace('_', ' ').toCapitalFirstChar(),
                 link = "https://google.com"
             ),
             genre = mal.genres.map {
                 AnimeDataWithLink(
-                    name = it.name,
+                    name = it.name.orDash(),
                     link = "${Constant.MAL_GENRE_URL}${it.id}"
                 )
             }.toImmutableList(),

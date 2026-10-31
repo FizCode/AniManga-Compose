@@ -11,8 +11,7 @@ import dev.fizcode.mediadetails.domain.model.PagedResult
 internal interface MediaDetailsRepository {
 
     suspend fun fetchAnimeDetails(
-        animeId: Int,
-        fields: String
+        animeId: Int
     ): DomainNetworkState<AnimeDetailsDomainModel>
 
     suspend fun fetchAnimeCast(animeId: Int): DomainNetworkState<List<CastDomainModel>>

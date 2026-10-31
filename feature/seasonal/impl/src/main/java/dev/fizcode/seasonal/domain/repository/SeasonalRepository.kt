@@ -9,8 +9,7 @@ internal interface SeasonalRepository {
         year: Int,
         season: String,
         sortBy: String,
-        limit: Int,
-        fields: String
+        limit: Int
     ): DomainNetworkState<SeasonalDomainModel>
 
 }

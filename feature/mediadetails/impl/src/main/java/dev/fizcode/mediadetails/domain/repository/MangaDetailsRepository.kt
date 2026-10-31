@@ -8,8 +8,7 @@ import dev.fizcode.mediadetails.domain.model.PagedResult
 internal interface MangaDetailsRepository {
 
     suspend fun fetchMangaDetails(
-        mangaId: Int,
-        fields: String
+        mangaId: Int
     ): DomainNetworkState<MangaDetailsDomainModel>
 
     suspend fun fetchMangaCharacters(mangaId: Int): DomainNetworkState<List<CastDomainModel>>

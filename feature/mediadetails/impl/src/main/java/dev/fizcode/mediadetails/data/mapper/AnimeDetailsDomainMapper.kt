@@ -1,7 +1,5 @@
 package dev.fizcode.mediadetails.data.mapper
 
-import dev.fizcode.common.util.extensions.orDash
-import dev.fizcode.common.util.extensions.orDashList
 import dev.fizcode.common.util.extensions.orZero
 import dev.fizcode.mediadetails.data.response.MalAnimeDetailsResponse
 import dev.fizcode.mediadetails.domain.model.AlternativeTitles
@@ -41,7 +39,7 @@ internal class AnimeDetailsDomainMapper {
             rank = response.rank.orZero(),
             rating = response.rating.orEmpty(),
             relatedAnime = response.relatedAnime.toRelatedDomainModel(),
-            source = response.source.orDash(),
+            source = response.source.orEmpty(),
             startDate = response.startDate.orEmpty(),
             startSeason = response.startSeason.toDomainModel(),
             status = response.status.orEmpty(),
@@ -68,7 +66,7 @@ internal class AnimeDetailsDomainMapper {
     private fun List<MalAnimeDetailsResponse.Genre>?.toGenreDomainModel() = this.orEmpty().map {
         Genre(
             id = it.id.orZero(),
-            name = it.name.orDash()
+            name = it.name.orEmpty()
         )
     }
 
@@ -116,7 +114,7 @@ internal class AnimeDetailsDomainMapper {
     private fun List<MalAnimeDetailsResponse.Studio>?.toStudioDomainModel() = this.orEmpty().map {
         Studio(
             id = it.id.orZero(),
-            name = it.name.orDash()
+            name = it.name.orEmpty()
         )
     }
 }

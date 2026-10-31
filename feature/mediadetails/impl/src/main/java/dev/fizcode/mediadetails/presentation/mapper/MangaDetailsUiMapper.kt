@@ -1,10 +1,7 @@
 package dev.fizcode.mediadetails.presentation.mapper
 
+import dev.fizcode.common.util.extensions.orDash
 import dev.fizcode.common.util.extensions.toCapitalFirstChar
-import dev.fizcode.common.util.extensions.toCommaSeparators
-import dev.fizcode.common.util.extensions.toCompactNumber
-import dev.fizcode.common.util.extensions.toStringOrNa
-import dev.fizcode.common.util.extensions.toStringWithComma
 import dev.fizcode.mediadetails.domain.model.AniListMangaDetailsDomainModel
 import dev.fizcode.mediadetails.domain.model.CastDomainModel
 import dev.fizcode.mediadetails.domain.model.MalMangaDetailsDomainModel
@@ -18,6 +15,10 @@ import dev.fizcode.mediadetails.presentation.info.model.MangaDetailsInfoUiModel
 import dev.fizcode.mediadetails.presentation.info.model.MangaInfo
 import dev.fizcode.mediadetails.presentation.model.MangaDetailsUiModel
 import dev.fizcode.mediadetails.util.Constant
+import dev.fizcode.mediadetails.util.toCommaSeparators
+import dev.fizcode.mediadetails.util.toCompactNumber
+import dev.fizcode.mediadetails.util.toStringOrNa
+import dev.fizcode.mediadetails.util.toStringWithComma
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import dev.fizcode.common.settings.MediaTitles
@@ -49,7 +50,7 @@ internal class MangaDetailsUiMapper {
             score = mal.mean.toStringOrNa(),
             stars = mal.mean,
             totalVote = mal.numScoringUsers.toCompactNumber(),
-            genre = mal.genres.map { it.name }.toImmutableList()
+            genre = mal.genres.map { it.name.orDash() }.toImmutableList()
         )
     }
 
@@ -81,7 +82,7 @@ internal class MangaDetailsUiMapper {
             AnimeDataWithLink(name = it.name, link = "${Constant.MAL_MANGA_MAGAZINE_URL}${it.id}")
         }.toImmutableList(),
         genre = mal.genres.map {
-            AnimeDataWithLink(name = it.name, link = "${Constant.MAL_MANGA_GENRE_URL}${it.id}")
+            AnimeDataWithLink(name = it.name.orDash(), link = "${Constant.MAL_MANGA_GENRE_URL}${it.id}")
         }.toImmutableList(),
         themes = aniList?.themes.orEmpty().map {
             AnimeDataWithLink(name = it.name, link = it.url)

@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Test
 import dev.fizcode.mediadetails.domain.model.PagedResult
 
@@ -19,15 +18,12 @@ class FetchAnimeDetailsUseCaseTest {
 
     private class FakeRepository : MediaDetailsRepository {
         var animeId: Int? = null
-        var fields: String? = null
         val result = DomainNetworkState.ErrorNetwork(message = "failed")
 
         override suspend fun fetchAnimeDetails(
-            animeId: Int,
-            fields: String
+            animeId: Int
         ): DomainNetworkState<AnimeDetailsDomainModel> {
             this.animeId = animeId
-            this.fields = fields
             return result
         }
 
@@ -49,13 +45,12 @@ class FetchAnimeDetailsUseCaseTest {
     }
 
     @Test
-    fun `forwards the anime id with a field list and returns the result`() = runTest {
+    fun `forwards the anime id and returns the result`() = runTest {
         val repository = FakeRepository()
 
         val result = FetchAnimeDetailsUseCase(repository)(animeId = 42)
 
         assertEquals(42, repository.animeId)
-        assertTrue(repository.fields.orEmpty().split(",").size > 1)
         assertEquals(repository.result, result)
     }
 }

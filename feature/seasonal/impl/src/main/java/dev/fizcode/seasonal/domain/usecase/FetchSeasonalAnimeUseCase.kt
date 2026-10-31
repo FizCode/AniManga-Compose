@@ -1,9 +1,7 @@
 package dev.fizcode.seasonal.domain.usecase
 
 import dev.fizcode.common.base.callhandler.DomainNetworkState
-import dev.fizcode.mal.util.AnimeFieldsConstant
 import dev.fizcode.mal.util.AnimeSortingConstant
-import dev.fizcode.mal.util.fieldsPicker
 import dev.fizcode.seasonal.domain.model.SeasonalDomainModel
 import dev.fizcode.seasonal.domain.repository.SeasonalRepository
 
@@ -15,25 +13,11 @@ internal class FetchSeasonalAnimeUseCase(
         season: String,
         limit: Int
     ): DomainNetworkState<SeasonalDomainModel> {
-        val fields = fieldsPicker(
-            AnimeFieldsConstant.ALTERNATIVE_TITLES,
-            AnimeFieldsConstant.NSFW,
-            AnimeFieldsConstant.MEDIA_TYPE,
-            AnimeFieldsConstant.MEAN,
-            AnimeFieldsConstant.BROADCAST,
-            AnimeFieldsConstant.STATUS,
-            AnimeFieldsConstant.NUM_EPISODES,
-            AnimeFieldsConstant.STUDIOS,
-            AnimeFieldsConstant.SYNOPSIS,
-            AnimeFieldsConstant.GENRES
-        )
-
         return seasonalRepository.fetchSeasonalAnime(
             year = year,
             season = season,
             sortBy = AnimeSortingConstant.ANIME_SCORE,
-            limit = limit,
-            fields = fields
+            limit = limit
         )
     }
 }
