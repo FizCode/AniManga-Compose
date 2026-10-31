@@ -16,6 +16,8 @@ import dev.fizcode.mediadetails.presentation.info.model.AnimeCastUiModel
 import dev.fizcode.mediadetails.presentation.info.model.AnimeStaffUiModel
 import dev.fizcode.mediadetails.presentation.info.model.MangaCharacterUiModel
 import dev.fizcode.mediadetails.presentation.info.util.Constant as InfoConstant
+import dev.fizcode.mediadetails.presentation.people.model.PagedItems
+import dev.fizcode.mediadetails.presentation.people.model.PagedListIntent
 import dev.fizcode.mediadetails.util.Constant
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.androidx.compose.koinViewModel
@@ -30,13 +32,13 @@ internal fun MediaCastScreen(
     val viewModel: MediaCastViewModel = koinViewModel(key = "cast-$mediaId") {
         parametersOf(mediaId)
     }
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     CastListContent(
-        state = state,
+        state = uiState.items,
         onBackClick = onBackClick,
-        onLoadMore = viewModel::loadMore,
-        onRetry = viewModel::retry
+        onLoadMore = { viewModel.onIntent(PagedListIntent.LoadMore) },
+        onRetry = { viewModel.onIntent(PagedListIntent.Retry) }
     )
 }
 
@@ -49,13 +51,13 @@ internal fun MediaStaffScreen(
     val viewModel: MediaStaffViewModel = koinViewModel(key = "staff-$mediaId") {
         parametersOf(mediaId)
     }
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     StaffListContent(
-        state = state,
+        state = uiState.items,
         onBackClick = onBackClick,
-        onLoadMore = viewModel::loadMore,
-        onRetry = viewModel::retry
+        onLoadMore = { viewModel.onIntent(PagedListIntent.LoadMore) },
+        onRetry = { viewModel.onIntent(PagedListIntent.Retry) }
     )
 }
 
@@ -68,13 +70,13 @@ internal fun MangaCharactersScreen(
     val viewModel: MangaCharactersViewModel = koinViewModel(key = "characters-$mediaId") {
         parametersOf(mediaId)
     }
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     CharacterListContent(
-        state = state,
+        state = uiState.items,
         onBackClick = onBackClick,
-        onLoadMore = viewModel::loadMore,
-        onRetry = viewModel::retry
+        onLoadMore = { viewModel.onIntent(PagedListIntent.LoadMore) },
+        onRetry = { viewModel.onIntent(PagedListIntent.Retry) }
     )
 }
 

@@ -5,8 +5,9 @@ import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.mediadetails.MainDispatcherRule
 import dev.fizcode.mediadetails.awaitValue
 import dev.fizcode.mediadetails.domain.model.PagedResult
-import dev.fizcode.mediadetails.presentation.people.PagedItems
 import dev.fizcode.mediadetails.presentation.people.PagedListViewModel
+import dev.fizcode.mediadetails.presentation.people.model.PagedItems
+import dev.fizcode.mediadetails.presentation.people.model.PagedListIntent
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -40,14 +41,18 @@ internal class PagedListViewModelTest {
     private fun page(vararg numbers: Int, hasNext: Boolean) =
         DomainNetworkState.Success(PagedResult(numbers.toList(), hasNext))
 
+    private suspend fun NumbersViewModel.awaitItems(
+        predicate: (UiState<PagedItems<String>>) -> Boolean
+    ) = uiState.awaitValue { predicate(it.items) }.items
+
     private fun UiState<PagedItems<String>>.items() = (this as UiState.Success).data.items.toList()
 
     @Test
-    fun `the first page is loaded on start`() = runBlocking {
+    fun `the first page is loaded on start`() = runBlocking<Unit> {
         pages.results[1] = page(1, 2, hasNext = true)
 
         val vm = NumbersViewModel(pages)
-        val state = vm.state.awaitValue { it is UiState.Success }
+        val state = vm.awaitItems { it is UiState.Success }
 
         assertEquals(listOf("item 1", "item 2"), state.items())
         assertTrue((state as UiState.Success).data.hasNextPage)
@@ -55,14 +60,14 @@ internal class PagedListViewModelTest {
     }
 
     @Test
-    fun `loading more adds the next page after the loaded ones`() = runBlocking {
+    fun `loading more adds the next page after the loaded ones`() = runBlocking<Unit> {
         pages.results[1] = page(1, 2, hasNext = true)
         pages.results[2] = page(3, hasNext = false)
         val vm = NumbersViewModel(pages)
-        vm.state.awaitValue { it is UiState.Success }
+        vm.awaitItems { it is UiState.Success }
 
-        vm.loadMore()
-        val state = vm.state.awaitValue { it is UiState.Success && it.data.items.size == 3 }
+        vm.onIntent(PagedListIntent.LoadMore)
+        val state = vm.awaitItems { it is UiState.Success && it.data.items.size == 3 }
 
         assertEquals(listOf("item 1", "item 2", "item 3"), state.items())
         assertFalse((state as UiState.Success).data.hasNextPage)
@@ -70,56 +75,56 @@ internal class PagedListViewModelTest {
     }
 
     @Test
-    fun `nothing more is loaded when there is no next page`() = runBlocking {
+    fun `nothing more is loaded when there is no next page`() = runBlocking<Unit> {
         pages.results[1] = page(1, hasNext = false)
         val vm = NumbersViewModel(pages)
-        vm.state.awaitValue { it is UiState.Success }
+        vm.awaitItems { it is UiState.Success }
 
-        vm.loadMore()
-        vm.loadMore()
+        vm.onIntent(PagedListIntent.LoadMore)
+        vm.onIntent(PagedListIntent.LoadMore)
 
         assertEquals(listOf(1), pages.requestedPages)
     }
 
     @Test
-    fun `an empty first page is an empty list`() = runBlocking {
+    fun `an empty first page is an empty list`() = runBlocking<Unit> {
         pages.results[1] = page(hasNext = false)
 
         val vm = NumbersViewModel(pages)
 
-        assertEquals(UiState.Empty, vm.state.awaitValue { it is UiState.Empty })
+        assertEquals(UiState.Empty, vm.awaitItems { it is UiState.Empty })
     }
 
     @Test
-    fun `a failing first page is an error and retry loads it again`() = runBlocking {
+    fun `a failing first page is an error and retry loads it again`() = runBlocking<Unit> {
         pages.results[1] = DomainNetworkState.ErrorNetwork(message = "offline")
         val vm = NumbersViewModel(pages)
-        vm.state.awaitValue { it is UiState.Error }
+        vm.awaitItems { it is UiState.Error }
 
         pages.results[1] = page(1, hasNext = false)
-        vm.retry()
-        val state = vm.state.awaitValue { it is UiState.Success }
+        vm.onIntent(PagedListIntent.Retry)
+        val state = vm.awaitItems { it is UiState.Success }
 
         assertEquals(listOf("item 1"), state.items())
         assertEquals(listOf(1, 1), pages.requestedPages)
     }
 
     @Test
-    fun `a failing next page keeps the loaded items and retry loads that page again`() = runBlocking {
+    fun `a failing next page keeps the loaded items and retry loads that page again`() = runBlocking<Unit> {
         pages.results[1] = page(1, hasNext = true)
         pages.results[2] = DomainNetworkState.ErrorNetwork(message = "offline")
         val vm = NumbersViewModel(pages)
-        vm.state.awaitValue { it is UiState.Success }
+        vm.awaitItems { it is UiState.Success }
 
-        vm.loadMore()
-        val failed = vm.state.awaitValue { it is UiState.Success && it.data.loadMoreFailed }
+        vm.onIntent(PagedListIntent.LoadMore)
+        val failed = vm.awaitItems { it is UiState.Success && it.data.loadMoreFailed }
 
         assertEquals(listOf("item 1"), failed.items())
         assertFalse((failed as UiState.Success).data.isLoadingMore)
 
         pages.results[2] = page(2, hasNext = false)
-        vm.retry()
-        val loaded = vm.state.awaitValue { it is UiState.Success && it.data.items.size == 2 }
+        vm.onIntent(PagedListIntent.Retry)
+        val loaded = vm.awaitItems { it is UiState.Success && it.data.items.size == 2 }
 
         assertEquals(listOf("item 1", "item 2"), loaded.items())
         assertEquals(listOf(1, 2, 2), pages.requestedPages)
