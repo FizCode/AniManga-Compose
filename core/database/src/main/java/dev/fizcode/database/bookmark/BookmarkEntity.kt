@@ -15,6 +15,7 @@ internal data class BookmarkEntity(
     @ColumnInfo(name = "episodes") val episodes: String,
     @ColumnInfo(name = "status") val status: String,
     @ColumnInfo(name = "studio") val studio: String,
+    /** The genres in one column, see [BookmarkLocalDataSourceImpl]. */
     @ColumnInfo(name = "genres") val genres: String,
     /** The synonyms in one column, see [BookmarkLocalDataSourceImpl]. */
     @ColumnInfo(name = "title_synonyms", defaultValue = "''") val titleSynonyms: String = "",

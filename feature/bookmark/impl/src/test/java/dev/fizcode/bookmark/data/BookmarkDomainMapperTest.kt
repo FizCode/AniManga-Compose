@@ -19,8 +19,8 @@ class BookmarkDomainMapperTest {
     @Test
     fun `records keep all fields and order`() {
         val records = listOf(
-            BookmarkRecord(1, "tv", "p1", "8.0", "A", "12 Episodes", "Finished", "Bones", "Action, Comedy"),
-            BookmarkRecord(2, "movie", "p2", "9.0", "B", "1 Episode", "Finished", "CoMix", "Drama")
+            BookmarkRecord(1, "tv", "p1", "8.0", "A", "12 Episodes", "Finished", "Bones", listOf("Action", "Comedy")),
+            BookmarkRecord(2, "movie", "p2", "9.0", "B", "1 Episode", "Finished", "CoMix", listOf("Drama"))
         )
 
         val domain = mapper.mapToBookmarkDomainModel(records)
@@ -34,14 +34,14 @@ class BookmarkDomainMapperTest {
             assertEquals("12 Episodes", episodes)
             assertEquals("Finished", status)
             assertEquals("Bones", studio)
-            assertEquals("Action, Comedy", genres)
+            assertEquals(listOf("Action", "Comedy"), genres)
         }
     }
 
     @Test
     fun `alternative titles are kept`() {
         val record = BookmarkRecord(
-            1, "tv", "p1", "8.0", "A", "12 Episodes", "Finished", "Bones", "Action",
+            1, "tv", "p1", "8.0", "A", "12 Episodes", "Finished", "Bones", listOf("Action"),
             alternativeTitles = AlternativeTitles(listOf("A1", "A2"), japanese = "エー", english = "Ay")
         )
 
@@ -54,7 +54,7 @@ class BookmarkDomainMapperTest {
 
     @Test
     fun `a bookmark without other titles keeps only the default title`() {
-        val record = BookmarkRecord(1, "tv", "p1", "8.0", "A", "12 Episodes", "Finished", "Bones", "Action")
+        val record = BookmarkRecord(1, "tv", "p1", "8.0", "A", "12 Episodes", "Finished", "Bones", listOf("Action"))
 
         val alternative = mapper.mapToBookmarkDomainModel(listOf(record)).single().alternativeTitles
 

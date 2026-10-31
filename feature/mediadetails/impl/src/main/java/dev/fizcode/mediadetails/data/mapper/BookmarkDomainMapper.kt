@@ -1,6 +1,5 @@
 package dev.fizcode.mediadetails.data.mapper
 
-import dev.fizcode.common.util.extensions.toStringWithComma
 import dev.fizcode.database.bookmark.BookmarkRecord
 import dev.fizcode.mediadetails.domain.model.BookmarkDomainModel
 
@@ -16,7 +15,7 @@ internal class BookmarkDomainMapper {
             episodes = data.episodes,
             status = data.status,
             studio = data.studio,
-            genres = data.genres.toStringWithComma(),
+            genres = data.genres,
             alternativeTitles = data.alternativeTitles
         )
 }

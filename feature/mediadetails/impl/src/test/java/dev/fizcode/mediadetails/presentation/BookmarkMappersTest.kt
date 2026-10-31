@@ -52,7 +52,7 @@ class BookmarkMappersTest {
     }
 
     @Test
-    fun `domain model maps to record with comma separated genres`() {
+    fun `domain model maps to record with its genres`() {
         val record = BookmarkDomainMapper().mapToBookmarkRecord(
             AnimeBookmarkUiMapper().mapToBookmarkDomainModel(argument)
         )
@@ -65,7 +65,7 @@ class BookmarkMappersTest {
         assertEquals("12 Episodes", record.episodes)
         assertEquals("Finished", record.status)
         assertEquals("Pierrot", record.studio)
-        assertEquals("Action, Comedy", record.genres)
+        assertEquals(listOf("Action", "Comedy"), record.genres)
     }
 
     @Test

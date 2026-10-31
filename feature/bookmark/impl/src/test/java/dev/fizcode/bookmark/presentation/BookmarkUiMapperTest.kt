@@ -16,7 +16,7 @@ class BookmarkUiMapperTest {
     }
 
     @Test
-    fun `maps fields, builds subtitle and splits genres`() {
+    fun `maps fields, builds subtitle and keeps genres`() {
         val ui = mapper.mapToBookmarkUiModel(
             listOf(
                 BookmarkDomainModel(
@@ -28,7 +28,7 @@ class BookmarkUiMapperTest {
                     episodes = "12 Episodes",
                     status = "Finished",
                     studio = "Pierrot",
-                    genres = "Action, Comedy"
+                    genres = listOf("Action", "Comedy")
                 )
             )
         ).single()
