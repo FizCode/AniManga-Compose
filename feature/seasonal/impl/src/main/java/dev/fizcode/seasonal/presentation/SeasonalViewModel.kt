@@ -1,118 +1,63 @@
 package dev.fizcode.seasonal.presentation
 
-import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.runtime.snapshotFlow
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import dev.fizcode.common.base.callhandler.DomainNetworkState
-import dev.fizcode.common.base.callhandler.UiState
-import dev.fizcode.common.base.presentationhandler.toUiState
+import dev.fizcode.common.base.mvi.MviViewModel
+import dev.fizcode.common.base.presentationhandler.loadAsUiState
+import dev.fizcode.common.settings.NsfwFilterProvider
+import dev.fizcode.common.settings.changes
 import dev.fizcode.mal.util.SeasonHelper
 import dev.fizcode.seasonal.domain.usecase.FetchSeasonalAnimeUseCase
 import dev.fizcode.seasonal.presentation.mapper.SeasonalUiMapper
-import dev.fizcode.seasonal.presentation.model.Season
-import dev.fizcode.seasonal.presentation.model.SeasonalUiModel
+import dev.fizcode.seasonal.presentation.model.SeasonalIntent
+import dev.fizcode.seasonal.presentation.model.SeasonalUiState
 import dev.fizcode.seasonal.util.Constant
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
-import dev.fizcode.common.settings.NsfwFilterProvider
-import dev.fizcode.common.settings.changes
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onStart
 
 internal class SeasonalViewModel(
     private val fetchSeasonalAnimeUseCase: FetchSeasonalAnimeUseCase,
     private val seasonalUiMapper: SeasonalUiMapper,
     seasonHelper: SeasonHelper,
     nsfwFilterProvider: NsfwFilterProvider
-) : ViewModel() {
+) : MviViewModel<SeasonalUiState, SeasonalIntent, Nothing>(initialState(seasonHelper)) {
 
-    /** Local title filter applied on top of the loaded season. */
-    val queryState = TextFieldState()
+    private val retries = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
 
-    /** Starts on the season we are in right now. */
-    private val _selectedSeason = MutableStateFlow(Season.fromApiValue(seasonHelper.getCurrentSeason()))
-    val selectedSeason: StateFlow<Season> = _selectedSeason.asStateFlow()
-
-    private val _selectedYear = MutableStateFlow(seasonHelper.getCurrentYear())
-    val selectedYear: StateFlow<Int> = _selectedYear.asStateFlow()
-
-    /** Years offered by the filter, newest first, including [Constant.UPCOMING_YEARS] ahead. */
-    val availableYears: ImmutableList<Int> =
-        (seasonHelper.getCurrentYear() + Constant.UPCOMING_YEARS downTo Constant.FIRST_YEAR)
-            .toImmutableList()
-
-    private val retryTrigger = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
-
-    fun selectSeason(season: Season) {
-        _selectedSeason.value = season
-    }
-
-    fun selectYear(year: Int) {
-        _selectedYear.value = year
-    }
-
-    fun retry() {
-        retryTrigger.tryEmit(Unit)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private val seasonalAnime: StateFlow<UiState<List<SeasonalUiModel>>> =
+    init {
         combine(
-            _selectedSeason,
-            _selectedYear,
-            merge(retryTrigger, nsfwFilterProvider.changes()).onStart { emit(Unit) }
-        ) { season, year, _ -> season to year }
+            uiState.map { it.season to it.year }.distinctUntilChanged(),
+            merge(retries, nsfwFilterProvider.changes()).onStart { emit(Unit) }
+        ) { selection, _ -> selection }
             .flatMapLatest { (season, year) ->
-                flow {
-                    emit(UiState.Loading)
-
-                    val result = try {
-                        fetchSeasonalAnimeUseCase(
-                            year = year,
-                            season = season.apiValue,
-                            limit = Constant.RESULT_LIMIT
-                        )
-                    } catch (e: Exception) {
-                        DomainNetworkState.ErrorNetwork(exception = e, message = e.message)
-                    }
-
-                    emit(result.toUiState(seasonalUiMapper::mapToSeasonalUiModel))
-                }.flowOn(Dispatchers.IO)
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(Constant.STOP_TIMEOUT_MILLIS),
-                initialValue = UiState.Loading
-            )
-
-    /** The loaded season narrowed by the title typed in [queryState]. */
-    val seasonalResult: StateFlow<UiState<List<SeasonalUiModel>>> =
-        combine(
-            seasonalAnime,
-            snapshotFlow { queryState.text.toString().trim() }.distinctUntilChanged()
-        ) { state, query ->
-            if (state is UiState.Success && query.isNotEmpty()) {
-                state.data.filter { it.titles.matches(query) }
-                    .let { if (it.isEmpty()) UiState.Empty else UiState.Success(it) }
-            } else {
-                state
+                loadAsUiState(seasonalUiMapper::mapToSeasonalUiModel) {
+                    fetchSeasonalAnimeUseCase(
+                        year = year,
+                        season = season.apiValue,
+                        limit = Constant.RESULT_LIMIT
+                    )
+                }
             }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(Constant.STOP_TIMEOUT_MILLIS),
-            initialValue = UiState.Loading
-        )
+            .collectIntoState { copy(seasonal = it) }
+    }
+
+    override fun onIntent(intent: SeasonalIntent) {
+        when (intent) {
+            is SeasonalIntent.SelectSeason -> setState { copy(season = intent.season) }
+            is SeasonalIntent.SelectYear -> setState { copy(year = intent.year) }
+            is SeasonalIntent.QueryChanged -> setState { copy(query = intent.query.trim()) }
+            SeasonalIntent.Retry -> retries.tryEmit(Unit)
+        }
+    }
 }
+
+private fun initialState(seasonHelper: SeasonHelper) = SeasonalUiState(
+    season = seasonHelper.getCurrentSeason(),
+    year = seasonHelper.getCurrentYear(),
+    years = (seasonHelper.getCurrentYear() + Constant.UPCOMING_YEARS downTo Constant.FIRST_YEAR)
+        .toImmutableList()
+)

@@ -12,7 +12,9 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,10 +23,15 @@ import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.other.PillTabs
 import dev.fizcode.manga.presentation.component.MangaHeader
 import dev.fizcode.manga.presentation.component.MangaListComponent
+import dev.fizcode.manga.presentation.model.MangaIntent
+import dev.fizcode.manga.presentation.model.MangaRankingRequest
 import dev.fizcode.manga.presentation.model.MangaSort
 import dev.fizcode.manga.presentation.model.MangaType
 import dev.fizcode.manga.presentation.model.MangaUiModel
+import dev.fizcode.manga.presentation.model.MangaUiState
+import dev.fizcode.manga.presentation.model.RankedManga
 import dev.fizcode.manga.presentation.model.dummyMangaUiModel
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.androidx.compose.koinViewModel
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -38,18 +45,21 @@ internal fun MangaScreen(
     onCardClick: (mediaType: String, mediaId: Int) -> Unit
 ) {
     val mangaViewModel: MangaViewModel = koinViewModel()
-    val result by mangaViewModel.mangaResult.collectAsStateWithLifecycle()
-    val type by mangaViewModel.selectedType.collectAsStateWithLifecycle()
-    val sort by mangaViewModel.selectedSort.collectAsStateWithLifecycle()
+    val uiState by mangaViewModel.uiState.collectAsStateWithLifecycle()
+    val queryState = rememberTextFieldState(initialText = uiState.query)
+
+    LaunchedEffect(queryState) {
+        snapshotFlow { queryState.text.toString() }
+            .distinctUntilChanged()
+            .collect { mangaViewModel.onIntent(MangaIntent.QueryChanged(it)) }
+    }
 
     MangaScreenContent(
-        queryState = mangaViewModel.queryState,
-        type = type,
-        sort = sort,
-        result = result,
-        onTypeSelect = mangaViewModel::selectType,
-        onSortSelect = mangaViewModel::selectSort,
-        onRetry = mangaViewModel::retry,
+        queryState = queryState,
+        uiState = uiState,
+        onTypeSelect = { mangaViewModel.onIntent(MangaIntent.SelectType(it)) },
+        onSortSelect = { mangaViewModel.onIntent(MangaIntent.SelectSort(it)) },
+        onRetry = { mangaViewModel.onIntent(MangaIntent.Retry) },
         onCardClick = onCardClick
     )
 }
@@ -58,9 +68,7 @@ internal fun MangaScreen(
 @Composable
 private fun MangaScreenContent(
     queryState: TextFieldState,
-    type: MangaType,
-    sort: MangaSort,
-    result: UiState<List<MangaUiModel>>,
+    uiState: MangaUiState,
     onTypeSelect: (MangaType) -> Unit,
     onSortSelect: (MangaSort) -> Unit,
     onRetry: () -> Unit,
@@ -79,7 +87,7 @@ private fun MangaScreenContent(
                     Box(modifier = Modifier.padding(end = 12.dp)) {
                         MangaHeader(
                             queryState = queryState,
-                            sort = sort,
+                            sort = uiState.sort,
                             onSortSelect = onSortSelect
                         )
                     }
@@ -97,14 +105,14 @@ private fun MangaScreenContent(
             Spacer(Modifier.height(8.dp))
             PillTabs(
                 items = MangaType.entries,
-                selected = type,
+                selected = uiState.type,
                 label = { it.label },
                 onSelect = onTypeSelect
             )
             Spacer(Modifier.height(8.dp))
             MangaListComponent(
-                result = result,
-                isFiltering = queryState.text.isNotBlank(),
+                result = uiState.result,
+                isFiltering = uiState.query.isNotEmpty(),
                 onRetry = onRetry,
                 onCardClick = onCardClick
             )
@@ -112,15 +120,12 @@ private fun MangaScreenContent(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun MangaScreenSuccessPreview() {
+private fun MangaScreenPreviewContent(result: UiState<List<MangaUiModel>>) {
     AniMangaAnimeAndMangaInfoTheme {
         MangaScreenContent(
             queryState = rememberTextFieldState(),
-            type = MangaType.ALL,
-            sort = MangaSort.RANKING,
-            result = UiState.Success(listOf(dummyMangaUiModel, dummyMangaUiModel.copy(id = 1))),
+            uiState = MangaUiState(ranked = RankedManga(MangaRankingRequest.of(MangaType.ALL, MangaSort.RANKING), result)),
             onTypeSelect = {},
             onSortSelect = {},
             onRetry = {},
@@ -131,51 +136,20 @@ private fun MangaScreenSuccessPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun MangaScreenLoadingPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
-        MangaScreenContent(
-            queryState = rememberTextFieldState(),
-            type = MangaType.ALL,
-            sort = MangaSort.RANKING,
-            result = UiState.Loading,
-            onTypeSelect = {},
-            onSortSelect = {},
-            onRetry = {},
-            onCardClick = { _, _ -> }
-        )
-    }
-}
+private fun MangaScreenSuccessPreview() = MangaScreenPreviewContent(
+    UiState.Success(listOf(dummyMangaUiModel, dummyMangaUiModel.copy(id = 1)))
+)
 
 @Preview(showBackground = true)
 @Composable
-private fun MangaScreenEmptyPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
-        MangaScreenContent(
-            queryState = rememberTextFieldState(),
-            type = MangaType.ALL,
-            sort = MangaSort.RANKING,
-            result = UiState.Empty,
-            onTypeSelect = {},
-            onSortSelect = {},
-            onRetry = {},
-            onCardClick = { _, _ -> }
-        )
-    }
-}
+private fun MangaScreenLoadingPreview() = MangaScreenPreviewContent(UiState.Loading)
 
 @Preview(showBackground = true)
 @Composable
-private fun MangaScreenErrorPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
-        MangaScreenContent(
-            queryState = rememberTextFieldState(),
-            type = MangaType.ALL,
-            sort = MangaSort.RANKING,
-            result = UiState.Error(message = "Something went wrong. Please try again."),
-            onTypeSelect = {},
-            onSortSelect = {},
-            onRetry = {},
-            onCardClick = { _, _ -> }
-        )
-    }
-}
+private fun MangaScreenEmptyPreview() = MangaScreenPreviewContent(UiState.Empty)
+
+@Preview(showBackground = true)
+@Composable
+private fun MangaScreenErrorPreview() = MangaScreenPreviewContent(
+    UiState.Error(message = "Something went wrong. Please try again.")
+)

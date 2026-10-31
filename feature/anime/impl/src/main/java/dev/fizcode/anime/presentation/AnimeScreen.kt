@@ -23,6 +23,8 @@ import dev.fizcode.anime.presentation.component.AnimeScreenHeader
 import dev.fizcode.anime.presentation.component.CurrentSeason
 import dev.fizcode.anime.presentation.component.TopAiring
 import dev.fizcode.anime.presentation.component.TopRanking
+import dev.fizcode.anime.presentation.model.AnimeIntent
+import dev.fizcode.anime.presentation.model.AnimeUiState
 import dev.fizcode.anime.presentation.model.SeasonalUiModel
 import dev.fizcode.anime.presentation.model.TopAiringUiModel
 import dev.fizcode.anime.presentation.model.TopRankingUiModel
@@ -44,30 +46,11 @@ internal fun AnimeScreen(
     onSettingsClick: () -> Unit
 ) {
     val animeViewModel: AnimeViewModel = koinViewModel()
-
-    val currentSeason by animeViewModel.currentSeason.collectAsStateWithLifecycle()
-    val topAiring by animeViewModel.topAiring.collectAsStateWithLifecycle()
-    val topRanking by animeViewModel.topRanking.collectAsStateWithLifecycle()
-    val refreshing by animeViewModel.refreshing.collectAsStateWithLifecycle()
-
-    val isRefreshing = refreshing && (
-            currentSeason is UiState.Loading ||
-                    topAiring is UiState.Loading ||
-                    topRanking is UiState.Loading
-            )
-
-    LaunchedEffect(isRefreshing) {
-        if (!isRefreshing) {
-            animeViewModel.shouldNotRefresh()
-        }
-    }
+    val uiState by animeViewModel.uiState.collectAsStateWithLifecycle()
 
     AnimeScreenContent(
-        currentSeason = currentSeason,
-        topAiring = topAiring,
-        topRanking = topRanking,
-        isRefreshing = isRefreshing,
-        onRefreshClick = animeViewModel::refresh,
+        uiState = uiState,
+        onRefreshClick = { animeViewModel.onIntent(AnimeIntent.Refresh) },
         onCardClick = onCardClick,
         onSearchClick = onSearchClick,
         onCurrentSeasonClick = onCurrentSeasonClick,
@@ -75,16 +58,12 @@ internal fun AnimeScreen(
         onTopRankingClick = onTopRankingClick,
         onSettingsClick = onSettingsClick
     )
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AnimeScreenContent(
-    currentSeason: UiState<List<SeasonalUiModel>>,
-    topAiring: UiState<List<TopAiringUiModel>>,
-    topRanking: UiState<List<TopRankingUiModel>>,
-    isRefreshing: Boolean = false,
+    uiState: AnimeUiState,
     onRefreshClick: () -> Unit = {},
     onCardClick: (mediaType: String, mediaId: Int) -> Unit,
     onSearchClick: () -> Unit = {},
@@ -110,7 +89,7 @@ private fun AnimeScreenContent(
     ) { innerPadding ->
         PullToRefreshBox(
             modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
-            isRefreshing = isRefreshing,
+            isRefreshing = uiState.isRefreshing,
             onRefresh = onRefreshClick
         ) {
             LazyColumn(
@@ -121,7 +100,7 @@ private fun AnimeScreenContent(
                 item {
                     CurrentSeason(
                         headerTitle = Constant.CURRENT_SEASON,
-                        cardItem = currentSeason,
+                        cardItem = uiState.currentSeason,
                         onHeaderClick = onCurrentSeasonClick,
                         onCardClick = onCardClick
                     )
@@ -129,7 +108,7 @@ private fun AnimeScreenContent(
                 item {
                     TopAiring(
                         headerTitle = Constant.TOP_AIRING,
-                        cardItem = topAiring,
+                        cardItem = uiState.topAiring,
                         onHeaderClick = onTopAiringClick,
                         onCardClick = onCardClick
                     )
@@ -137,7 +116,7 @@ private fun AnimeScreenContent(
                 item {
                     TopRanking(
                         headerTitle = Constant.TOP_RANKING,
-                        cardItem = topRanking,
+                        cardItem = uiState.topRanking,
                         onHeaderClick = onTopRankingClick,
                         onCardClick = onCardClick
                     )
@@ -147,14 +126,11 @@ private fun AnimeScreenContent(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun AnimeScreenSuccessPreview() {
+private fun AnimeScreenPreviewContent(uiState: AnimeUiState) {
     AniMangaAnimeAndMangaInfoTheme {
         AnimeScreenContent(
-            currentSeason = UiState.Success(List(6) { dummySeasonalUiModel }),
-            topAiring = UiState.Success(List(5) { dummyTopAiringUiModel }),
-            topRanking = UiState.Success(List(5) { dummyTopRankingUiModel }),
+            uiState = uiState,
             onCardClick = { _, _ -> }
         )
     }
@@ -162,39 +138,27 @@ private fun AnimeScreenSuccessPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun AnimeScreenLoadingPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
-        AnimeScreenContent(
-            currentSeason = UiState.Loading,
-            topAiring = UiState.Loading,
-            topRanking = UiState.Loading,
-            onCardClick = { _, _ -> }
-        )
-    }
-}
+private fun AnimeScreenSuccessPreview() = AnimeScreenPreviewContent(
+    AnimeUiState(
+        currentSeason = UiState.Success(List(6) { dummySeasonalUiModel }),
+        topAiring = UiState.Success(List(5) { dummyTopAiringUiModel }),
+        topRanking = UiState.Success(List(5) { dummyTopRankingUiModel })
+    )
+)
 
 @Preview(showBackground = true)
 @Composable
-private fun AnimeScreenEmptyPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
-        AnimeScreenContent(
-            currentSeason = UiState.Empty,
-            topAiring = UiState.Empty,
-            topRanking = UiState.Empty,
-            onCardClick = { _, _ -> }
-        )
-    }
-}
+private fun AnimeScreenLoadingPreview() = AnimeScreenPreviewContent(AnimeUiState())
+
+@Preview(showBackground = true)
+@Composable
+private fun AnimeScreenEmptyPreview() = AnimeScreenPreviewContent(
+    AnimeUiState(UiState.Empty, UiState.Empty, UiState.Empty)
+)
 
 @Preview(showBackground = true)
 @Composable
 private fun AnimeScreenErrorPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
-        AnimeScreenContent(
-            currentSeason = UiState.Error(message = "Something went wrong. Please try again."),
-            topAiring = UiState.Error(message = "Something went wrong. Please try again."),
-            topRanking = UiState.Error(message = "Something went wrong. Please try again."),
-            onCardClick = { _, _ -> }
-        )
-    }
+    val error = UiState.Error(message = "Something went wrong. Please try again.")
+    AnimeScreenPreviewContent(AnimeUiState(error, error, error))
 }

@@ -15,11 +15,12 @@ import dev.fizcode.anime.domain.usecase.FetchTopRankingAnimeUseCase
 import dev.fizcode.anime.presentation.mapper.SeasonalAnimeUiMapper
 import dev.fizcode.anime.presentation.mapper.TopAiringAnimeUiMapper
 import dev.fizcode.anime.presentation.mapper.TopRankingAnimeUiMapper
+import dev.fizcode.anime.presentation.model.AnimeIntent
 import dev.fizcode.common.base.callhandler.DomainNetworkState
 import dev.fizcode.common.base.callhandler.UiState
+import dev.fizcode.mal.util.Season
 import dev.fizcode.mal.util.SeasonHelper
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -38,6 +39,7 @@ class AnimeViewModelTest {
 
     private class FakeAnimeRepository : AnimeRepository {
         val seasonCalls = AtomicInteger()
+        var gate: CompletableDeferred<Unit>? = null
         var seasonResult: () -> DomainNetworkState<SeasonalAnimeDomainModel> = {
             DomainNetworkState.Success(
                 SeasonalAnimeDomainModel(listOf(Data(Node(id = 1, title = "Season"))))
@@ -48,17 +50,16 @@ class AnimeViewModelTest {
             year: Int,
             season: String,
             sortBy: String,
-            limit: Int,
-            fields: String
+            limit: Int
         ): DomainNetworkState<SeasonalAnimeDomainModel> {
             seasonCalls.incrementAndGet()
+            gate?.await()
             return seasonResult()
         }
 
         override suspend fun fetchTopAiringAnime(
             rankingType: String,
-            limit: Int,
-            fields: String
+            limit: Int
         ): DomainNetworkState<TopAiringDomainModel> = DomainNetworkState.Success(
             TopAiringDomainModel(
                 listOf(TopAiringDomainModel.Data(TopAiringDomainModel.Node(id = 2, title = "Airing")))
@@ -67,8 +68,7 @@ class AnimeViewModelTest {
 
         override suspend fun fetchTopRankingAnime(
             rankingType: String,
-            limit: Int,
-            fields: String
+            limit: Int
         ): DomainNetworkState<TopRankingDomainModel> = DomainNetworkState.Empty
     }
 
@@ -83,7 +83,7 @@ class AnimeViewModelTest {
             fetchSeasonAnimeUseCase = FetchSeasonalAnimeUseCase(
                 repository,
                 object : SeasonHelper {
-                    override fun getCurrentSeason() = "fall"
+                    override fun getCurrentSeason() = Season.FALL
                     override fun getCurrentYearForSeason() = 2025
                     override fun getCurrentYear() = 2025
                 }
@@ -98,72 +98,43 @@ class AnimeViewModelTest {
     )
 
     @Test
-    fun `state flows are empty until collected`() {
+    fun `loads every section when created`() = runBlocking<Unit> {
         val vm = viewModel()
 
-        assertEquals(UiState.Empty, vm.currentSeason.value)
-        assertEquals(0, repository.seasonCalls.get())
+        val state = vm.uiState.awaitValue { !it.isLoading }
+
+        assertEquals("Season", (state.currentSeason as UiState.Success).data.single().title)
+        assertEquals("Airing", (state.topAiring as UiState.Success).data.single().title)
+        assertEquals(UiState.Empty, state.topRanking)
+        assertEquals(1, repository.seasonCalls.get())
     }
 
     @Test
-    fun `current season emits mapped data`() = runBlocking {
-        val vm = viewModel()
-        val job = vm.currentSeason.onEach { }.launchIn(this)
-
-        val state = vm.currentSeason.awaitValue { it is UiState.Success }
-
-        assertEquals("Season", (state as UiState.Success).data.single().title)
-        job.cancel()
-    }
-
-    @Test
-    fun `top airing emits mapped data`() = runBlocking {
-        val vm = viewModel()
-        val job = vm.topAiring.onEach { }.launchIn(this)
-
-        val state = vm.topAiring.awaitValue { it is UiState.Success }
-
-        assertEquals("Airing", (state as UiState.Success).data.single().title)
-        job.cancel()
-    }
-
-    @Test
-    fun `empty repository result maps to empty state`() = runBlocking {
-        val vm = viewModel()
-        val job = vm.topRanking.onEach { }.launchIn(this)
-
-        // Loading is emitted first, then Empty again once the (empty) result arrives.
-        vm.topRanking.awaitValue { it == UiState.Loading || it == UiState.Empty }
-
-        assertTrue(vm.topRanking.value is UiState.Empty || vm.topRanking.value is UiState.Loading)
-        job.cancel()
-    }
-
-    @Test
-    fun `repository failure becomes an error state`() = runBlocking {
+    fun `a failing section becomes an error without breaking the others`() = runBlocking<Unit> {
         repository.seasonResult = { throw IllegalStateException("boom") }
         val vm = viewModel()
-        val job = vm.currentSeason.onEach { }.launchIn(this)
 
-        val state = vm.currentSeason.awaitValue { it is UiState.Error }
+        val state = vm.uiState.awaitValue { !it.isLoading }
 
-        assertEquals("boom", (state as UiState.Error).message)
-        job.cancel()
+        assertEquals("boom", (state.currentSeason as UiState.Error).message)
+        assertTrue(state.topAiring is UiState.Success)
     }
 
     @Test
-    fun `refresh refetches and refreshing flag can be reset`() = runBlocking {
+    fun `refresh reloads every section and stops refreshing when all are done`() = runBlocking<Unit> {
         val vm = viewModel()
-        val job = vm.currentSeason.onEach { }.launchIn(this)
-        vm.currentSeason.awaitValue { it is UiState.Success }
-        assertEquals(1, repository.seasonCalls.get())
+        vm.uiState.awaitValue { !it.isLoading }
+        val gate = CompletableDeferred<Unit>()
+        repository.gate = gate
 
-        vm.refresh()
-        assertTrue(vm.refreshing.value)
-        vm.currentSeason.awaitValue { repository.seasonCalls.get() == 2 }
+        vm.onIntent(AnimeIntent.Refresh)
 
-        vm.shouldNotRefresh()
-        assertFalse(vm.refreshing.value)
-        job.cancel()
+        val refreshing = vm.uiState.value
+        assertTrue(refreshing.isRefreshing)
+        assertTrue(refreshing.currentSeason is UiState.Loading)
+        gate.complete(Unit)
+        val settled = vm.uiState.awaitValue { !it.isRefreshing }
+        assertFalse(settled.isLoading)
+        assertEquals(2, repository.seasonCalls.get())
     }
 }

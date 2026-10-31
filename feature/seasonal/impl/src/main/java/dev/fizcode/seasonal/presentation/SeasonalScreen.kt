@@ -11,20 +11,25 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fizcode.common.base.callhandler.UiState
+import dev.fizcode.mal.util.Season
 import dev.fizcode.seasonal.presentation.component.SeasonTabs
 import dev.fizcode.seasonal.presentation.component.SeasonalHeader
 import dev.fizcode.seasonal.presentation.component.SeasonalListComponent
-import dev.fizcode.seasonal.presentation.model.Season
+import dev.fizcode.seasonal.presentation.model.SeasonalIntent
 import dev.fizcode.seasonal.presentation.model.SeasonalUiModel
+import dev.fizcode.seasonal.presentation.model.SeasonalUiState
 import dev.fizcode.seasonal.presentation.model.dummySeasonalUiModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.androidx.compose.koinViewModel
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -38,20 +43,22 @@ internal fun SeasonalScreen(
     onCardClick: (mediaType: String, mediaId: Int) -> Unit
 ) {
     val seasonalViewModel: SeasonalViewModel = koinViewModel()
-    val result by seasonalViewModel.seasonalResult.collectAsStateWithLifecycle()
-    val season by seasonalViewModel.selectedSeason.collectAsStateWithLifecycle()
-    val year by seasonalViewModel.selectedYear.collectAsStateWithLifecycle()
+    val uiState by seasonalViewModel.uiState.collectAsStateWithLifecycle()
+    val queryState = rememberTextFieldState(initialText = uiState.query)
+
+    LaunchedEffect(queryState) {
+        snapshotFlow { queryState.text.toString() }
+            .distinctUntilChanged()
+            .collect { seasonalViewModel.onIntent(SeasonalIntent.QueryChanged(it)) }
+    }
 
     SeasonalScreenContent(
-        queryState = seasonalViewModel.queryState,
-        season = season,
-        year = year,
-        years = seasonalViewModel.availableYears,
-        result = result,
-        onSeasonSelect = seasonalViewModel::selectSeason,
-        onYearSelect = seasonalViewModel::selectYear,
+        queryState = queryState,
+        uiState = uiState,
+        onSeasonSelect = { seasonalViewModel.onIntent(SeasonalIntent.SelectSeason(it)) },
+        onYearSelect = { seasonalViewModel.onIntent(SeasonalIntent.SelectYear(it)) },
         onCardClick = onCardClick,
-        onRetry = seasonalViewModel::retry
+        onRetry = { seasonalViewModel.onIntent(SeasonalIntent.Retry) }
     )
 }
 
@@ -59,10 +66,7 @@ internal fun SeasonalScreen(
 @Composable
 private fun SeasonalScreenContent(
     queryState: TextFieldState,
-    season: Season,
-    year: Int,
-    years: ImmutableList<Int>,
-    result: UiState<List<SeasonalUiModel>>,
+    uiState: SeasonalUiState,
     onSeasonSelect: (Season) -> Unit,
     onYearSelect: (Int) -> Unit,
     onCardClick: (mediaType: String, mediaId: Int) -> Unit,
@@ -81,8 +85,8 @@ private fun SeasonalScreenContent(
                     Box(modifier = Modifier.padding(end = 12.dp)) {
                         SeasonalHeader(
                             queryState = queryState,
-                            year = year,
-                            years = years,
+                            year = uiState.year,
+                            years = uiState.years,
                             onYearSelect = onYearSelect
                         )
                     }
@@ -98,11 +102,11 @@ private fun SeasonalScreenContent(
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(Modifier.height(8.dp))
-            SeasonTabs(selected = season, onSelect = onSeasonSelect)
+            SeasonTabs(selected = uiState.season, onSelect = onSeasonSelect)
             Spacer(Modifier.height(8.dp))
             SeasonalListComponent(
-                result = result,
-                isFiltering = queryState.text.isNotBlank(),
+                result = uiState.result,
+                isFiltering = uiState.query.isNotEmpty(),
                 onCardClick = onCardClick,
                 onRetry = onRetry
             )
@@ -110,17 +114,16 @@ private fun SeasonalScreenContent(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun SeasonalScreenSuccessPreview() {
+private fun SeasonalScreenPreviewContent(result: UiState<List<SeasonalUiModel>>) {
     AniMangaAnimeAndMangaInfoTheme {
         SeasonalScreenContent(
             queryState = rememberTextFieldState(),
-            season = Season.WINTER,
-            year = 2026,
-            years = persistentListOf(2027, 2026, 2025),
-            result = UiState.Success(
-                listOf(dummySeasonalUiModel, dummySeasonalUiModel.copy(id = 1, rank = 2))
+            uiState = SeasonalUiState(
+                season = Season.WINTER,
+                year = 2026,
+                years = persistentListOf(2027, 2026, 2025),
+                seasonal = result
             ),
             onSeasonSelect = {},
             onYearSelect = {},
@@ -132,54 +135,20 @@ private fun SeasonalScreenSuccessPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun SeasonalScreenLoadingPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
-        SeasonalScreenContent(
-            queryState = rememberTextFieldState(),
-            season = Season.WINTER,
-            year = 2026,
-            years = persistentListOf(2027, 2026, 2025),
-            result = UiState.Loading,
-            onSeasonSelect = {},
-            onYearSelect = {},
-            onCardClick = { _, _ -> },
-            onRetry = {}
-        )
-    }
-}
+private fun SeasonalScreenSuccessPreview() = SeasonalScreenPreviewContent(
+    UiState.Success(listOf(dummySeasonalUiModel, dummySeasonalUiModel.copy(id = 1, rank = 2)))
+)
 
 @Preview(showBackground = true)
 @Composable
-private fun SeasonalScreenEmptyPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
-        SeasonalScreenContent(
-            queryState = rememberTextFieldState(),
-            season = Season.WINTER,
-            year = 2026,
-            years = persistentListOf(2027, 2026, 2025),
-            result = UiState.Empty,
-            onSeasonSelect = {},
-            onYearSelect = {},
-            onCardClick = { _, _ -> },
-            onRetry = {}
-        )
-    }
-}
+private fun SeasonalScreenLoadingPreview() = SeasonalScreenPreviewContent(UiState.Loading)
 
 @Preview(showBackground = true)
 @Composable
-private fun SeasonalScreenErrorPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
-        SeasonalScreenContent(
-            queryState = rememberTextFieldState(),
-            season = Season.WINTER,
-            year = 2026,
-            years = persistentListOf(2027, 2026, 2025),
-            result = UiState.Error(message = "Something went wrong. Please try again."),
-            onSeasonSelect = {},
-            onYearSelect = {},
-            onCardClick = { _, _ -> },
-            onRetry = {}
-        )
-    }
-}
+private fun SeasonalScreenEmptyPreview() = SeasonalScreenPreviewContent(UiState.Empty)
+
+@Preview(showBackground = true)
+@Composable
+private fun SeasonalScreenErrorPreview() = SeasonalScreenPreviewContent(
+    UiState.Error(message = "Something went wrong. Please try again.")
+)
