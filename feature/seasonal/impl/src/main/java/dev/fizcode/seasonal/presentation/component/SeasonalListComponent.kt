@@ -7,14 +7,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.EmptyCardComponent
-import dev.fizcode.designsystem.component.card.ErrorCardWithButtonComponent
 import dev.fizcode.designsystem.component.card.MovieCardLarge
+import dev.fizcode.designsystem.component.other.ErrorWithRetry
 import dev.fizcode.designsystem.component.shimmer.MovieCardLargeShimmer
 import dev.fizcode.seasonal.presentation.model.SeasonalUiModel
 import dev.fizcode.seasonal.presentation.model.dummySeasonalUiModel
@@ -62,20 +64,13 @@ internal fun SeasonalListComponent(
         desc = if (isFiltering) Constant.EMPTY_QUERY_RESULT else Constant.EMPTY_RESULT
     )
 
-    is UiState.Error -> SeasonalError(result.message, onRetry, modifier)
+    is UiState.Error -> ErrorWithRetry(
+        onRetry = onRetry,
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    )
 }
-
-@Composable
-private fun SeasonalError(
-    message: String?,
-    onRetry: () -> Unit,
-    modifier: Modifier
-) = ErrorCardWithButtonComponent(
-    modifier = modifier,
-    errorCode = Constant.ERROR_TITLE,
-    errorDesc = message ?: Constant.ERROR_UNKNOWN,
-    onErrorButtonClick = onRetry
-)
 
 @Composable
 private fun SeasonalListPreviewContent(

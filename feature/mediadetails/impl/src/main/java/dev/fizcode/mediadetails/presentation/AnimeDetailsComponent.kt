@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import dev.fizcode.mediadetails.presentation.model.ImageGallery
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,7 +41,7 @@ internal fun AnimeDetailsComponent(
     animeCast: UiState<ImmutableList<AnimeCastUiModel>>,
     animeStaff: UiState<ImmutableList<AnimeStaffUiModel>>,
     headerTitle: (MediaTitles) -> Unit,
-    selectedImage: (String) -> Unit,
+    selectedImage: (ImageGallery) -> Unit,
     onRetryDetails: () -> Unit,
     onRetryCastAndStaff: () -> Unit,
     onMoreCastClick: () -> Unit,

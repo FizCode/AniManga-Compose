@@ -5,8 +5,6 @@ internal object Constant {
     const val CHAPTER = "Ch."
     const val EMPTY_QUERY_RESULT = "No manga matches your search."
     const val EMPTY_RESULT = "No manga found."
-    const val ERROR_TITLE = "Error"
-    const val ERROR_UNKNOWN = "Something went wrong."
     const val FILTER_ICON = "Sort by"
     const val PLACEHOLDER = "Search"
     const val RANKING_LIMIT = 100
