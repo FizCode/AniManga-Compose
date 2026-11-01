@@ -33,6 +33,7 @@ import dev.fizcode.anime.presentation.model.dummyTopAiringUiModel
 import dev.fizcode.anime.presentation.model.dummyTopRankingUiModel
 import dev.fizcode.anime.util.Constant
 import dev.fizcode.common.base.callhandler.UiState
+import dev.fizcode.designsystem.component.other.ErrorWithRetry
 import org.koin.androidx.compose.koinViewModel
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 
@@ -97,6 +98,15 @@ private fun AnimeScreenContent(
                 modifier = Modifier.fillMaxHeight(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                if (uiState.isAllFailed) {
+                    item {
+                        ErrorWithRetry(
+                            modifier = Modifier.fillParentMaxSize(),
+                            onRetry = onRefreshClick
+                        )
+                    }
+                    return@LazyColumn
+                }
                 item {
                     CurrentSeason(
                         headerTitle = Constant.CURRENT_SEASON,

@@ -13,6 +13,11 @@ internal data class AnimeUiState(
             topAiring is UiState.Loading ||
             topRanking is UiState.Loading
 
+    val isAllFailed: Boolean
+        get() = currentSeason is UiState.Error &&
+            topAiring is UiState.Error &&
+            topRanking is UiState.Error
+
     fun refreshing() = copy(
         currentSeason = UiState.Loading,
         topAiring = UiState.Loading,
