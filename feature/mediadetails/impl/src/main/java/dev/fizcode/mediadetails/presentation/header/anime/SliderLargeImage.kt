@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import dev.fizcode.designsystem.util.base.shimmer
 import dev.fizcode.mediadetails.presentation.header.util.Constant
+import dev.fizcode.mediadetails.presentation.model.ImageGallery
 import kotlinx.collections.immutable.ImmutableList
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
@@ -27,7 +28,7 @@ import kotlinx.collections.immutable.persistentListOf
 internal fun SliderLargeImage(
     pictures: ImmutableList<String>,
     largePictures: ImmutableList<String>,
-    onPictureClick: (String) -> Unit
+    onPictureClick: (ImageGallery) -> Unit
 ) = when {
     pictures.size >= 2 -> {
         HorizontalMultiBrowseCarousel(
@@ -45,7 +46,7 @@ internal fun SliderLargeImage(
                     .maskClip(MaterialTheme.shapes.small)
                     .shimmer()
                     .height(202.dp)
-                    .clickable { onPictureClick(largePictures[index]) },
+                    .clickable { onPictureClick(ImageGallery(largePictures.ifEmpty { pictures }, index)) },
                 contentScale = ContentScale.Crop,
                 contentDescription = Constant.SLIDER_IMAGES,
                 model = picture
@@ -59,7 +60,7 @@ internal fun SliderLargeImage(
                 .fillMaxWidth()
                 .height(202.dp)
                 .shimmer()
-                .clickable { onPictureClick(pictures.first()) },
+                .clickable { onPictureClick(ImageGallery(largePictures.ifEmpty { pictures })) },
             contentScale = ContentScale.Crop,
             contentDescription = Constant.SLIDER_IMAGES,
             model = pictures.first()

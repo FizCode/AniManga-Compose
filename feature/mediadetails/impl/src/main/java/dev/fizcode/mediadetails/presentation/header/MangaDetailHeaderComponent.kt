@@ -1,5 +1,6 @@
 package dev.fizcode.mediadetails.presentation.header
 
+import dev.fizcode.mediadetails.presentation.model.ImageGallery
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,7 +26,7 @@ fun MangaDetailHeaderComponent(
     modifier: Modifier = Modifier,
     isBookmarked: Boolean,
     header: MangaDetailsHeaderUiModel,
-    onPictureClick: (String) -> Unit,
+    onPictureClick: (ImageGallery) -> Unit,
     onClickBookmark: () -> Unit
 ) {
     Column(

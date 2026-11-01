@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import dev.fizcode.mediadetails.presentation.model.ImageGallery
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.fizcode.common.base.callhandler.UiState
@@ -27,7 +28,7 @@ internal fun MangaDetailsComponent(
     mangaDetails: UiState<MangaDetailsUiModel>,
     characters: UiState<ImmutableList<MangaCharacterUiModel>>,
     headerTitle: (MediaTitles) -> Unit,
-    selectedImage: (String) -> Unit,
+    selectedImage: (ImageGallery) -> Unit,
     onRetryDetails: () -> Unit,
     onRetryCharacters: () -> Unit,
     onMoreCharactersClick: () -> Unit,

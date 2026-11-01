@@ -18,6 +18,7 @@ import dev.fizcode.mediadetails.presentation.header.anime.SliderLargeImage
 import kotlinx.collections.immutable.persistentListOf
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
+import dev.fizcode.mediadetails.presentation.model.ImageGallery
 import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 @Composable
@@ -25,7 +26,7 @@ fun DetailHeaderComponent(
     modifier: Modifier = Modifier,
     isBookmarked: Boolean,
     header: AnimeDetailsHeaderUiModel,
-    onPictureClick: (String) -> Unit,
+    onPictureClick: (ImageGallery) -> Unit,
     onClickBookmark: () -> Unit
 ) {
     Column(

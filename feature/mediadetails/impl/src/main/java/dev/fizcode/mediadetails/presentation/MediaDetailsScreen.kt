@@ -1,6 +1,15 @@
 package dev.fizcode.mediadetails.presentation
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+import dev.fizcode.mediadetails.util.DownloadResult
+import dev.fizcode.mediadetails.util.ImageDownloader
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -35,15 +44,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.mediadetails.presentation.model.ImageGallery
 import dev.fizcode.mediadetails.presentation.model.MediaDetailsEffect
 import dev.fizcode.mediadetails.presentation.model.MediaDetailsIntent
-import dev.fizcode.mediadetails.util.Constant
+import dev.fizcode.mediadetails.presentation.model.MediaDetailsUiState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
+import dev.fizcode.mediadetails.util.Constant
 import dev.fizcode.designsystem.theme.LocalTitleStyle
 import dev.fizcode.common.settings.MediaTitles
 
@@ -56,26 +67,32 @@ internal fun MediaDetailsScreen(
     onOpenStaff: () -> Unit,
     onOpenCharacters: () -> Unit
 ) {
-    val mediaKind = remember(mediaType) { MediaKind.from(mediaType) }
     val mediaDetailsViewModel: MediaDetailsViewModel = koinViewModel(key = "$mediaId") {
         parametersOf(mediaId, mediaType)
     }
-
+    val uiState by mediaDetailsViewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val uiState by mediaDetailsViewModel.uiState.collectAsStateWithLifecycle()
+    fun showMessage(message: String) {
+        scope.launch { snackbarHostState.showSnackbar(message = message) }
+    }
 
-    // The title bar and the share text show the title in the style the user picked.
-    val titleStyle = LocalTitleStyle.current
-    var headerTitles = MediaTitles("")
-    val headerTitle = { headerTitles.resolve(titleStyle) }
-    var selectedImage by remember { mutableStateOf<String?>(null) }
+    LaunchedEffect(mediaDetailsViewModel.effect, lifecycleOwner) {
+        mediaDetailsViewModel.effect.collect { effect ->
+            showMessage(
+                when (effect) {
+                    MediaDetailsEffect.Bookmarked -> Constant.BOOKMARKED
+                    MediaDetailsEffect.Unbookmarked -> Constant.UNBOOKMARKED
+                }
+            )
+        }
+    }
 
-    val context = LocalContext.current
     // Opens the share sheet with the shared text and a link that opens this media in the app.
-    val onClickShare: (String) -> Unit = { content ->
-        val title = headerTitle()
+    val onShare: (title: String, content: String) -> Unit = { title, content ->
         val text = buildShareText(
             title = title,
             content = content,
@@ -90,22 +107,85 @@ internal fun MediaDetailsScreen(
         context.startActivity(Intent.createChooser(sendIntent, Constant.SHARE_CHOOSER_TITLE))
     }
 
-    LaunchedEffect(mediaDetailsViewModel.effect, lifecycleOwner) {
-        mediaDetailsViewModel.effect.collect { effect ->
-            val message = when (effect) {
-                MediaDetailsEffect.Bookmarked -> Constant.BOOKMARKED
-                MediaDetailsEffect.Unbookmarked -> Constant.UNBOOKMARKED
-            }
-            snackbarHostState.showSnackbar(message = message)
+    fun download(imageUrl: String) {
+        scope.launch {
+            // The progress message is dismissed as soon as the result is known.
+            val progress = launch { snackbarHostState.showSnackbar(message = Constant.DOWNLOAD_STARTED) }
+            val result = ImageDownloader.download(context, imageUrl)
+            progress.cancel()
+            snackbarHostState.showSnackbar(
+                message = when (result) {
+                    DownloadResult.Saved -> Constant.DOWNLOAD_SAVED
+                    DownloadResult.Failed -> Constant.DOWNLOAD_FAILED
+                    DownloadResult.StillRunning -> Constant.DOWNLOAD_STILL_RUNNING
+                }
+            )
         }
     }
+    var pendingDownload by remember { mutableStateOf<String?>(null) }
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        val url = pendingDownload
+        pendingDownload = null
+        if (granted && url != null) download(url) else showMessage(Constant.DOWNLOAD_PERMISSION_DENIED)
+    }
+    val onDownloadImage: (String) -> Unit = { imageUrl ->
+        val hasPermission = !ImageDownloader.needsStoragePermission ||
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        if (hasPermission) {
+            download(imageUrl)
+        } else {
+            pendingDownload = imageUrl
+            permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+    }
+
+    MediaDetailsContent(
+        mediaKind = remember(mediaType) { MediaKind.from(mediaType) },
+        uiState = uiState,
+        snackbarHostState = snackbarHostState,
+        onIntent = mediaDetailsViewModel::onIntent,
+        onBackPressed = onBackPressed,
+        onOpenCast = onOpenCast,
+        onOpenStaff = onOpenStaff,
+        onOpenCharacters = onOpenCharacters,
+        onShare = onShare,
+        onDownloadImage = onDownloadImage
+    )
+}
+
+/** Stateless content of the screen, it only takes state and callbacks so it can be previewed. */
+@Composable
+private fun MediaDetailsContent(
+    mediaKind: MediaKind,
+    uiState: MediaDetailsUiState,
+    snackbarHostState: SnackbarHostState,
+    onIntent: (MediaDetailsIntent) -> Unit,
+    onBackPressed: () -> Unit,
+    onOpenCast: () -> Unit,
+    onOpenStaff: () -> Unit,
+    onOpenCharacters: () -> Unit,
+    onShare: (title: String, content: String) -> Unit,
+    onDownloadImage: (String) -> Unit
+) {
+    // The title bar and the share text show the title in the style the user picked.
+    val titleStyle = LocalTitleStyle.current
+    var headerTitles = MediaTitles("")
+    val headerTitle = { headerTitles.resolve(titleStyle) }
+    var selectedImage by remember { mutableStateOf<ImageGallery?>(null) }
+    val onClickShare: (String) -> Unit = { content -> onShare(headerTitle(), content) }
 
     MediaDetailsLayout(
         headerTitle = headerTitle,
         snackbarHostState = snackbarHostState,
         selectedImage = selectedImage,
         onDismissImage = { selectedImage = null },
-        onBackPressed = onBackPressed
+        onBackPressed = onBackPressed,
+        onDownloadImage = onDownloadImage
     ) { observerModifier ->
         when (mediaKind) {
             MediaKind.ANIME -> {
@@ -117,14 +197,12 @@ internal fun MediaDetailsScreen(
                     animeStaff = uiState.animeStaff,
                     headerTitle = { headerTitles = it },
                     selectedImage = { selectedImage = it },
-                    onRetryDetails = { mediaDetailsViewModel.onIntent(MediaDetailsIntent.RetryDetails) },
-                    onRetryCastAndStaff = {
-                        mediaDetailsViewModel.onIntent(MediaDetailsIntent.RetryCastAndStaff)
-                    },
+                    onRetryDetails = { onIntent(MediaDetailsIntent.RetryDetails) },
+                    onRetryCastAndStaff = { onIntent(MediaDetailsIntent.RetryCastAndStaff) },
                     onMoreCastClick = onOpenCast,
                     onMoreStaffClick = onOpenStaff,
                     onClickShare = onClickShare,
-                    onClickBookmark = { mediaDetailsViewModel.onIntent(MediaDetailsIntent.ToggleBookmark) }
+                    onClickBookmark = { onIntent(MediaDetailsIntent.ToggleBookmark) }
                 )
             }
 
@@ -136,13 +214,11 @@ internal fun MediaDetailsScreen(
                     characters = uiState.mangaCharacters,
                     headerTitle = { headerTitles = it },
                     selectedImage = { selectedImage = it },
-                    onRetryDetails = { mediaDetailsViewModel.onIntent(MediaDetailsIntent.RetryMangaDetails) },
-                    onRetryCharacters = {
-                        mediaDetailsViewModel.onIntent(MediaDetailsIntent.RetryMangaCharacters)
-                    },
+                    onRetryDetails = { onIntent(MediaDetailsIntent.RetryMangaDetails) },
+                    onRetryCharacters = { onIntent(MediaDetailsIntent.RetryMangaCharacters) },
                     onMoreCharactersClick = onOpenCharacters,
                     onClickShare = onClickShare,
-                    onClickBookmark = { mediaDetailsViewModel.onIntent(MediaDetailsIntent.ToggleBookmark) }
+                    onClickBookmark = { onIntent(MediaDetailsIntent.ToggleBookmark) }
                 )
             }
         }
@@ -154,9 +230,10 @@ internal fun MediaDetailsScreen(
 private fun MediaDetailsLayout(
     headerTitle: () -> String,
     snackbarHostState: SnackbarHostState,
-    selectedImage: String?,
+    selectedImage: ImageGallery?,
     onDismissImage: () -> Unit,
     onBackPressed: () -> Unit,
+    onDownloadImage: (String) -> Unit = {},
     content: @Composable (observerModifier: Modifier) -> Unit
 ) {
     val slideInAnimation = slideInVertically(initialOffsetY = { -it / 2 })
@@ -190,8 +267,12 @@ private fun MediaDetailsLayout(
     if (!showTopBars.value) {
         FloatingBackButton(onBackPressed = onBackPressed)
     }
-    selectedImage?.let { imageUrl ->
-        PopUpImage(imageUrl = imageUrl, onDismiss = onDismissImage)
+    selectedImage?.let { gallery ->
+        ImagesBottomSheet(
+            gallery = gallery,
+            onDownload = onDownloadImage,
+            onDismiss = onDismissImage
+        )
     }
 }
 
@@ -353,5 +434,27 @@ private fun MangaDetailsScreenLoadingPreview() {
                 onClickShare = {}
             )
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun MangaDetailsContentPreview() {
+    AniMangaAnimeAndMangaInfoTheme {
+        MediaDetailsContent(
+            mediaKind = MediaKind.MANGA,
+            uiState = MediaDetailsUiState(
+                mangaDetails = UiState.Success(MediaDetailsPreviewData.manga),
+                mangaCharacters = UiState.Success(MediaDetailsPreviewData.mangaCharacters)
+            ),
+            snackbarHostState = remember { SnackbarHostState() },
+            onIntent = {},
+            onBackPressed = {},
+            onOpenCast = {},
+            onOpenStaff = {},
+            onOpenCharacters = {},
+            onShare = { _, _ -> },
+            onDownloadImage = {}
+        )
     }
 }
