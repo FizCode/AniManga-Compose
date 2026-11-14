@@ -86,11 +86,20 @@ internal sealed interface PendingFilterChange {
     /** An extra warning to show in the dialog, if the change needs one. */
     val warning: String?
 
+    /** The sentence the user has to type before the change is allowed, null when none is needed. */
+    val confirmationPhrase: String?
+
+    fun isConfirmed(input: String): Boolean {
+        val phrase = confirmationPhrase ?: return true
+        return input.normalizedPhrase() == phrase.normalizedPhrase()
+    }
+
     data class Titling(val style: TitleStyle) : PendingFilterChange {
         override val dialogTitle = Constant.TITLING_DIALOG_TITLE
         override val label = style.label
         override val description = style.description
         override val warning: String? = null
+        override val confirmationPhrase: String? = null
     }
 
     data class Nsfw(val filter: NsfwFilter) : PendingFilterChange {
@@ -98,5 +107,9 @@ internal sealed interface PendingFilterChange {
         override val label = filter.label
         override val description = filter.description
         override val warning = filter.ageWarning
+        override val confirmationPhrase = Constant.NOT_SAFE_PHRASE.takeIf { filter == NsfwFilter.NOT_SAFE }
     }
 }
+
+/** Ignores case, outer spaces and the curly apostrophe some keyboards type. */
+private fun String.normalizedPhrase() = trim().replace('’', '\'').lowercase()

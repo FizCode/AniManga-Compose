@@ -156,8 +156,10 @@ private fun SettingsScreenContent(
                         selected = uiState.nsfwFilter,
                         label = { it.label },
                         onSelect = { filter ->
-                            if (filter != uiState.nsfwFilter) {
-                                pendingChange = PendingFilterChange.Nsfw(filter)
+                            when (filter) {
+                                uiState.nsfwFilter -> Unit
+                                NsfwFilter.SAFE -> onNsfwFilterChange(filter)
+                                else -> pendingChange = PendingFilterChange.Nsfw(filter)
                             }
                         }
                     )

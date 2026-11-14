@@ -23,6 +23,7 @@ internal object Constant {
     const val MAL_URL = "https://myanimelist.net"
     const val NSFW_DIALOG_TITLE = "Change NSFW filter?"
     const val NSFW_TITLE = "NSFW"
+    const val NOT_SAFE_PHRASE = "I'm above 21"
     const val OPEN_ICON = "Open"
     const val OTHER_SECTION = "Other"
     const val SETTINGS = "Settings"
@@ -31,6 +32,8 @@ internal object Constant {
     const val THEME_TITLE = "Theme"
     const val TITLING_DIALOG_TITLE = "Change titling style?"
     const val TITLING_TITLE = "Titling Style"
+    const val TYPE_PREFIX = "Type"
+    const val TYPE_SUFFIX = "to continue."
     const val UNKNOWN_VERSION = "unknown"
 
     /** Always shows the current [year], so it does not need an update every new year. */
