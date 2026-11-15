@@ -22,7 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.designsystem.util.base.shimmer
 
 /**
@@ -95,7 +95,7 @@ fun PillTabsShimmer(labels: List<String>, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun PillTabsPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         val items = listOf("All", "Manga", "Novel")
         PillTabs(items = items, selected = items.first(), label = { it }, onSelect = {})
     }
@@ -104,7 +104,7 @@ private fun PillTabsPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun PillTabsShimmerPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         PillTabsShimmer(labels = listOf("All", "Manga", "Novel"))
     }
 }

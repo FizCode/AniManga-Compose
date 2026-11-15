@@ -28,7 +28,7 @@ import dev.fizcode.manga.presentation.model.MangaSort
 import dev.fizcode.manga.util.Constant
 import dev.fizcode.designsystem.util.DashboardTopBarHeight
 import androidx.compose.foundation.layout.height
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 
 /**
  * Search field on the left and, on the right, the selected [sort] with a filter icon.
@@ -92,7 +92,7 @@ internal fun MangaHeader(
 @Preview(showBackground = true)
 @Composable
 private fun MangaHeaderPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         MangaHeader(
             queryState = rememberTextFieldState(),
             sort = MangaSort.RANKING,
@@ -104,7 +104,7 @@ private fun MangaHeaderPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun MangaHeaderWithQueryPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         MangaHeader(
             queryState = rememberTextFieldState(initialText = "Berserk"),
             sort = MangaSort.RANKING,

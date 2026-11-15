@@ -13,7 +13,7 @@ import dev.fizcode.anime.presentation.model.dummyTopRankingUiModel
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.MovieCardSmall
 import dev.fizcode.designsystem.component.shimmer.MovieCardSmallShimmer
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import dev.fizcode.designsystem.theme.LocalTitleStyle
 
@@ -75,7 +75,7 @@ internal fun TopRanking(
 
 @Composable
 private fun TopRankingPreviewContent(cardItem: UiState<List<TopRankingUiModel>>) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         TopRanking(
             headerTitle = "Top Ranking 🏆",
             cardItem = cardItem,

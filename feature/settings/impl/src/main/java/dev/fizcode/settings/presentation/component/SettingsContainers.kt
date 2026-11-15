@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.icon.CustomIcon
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 
 /** A titled group of settings drawn on one rounded card. */
 @Composable
@@ -101,7 +101,7 @@ internal fun SettingsIcon(
 @Preview(showBackground = true)
 @Composable
 private fun SettingsSectionPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SettingsSection(title = "Theme") {
             SettingsItem(
                 title = "Theme",

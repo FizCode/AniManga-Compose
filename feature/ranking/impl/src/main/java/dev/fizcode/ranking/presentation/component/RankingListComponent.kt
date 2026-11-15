@@ -16,7 +16,7 @@ import dev.fizcode.designsystem.component.card.EmptyCardComponent
 import dev.fizcode.designsystem.component.card.ErrorCardWithButtonComponent
 import dev.fizcode.designsystem.component.card.MovieCardLarge
 import dev.fizcode.designsystem.component.shimmer.MovieCardLargeShimmer
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.ranking.presentation.model.RankingUiModel
 import dev.fizcode.ranking.presentation.model.dummyRankingUiModel
 import dev.fizcode.ranking.util.Constant
@@ -86,7 +86,7 @@ private fun RankingListPreviewContent(
     result: UiState<List<RankingUiModel>>,
     query: String = ""
 ) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         RankingListComponent(
             result = result,
             query = query,

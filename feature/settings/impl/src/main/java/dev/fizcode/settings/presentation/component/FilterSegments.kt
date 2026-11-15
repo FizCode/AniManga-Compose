@@ -2,11 +2,9 @@ package dev.fizcode.settings.presentation.component
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
@@ -26,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.common.settings.NsfwFilter
 import dev.fizcode.common.settings.TitleStyle
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.settings.presentation.model.icon
 import dev.fizcode.settings.presentation.model.label
 
@@ -109,7 +107,7 @@ internal fun <T> FilterSegments(
 @Preview(showBackground = true)
 @Composable
 private fun TitleStyleSegmentsPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         FilterSegments(
             modifier = Modifier.padding(16.dp),
             options = TitleStyle.entries,
@@ -124,7 +122,7 @@ private fun TitleStyleSegmentsPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun NsfwSegmentsPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         FilterSegments(
             modifier = Modifier.padding(16.dp),
             options = NsfwFilter.entries,

@@ -37,7 +37,7 @@ import dev.fizcode.mediadetails.presentation.info.util.buildStatisticsList
 import dev.fizcode.mediadetails.presentation.info.util.Constant
 import dev.fizcode.mediadetails.util.toStringWithComma
 import kotlinx.collections.immutable.ImmutableList
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 
 @Composable
@@ -220,7 +220,7 @@ private fun RelatedAnimeList(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun InformationTabPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         InformationTabComponent(
             animeInfo = MediaDetailsPreviewData.anime.animeDetailsInfoUiModel.animeInfo
         )
@@ -229,8 +229,8 @@ private fun InformationTabPreview() {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun InformationTabExtendedInfoUnavailablePreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+private fun InformationTabExtendedUnavailablePreview() {
+    AniMangaTheme {
         InformationTabComponent(
             animeInfo = MediaDetailsPreviewData.anime.animeDetailsInfoUiModel.animeInfo,
             isExtendedInfoAvailable = false

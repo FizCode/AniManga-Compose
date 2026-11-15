@@ -22,7 +22,7 @@ import coil.compose.AsyncImage
 import dev.fizcode.designsystem.util.base.shimmer
 import dev.fizcode.mediadetails.presentation.info.model.AnimeCastUiModel
 import dev.fizcode.mediadetails.presentation.info.util.Constant
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -143,7 +143,7 @@ internal fun CastShimmer() {
 @Preview(showBackground = true)
 @Composable
 private fun CharacterCastPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         CharacterCast(
             characterData = MediaDetailsPreviewData.animeCast.first(),
             onCastImageClick = {}
@@ -154,7 +154,7 @@ private fun CharacterCastPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun CastShimmerPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         CastShimmer()
     }
 }

@@ -1,6 +1,5 @@
 package dev.fizcode.manga.presentation
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -33,7 +32,7 @@ import dev.fizcode.manga.presentation.model.RankedManga
 import dev.fizcode.manga.presentation.model.dummyMangaUiModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.androidx.compose.koinViewModel
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -122,7 +121,7 @@ private fun MangaScreenContent(
 
 @Composable
 private fun MangaScreenPreviewContent(result: UiState<List<MangaUiModel>>) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         MangaScreenContent(
             queryState = rememberTextFieldState(),
             uiState = MangaUiState(ranked = RankedManga(MangaRankingRequest.of(MangaType.ALL, MangaSort.RANKING), result)),

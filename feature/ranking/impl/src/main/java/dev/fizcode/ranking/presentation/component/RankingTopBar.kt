@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.component.other.SearchTextFieldComponent
 import dev.fizcode.designsystem.icon.CustomIcon
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.ranking.util.Constant
 
 /**
@@ -84,7 +84,7 @@ internal fun RankingTopBar(
 @Preview(showBackground = true)
 @Composable
 private fun RankingTopBarPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         RankingTopBar(
             title = "Top Airing ✨",
             isSearching = false,
@@ -100,7 +100,7 @@ private fun RankingTopBarPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun RankingTopBarSearchingPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         RankingTopBar(
             title = "Top Airing ✨",
             isSearching = true,

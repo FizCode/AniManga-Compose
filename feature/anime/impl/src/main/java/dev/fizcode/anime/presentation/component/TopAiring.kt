@@ -16,7 +16,7 @@ import dev.fizcode.anime.presentation.model.dummyTopAiringUiModel
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.MovieCardSimple
 import dev.fizcode.designsystem.component.shimmer.MovieCardSimpleShimmer
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 @Composable
@@ -68,7 +68,7 @@ internal fun TopAiring(
 
 @Composable
 private fun TopAiringPreviewContent(cardItem: UiState<List<TopAiringUiModel>>) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         TopAiring(
             headerTitle = "Top Airing ✨",
             cardItem = cardItem,

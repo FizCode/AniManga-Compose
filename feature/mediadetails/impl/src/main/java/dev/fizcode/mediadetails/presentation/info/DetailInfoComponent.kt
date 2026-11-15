@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
@@ -21,11 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.mediadetails.presentation.info.model.AnimeCastUiModel
-import dev.fizcode.mediadetails.presentation.info.model.AnimeDetails
 import dev.fizcode.mediadetails.presentation.info.model.AnimeDetailsInfoUiModel
-import dev.fizcode.mediadetails.presentation.info.model.AnimeInfo
 import dev.fizcode.mediadetails.presentation.info.model.AnimeStaffUiModel
-import dev.fizcode.mediadetails.presentation.info.model.AnimeThemes
 import dev.fizcode.mediadetails.presentation.info.model.TabContents
 import dev.fizcode.mediadetails.presentation.info.component.CastTabComponent
 import dev.fizcode.mediadetails.presentation.info.component.DetailsTabComponent
@@ -33,7 +29,7 @@ import dev.fizcode.mediadetails.presentation.info.component.InformationTabCompon
 import dev.fizcode.mediadetails.presentation.info.component.SongsTabComponent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 
 @Composable
@@ -112,8 +108,8 @@ fun DetailInfoComponent(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun DetailInfoComponentPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+private fun DetailComponentPreview() {
+    AniMangaTheme {
         DetailInfoComponent(
             infoUiModel = MediaDetailsPreviewData.anime.animeDetailsInfoUiModel,
             cast = UiState.Success(MediaDetailsPreviewData.animeCast),
@@ -128,8 +124,8 @@ private fun DetailInfoComponentPreview() {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun DetailInfoComponentLoadingPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+private fun DetailComponentLoadingPreview() {
+    AniMangaTheme {
         DetailInfoComponent(
             infoUiModel = MediaDetailsPreviewData.anime.animeDetailsInfoUiModel,
             cast = UiState.Loading,

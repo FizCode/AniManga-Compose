@@ -60,14 +60,28 @@ class SearchViewModelTest {
     ) = uiState.awaitValue { predicate(it.result) }.result
 
     @Test
-    fun `starts empty and ignores queries shorter than the minimum`() = runBlocking<Unit> {
+    fun `starts empty and does not search a blank query`() = runBlocking<Unit> {
         val repository = FakeSearchRepository { DomainNetworkState.Empty }
         val vm = viewModel(repository)
 
-        vm.type("bl")
+        vm.type("  ")
 
         assertEquals(UiState.Empty, vm.uiState.value.result)
         assertTrue(repository.queries.isEmpty())
+    }
+
+    @Test
+    fun `a single letter query is searched`() = runBlocking<Unit> {
+        val repository = FakeSearchRepository {
+            DomainNetworkState.Success(SearchAnimeDomainModel(listOf(node.copy(title = "K"))))
+        }
+        val vm = viewModel(repository)
+
+        vm.type("k")
+
+        val state = vm.awaitResult { it is UiState.Success }
+        assertEquals("K", (state as UiState.Success).data.single().title)
+        assertEquals(listOf("k"), repository.queries)
     }
 
     @Test
@@ -101,6 +115,20 @@ class SearchViewModelTest {
         val vm = viewModel(repository)
 
         vm.type("bleach")
+        vm.awaitResult { repository.queries.isNotEmpty() }
+        vm.awaitResult { it == UiState.Empty }
+
+        assertEquals(UiState.Empty, vm.uiState.value.result)
+    }
+
+    @Test
+    fun `a search that matches nothing maps to empty state`() = runBlocking<Unit> {
+        val repository = FakeSearchRepository {
+            DomainNetworkState.Success(SearchAnimeDomainModel(emptyList()))
+        }
+        val vm = viewModel(repository)
+
+        vm.type("mnb")
         vm.awaitResult { repository.queries.isNotEmpty() }
         vm.awaitResult { it == UiState.Empty }
 

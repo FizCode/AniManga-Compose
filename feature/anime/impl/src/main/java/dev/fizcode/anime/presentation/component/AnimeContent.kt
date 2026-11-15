@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import dev.fizcode.anime.util.Constant
 import dev.fizcode.designsystem.component.card.MovieCardSmall
 import dev.fizcode.designsystem.icon.CustomIcon
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 
 @Composable
 internal fun AnimeContent(
@@ -55,7 +55,7 @@ internal fun AnimeContent(
 @Preview(showBackground = true)
 @Composable
 private fun AnimeContentPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         AnimeContent(
             headerTitle = "Current Season ☀️",
             onHeaderClick = {}

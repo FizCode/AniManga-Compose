@@ -16,8 +16,7 @@ import dev.fizcode.mediadetails.presentation.info.MangaDetailInfoComponent
 import dev.fizcode.mediadetails.presentation.info.model.MangaCharacterUiModel
 import dev.fizcode.mediadetails.presentation.model.MangaDetailsUiModel
 import kotlinx.collections.immutable.ImmutableList
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
-import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import androidx.compose.ui.tooling.preview.Preview
 import dev.fizcode.common.settings.MediaTitles
 
@@ -80,7 +79,7 @@ private fun MangaDetailsComponentPreview(
     mangaDetails: UiState<MangaDetailsUiModel>,
     characters: UiState<ImmutableList<MangaCharacterUiModel>>
 ) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         MangaDetailsComponent(
             isBookmarked = false,
             mangaDetails = mangaDetails,

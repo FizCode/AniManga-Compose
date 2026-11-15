@@ -9,7 +9,6 @@ internal object Constant {
     const val EPISODES = "Episodes"
     const val ERROR_TITLE = "Error"
     const val ERROR_UNKNOWN = "Something went wrong."
-    const val MIN_QUERY_LENGTH = 3
     const val PLACEHOLDER = "Search"
     const val POSTER_IMAGE = "Poster Image"
     const val RESULT_LIMIT = 20

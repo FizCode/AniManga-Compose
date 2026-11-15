@@ -16,7 +16,7 @@ import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.EmptyCardComponent
 import dev.fizcode.designsystem.component.card.MovieCardSmall
 import dev.fizcode.designsystem.component.shimmer.MovieCardSmallShimmer
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import kotlinx.collections.immutable.persistentListOf
 import dev.fizcode.designsystem.theme.LocalTitleStyle
 
@@ -76,7 +76,7 @@ private fun BookmarkItemComponentPreview() {
         studio = "Toei Animation",
         genre = persistentListOf("Action", "Adventure", "Comedy")
     )
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         BookmarkItemComponent(
             cardItem = UiState.Success(List(4) { bookmark.copy(mediaId = it) }),
             emptyMessage = "",

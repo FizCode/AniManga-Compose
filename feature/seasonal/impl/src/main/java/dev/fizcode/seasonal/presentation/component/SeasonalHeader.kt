@@ -30,7 +30,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import dev.fizcode.designsystem.util.DashboardTopBarHeight
 import androidx.compose.foundation.layout.height
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 
 /**
  * Search field on the left, the selected [year] and a filter button on the right.
@@ -95,7 +95,7 @@ internal fun SeasonalHeader(
 @Preview(showBackground = true)
 @Composable
 private fun SeasonalHeaderPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SeasonalHeader(
             queryState = rememberTextFieldState(),
             year = 2026,
@@ -108,7 +108,7 @@ private fun SeasonalHeaderPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun SeasonalHeaderWithQueryPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SeasonalHeader(
             queryState = rememberTextFieldState(initialText = "One Piece"),
             year = 2026,

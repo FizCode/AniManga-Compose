@@ -1,7 +1,6 @@
 package dev.fizcode.onboarding.presentation.util
 
 import dev.fizcode.designsystem.icon.BrandLogo
-import dev.fizcode.onboarding.R
 
 internal object Constant {
 
@@ -12,10 +11,8 @@ internal object Constant {
 
     object OnBoardingContents {
 
-        val IMG_PAGE_1 = R.drawable.img_nerd_amico_1
         val IMG_PAGE_2 = BrandLogo.MY_ANIME_LIST
         val IMG_PAGE_3 = BrandLogo.ANILIST
-        val IMG_PAGE_4 = R.drawable.img_super_thank_you_amico_1
 
         const val TITLE_PAGE_1 = "This app is for study"
         const val TITLE_PAGE_2 = "All Datas is MAL’s"

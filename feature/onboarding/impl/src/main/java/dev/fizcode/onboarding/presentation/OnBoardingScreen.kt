@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.component.button.SimpleTextButton
 import dev.fizcode.designsystem.component.pager.PagerPositionDotIndicator
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.onboarding.presentation.component.OnBoardingPage
 import dev.fizcode.onboarding.presentation.component.OnBoardingPagerScreen
 import dev.fizcode.onboarding.presentation.model.OnBoardingEffect
@@ -135,7 +135,7 @@ private fun OnBoardingScreenContent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun OnBoardingScreenPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         OnBoardingScreenContent(pages = OnBoardingPage.all, onClickSkip = {})
     }
 }

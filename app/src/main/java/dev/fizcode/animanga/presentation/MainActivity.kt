@@ -19,7 +19,7 @@ import androidx.compose.runtime.setValue
 import dev.fizcode.animanga.navigation.AppNavDisplay
 import dev.fizcode.common.settings.ThemeMode
 import dev.fizcode.datastore.AniMangaDatastore
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.mediadetails.api.MediaDetailsRoute
 import dev.fizcode.mediadetails.navigation.toMediaDetailsRouteOrNull
 import kotlinx.coroutines.flow.first
@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
                 onDispose { }
             }
 
-            AniMangaAnimeAndMangaInfoTheme(darkTheme = darkTheme) {
+            AniMangaTheme(darkTheme = darkTheme) {
                 CompositionLocalProvider(LocalTitleStyle provides titleStyle) {
                     Surface(
                         color = MaterialTheme.colorScheme.background,

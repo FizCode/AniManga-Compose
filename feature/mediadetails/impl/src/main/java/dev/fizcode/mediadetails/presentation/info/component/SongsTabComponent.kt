@@ -15,8 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.mediadetails.presentation.info.model.AnimeThemes
-import kotlinx.collections.immutable.persistentListOf
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 
 @Composable
@@ -68,7 +67,7 @@ private fun SongContent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun SongsTabPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SongsTabComponent(
             songThemes = MediaDetailsPreviewData.anime.animeDetailsInfoUiModel.animeThemes
         )

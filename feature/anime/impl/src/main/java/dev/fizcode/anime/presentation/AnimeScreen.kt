@@ -11,12 +11,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fizcode.anime.presentation.component.AnimeScreenHeader
@@ -25,9 +23,6 @@ import dev.fizcode.anime.presentation.component.TopAiring
 import dev.fizcode.anime.presentation.component.TopRanking
 import dev.fizcode.anime.presentation.model.AnimeIntent
 import dev.fizcode.anime.presentation.model.AnimeUiState
-import dev.fizcode.anime.presentation.model.SeasonalUiModel
-import dev.fizcode.anime.presentation.model.TopAiringUiModel
-import dev.fizcode.anime.presentation.model.TopRankingUiModel
 import dev.fizcode.anime.presentation.model.dummySeasonalUiModel
 import dev.fizcode.anime.presentation.model.dummyTopAiringUiModel
 import dev.fizcode.anime.presentation.model.dummyTopRankingUiModel
@@ -35,7 +30,7 @@ import dev.fizcode.anime.util.Constant
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.other.ErrorWithRetry
 import org.koin.androidx.compose.koinViewModel
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 
 @Composable
 internal fun AnimeScreen(
@@ -138,7 +133,7 @@ private fun AnimeScreenContent(
 
 @Composable
 private fun AnimeScreenPreviewContent(uiState: AnimeUiState) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         AnimeScreenContent(
             uiState = uiState,
             onCardClick = { _, _ -> }

@@ -15,8 +15,7 @@ import dev.fizcode.mediadetails.presentation.header.anime.GenreChips
 import dev.fizcode.mediadetails.presentation.header.anime.LittleInfoCard
 import dev.fizcode.mediadetails.presentation.header.anime.ScoresAndBookmark
 import dev.fizcode.mediadetails.presentation.header.anime.SliderLargeImage
-import kotlinx.collections.immutable.persistentListOf
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 import dev.fizcode.mediadetails.presentation.model.ImageGallery
 import dev.fizcode.designsystem.theme.LocalTitleStyle
@@ -71,7 +70,7 @@ fun DetailHeaderComponent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun DetailHeaderComponentPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         DetailHeaderComponent(
             isBookmarked = true,
             header = MediaDetailsPreviewData.anime.animeDetailsHeaderUiModel,

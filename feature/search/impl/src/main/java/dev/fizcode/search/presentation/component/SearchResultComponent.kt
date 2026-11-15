@@ -14,11 +14,12 @@ import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.EmptyCardComponent
 import dev.fizcode.designsystem.component.card.ErrorCardComponent
 import dev.fizcode.designsystem.component.card.MovieCardMedium
+import dev.fizcode.designsystem.component.card.SearchPromptCardComponent
 import dev.fizcode.designsystem.component.shimmer.MovieCardSmallShimmer
 import dev.fizcode.search.presentation.model.SearchResultUiModel
 import dev.fizcode.search.presentation.model.dummySearchResultUiModel
 import dev.fizcode.search.util.Constant
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 @Composable
@@ -53,14 +54,11 @@ internal fun SearchResultComponent(
         }
     }
 
-    is UiState.Empty -> EmptyCardComponent(
-        modifier = modifier,
-        desc = if (query.length < Constant.MIN_QUERY_LENGTH) {
-            Constant.EMPTY_QUERY
-        } else {
-            Constant.EMPTY_RESULT
-        }
-    )
+    is UiState.Empty -> if (query.isEmpty()) {
+        SearchPromptCardComponent(modifier = modifier, desc = Constant.EMPTY_QUERY)
+    } else {
+        EmptyCardComponent(modifier = modifier, desc = Constant.EMPTY_RESULT)
+    }
 
     is UiState.Error -> SearchErrorComponent(result.message, modifier)
 }
@@ -82,7 +80,7 @@ private fun SearchResultPreviewContent(
     result: UiState<List<SearchResultUiModel>>,
     query: String = "Ble"
 ) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SearchResultComponent(
             result = result,
             query = query,
@@ -100,6 +98,11 @@ private fun SearchResultComponentPreview() = SearchResultPreviewContent(
 @Preview(showBackground = true)
 @Composable
 private fun SearchResultComponentLoadingPreview() = SearchResultPreviewContent(UiState.Loading)
+
+@Preview(showBackground = true)
+@Composable
+private fun SearchResultComponentPromptPreview() =
+    SearchResultPreviewContent(UiState.Empty, query = "")
 
 @Preview(showBackground = true)
 @Composable
