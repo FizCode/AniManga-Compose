@@ -24,8 +24,8 @@ android {
 
     defaultConfig {
         applicationId = "dev.fizcode.animanga"
-        versionCode = 1
-        versionName = "0.1.0" // X.Y.Z; X = Major, Y = minor, Z = Patch level
+        versionCode = 2
+        versionName = "0.2.0" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
