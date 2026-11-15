@@ -131,6 +131,18 @@ private fun SearchScreenLoadingPreview() {
 
 @Preview(showBackground = true)
 @Composable
+private fun SearchScreenPromptPreview() {
+    AniMangaTheme {
+        SearchScreenContent(
+            queryState = rememberTextFieldState(),
+            uiState = SearchUiState(),
+            onCardClick = { _, _ -> }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
 private fun SearchScreenEmptyPreview() {
     AniMangaTheme {
         SearchScreenContent(
