@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.fizcode.designsystem.animation.AnimangaStudyIllustration
+import dev.fizcode.designsystem.animation.AnimangaThankYouIllustration
 
 @Composable
 internal fun OnBoardingPagerScreen(
@@ -24,11 +26,17 @@ internal fun OnBoardingPagerScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Image(
-            modifier = Modifier.size(240.dp),
-            painter = painterResource(id = onBoardingPage.image),
-            contentDescription = null
-        )
+        val imageModifier = Modifier.size(240.dp)
+        when (val image = onBoardingPage.image) {
+            is OnBoardingImage.Drawable -> Image(
+                modifier = imageModifier,
+                painter = painterResource(id = image.id),
+                contentDescription = null
+            )
+
+            OnBoardingImage.Study -> AnimangaStudyIllustration(modifier = imageModifier)
+            OnBoardingImage.ThankYou -> AnimangaThankYouIllustration(modifier = imageModifier)
+        }
 
         Text(
             modifier = Modifier
