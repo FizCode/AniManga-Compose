@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class SearchViewModel(
     private val searchAnimeUseCase: SearchAnimeUseCase,
@@ -30,12 +31,14 @@ internal class SearchViewModel(
             nsfwFilterProvider.changes().onStart { emit(Unit) }
         ) { query, _ -> query }
             .flatMapLatest { query ->
-                if (query.length < Constant.MIN_QUERY_LENGTH) {
+                if (query.isEmpty()) {
                     flowOf(UiState.Empty)
                 } else {
                     loadAsUiState(searchUiMapper::mapToSearchResultUiModel) {
-                        delay(Constant.DEBOUNCE_MILLIS)
+                        delay(Constant.DEBOUNCE_MILLIS.milliseconds)
                         searchAnimeUseCase(query = query, limit = Constant.RESULT_LIMIT)
+                    }.map { result ->
+                        if (result is UiState.Success && result.data.isEmpty()) UiState.Empty else result
                     }
                 }
             }

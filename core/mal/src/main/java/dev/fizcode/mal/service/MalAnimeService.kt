@@ -3,6 +3,7 @@ package dev.fizcode.mal.service
 import dev.fizcode.mal.util.CommonConstant
 import dev.fizcode.mal.response.MalAnimeNode
 import dev.fizcode.mal.response.MalListResponse
+import dev.fizcode.mal.util.malSearchQuery
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -49,7 +50,7 @@ class MalAnimeService(private val malClient: HttpClient) {
         nsfw: Boolean = false
     ): MalListResponse<MalAnimeNode> =
         malClient.get("anime") {
-            parameter(CommonConstant.QUERY, query)
+            parameter(CommonConstant.QUERY, malSearchQuery(query))
             parameter(CommonConstant.LIMIT, limit)
             parameter(CommonConstant.FIELDS, fields)
             if (nsfw) parameter(CommonConstant.NSFW, true)
