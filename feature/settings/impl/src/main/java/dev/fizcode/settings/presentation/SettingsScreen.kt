@@ -38,7 +38,7 @@ import dev.fizcode.common.settings.ThemeMode
 import dev.fizcode.common.settings.TitleStyle
 import dev.fizcode.designsystem.icon.BrandLogo
 import dev.fizcode.designsystem.icon.CustomIcon
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.settings.presentation.component.AboutDialog
 import dev.fizcode.settings.presentation.component.ConfirmFilterDialog
 import dev.fizcode.settings.presentation.component.FilterBlock
@@ -261,7 +261,7 @@ private fun Context.openLink(url: String) {
 
 @Composable
 private fun SettingsScreenPreviewContent(uiState: SettingsUiState) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SettingsScreenContent(
             uiState = uiState,
             version = "0.1.0-Alpha",

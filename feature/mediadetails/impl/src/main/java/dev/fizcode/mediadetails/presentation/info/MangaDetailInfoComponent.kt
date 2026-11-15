@@ -22,14 +22,12 @@ import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.mediadetails.presentation.info.component.CharactersTabComponent
 import dev.fizcode.mediadetails.presentation.info.component.DetailsTabComponent
 import dev.fizcode.mediadetails.presentation.info.component.MangaInformationTabComponent
-import dev.fizcode.mediadetails.presentation.info.model.AnimeDetails
 import dev.fizcode.mediadetails.presentation.info.model.MangaCharacterUiModel
 import dev.fizcode.mediadetails.presentation.info.model.MangaDetailsInfoUiModel
-import dev.fizcode.mediadetails.presentation.info.model.MangaInfo
 import dev.fizcode.mediadetails.presentation.info.model.MangaTabContents
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 
 @Composable
@@ -101,8 +99,8 @@ fun MangaDetailInfoComponent(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun MangaDetailInfoComponentPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+private fun MangaDetailComponentPreview() {
+    AniMangaTheme {
         MangaDetailInfoComponent(
             infoUiModel = MediaDetailsPreviewData.manga.mangaDetailsInfoUiModel,
             characters = UiState.Success(MediaDetailsPreviewData.mangaCharacters),
@@ -115,8 +113,8 @@ private fun MangaDetailInfoComponentPreview() {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun MangaDetailInfoComponentLoadingPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+private fun MangaDetailComponentLoadingPreview() {
+    AniMangaTheme {
         MangaDetailInfoComponent(
             infoUiModel = MediaDetailsPreviewData.manga.mangaDetailsInfoUiModel,
             characters = UiState.Loading,

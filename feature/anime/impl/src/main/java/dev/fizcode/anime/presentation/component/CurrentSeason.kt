@@ -16,7 +16,7 @@ import dev.fizcode.anime.presentation.model.dummySeasonalUiModel
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.card.MovieCardLarge
 import dev.fizcode.designsystem.component.shimmer.MovieCardLargeShimmer
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 @Composable
@@ -72,7 +72,7 @@ internal fun CurrentSeason(
 
 @Composable
 private fun CurrentSeasonPreviewContent(cardItem: UiState<List<SeasonalUiModel>>) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         CurrentSeason(
             headerTitle = "Current Season ☀️",
             cardItem = cardItem,

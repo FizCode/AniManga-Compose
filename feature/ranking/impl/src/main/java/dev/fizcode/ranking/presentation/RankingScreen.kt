@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fizcode.common.base.callhandler.UiState
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.ranking.presentation.component.RankingListComponent
 import dev.fizcode.ranking.presentation.component.RankingTopBar
 import dev.fizcode.ranking.presentation.model.RankingIntent
@@ -114,7 +114,7 @@ private fun RankingScreenPreviewContent(
     result: UiState<List<RankingUiModel>>,
     query: String = ""
 ) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         RankingScreenContent(
             title = RankingType.TOP_AIRING.title,
             queryState = rememberTextFieldState(initialText = query),

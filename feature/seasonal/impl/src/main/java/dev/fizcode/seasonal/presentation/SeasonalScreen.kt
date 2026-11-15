@@ -27,11 +27,10 @@ import dev.fizcode.seasonal.presentation.model.SeasonalIntent
 import dev.fizcode.seasonal.presentation.model.SeasonalUiModel
 import dev.fizcode.seasonal.presentation.model.SeasonalUiState
 import dev.fizcode.seasonal.presentation.model.dummySeasonalUiModel
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.androidx.compose.koinViewModel
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -116,7 +115,7 @@ private fun SeasonalScreenContent(
 
 @Composable
 private fun SeasonalScreenPreviewContent(result: UiState<List<SeasonalUiModel>>) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SeasonalScreenContent(
             queryState = rememberTextFieldState(),
             uiState = SeasonalUiState(

@@ -18,7 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.mal.util.Season
 
 /**
@@ -71,7 +71,7 @@ internal fun SeasonTabs(
 @Preview(showBackground = true)
 @Composable
 private fun SeasonTabsPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SeasonTabs(selected = Season.WINTER, onSelect = {})
     }
 }
@@ -79,7 +79,7 @@ private fun SeasonTabsPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun SeasonTabsFallSelectedPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SeasonTabs(selected = Season.FALL, onSelect = {})
     }
 }

@@ -26,7 +26,7 @@ import dev.fizcode.mediadetails.presentation.info.model.MangaCharacterUiModel
 import dev.fizcode.mediadetails.presentation.info.util.Constant
 import dev.fizcode.mediadetails.util.Constant as MediaDetailsConstant
 import kotlinx.collections.immutable.ImmutableList
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 
 @Composable
@@ -98,7 +98,7 @@ internal fun CharacterRow(
 private fun CharactersTabPreviewContent(
     characters: UiState<ImmutableList<MangaCharacterUiModel>>
 ) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         CharactersTabComponent(
             characters = characters,
             onRetry = {},

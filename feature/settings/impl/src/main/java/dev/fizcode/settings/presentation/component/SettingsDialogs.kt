@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import dev.fizcode.common.settings.NsfwFilter
 import dev.fizcode.common.settings.ThemeMode
 import dev.fizcode.common.settings.TitleStyle
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.settings.presentation.model.PendingFilterChange
 import dev.fizcode.settings.presentation.model.icon
 import dev.fizcode.settings.presentation.model.label
@@ -179,7 +179,7 @@ internal fun AboutDialog(
 @Preview(showBackground = true)
 @Composable
 private fun ThemeDialogPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         ThemeDialog(selected = ThemeMode.DEFAULT, onSelect = {}, onDismiss = {})
     }
 }
@@ -187,7 +187,7 @@ private fun ThemeDialogPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun ConfirmFilterDialogPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         ConfirmFilterDialog(
             change = PendingFilterChange.Titling(TitleStyle.SYNONYM),
             onConfirm = {},
@@ -199,7 +199,7 @@ private fun ConfirmFilterDialogPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun ConfirmGreyDialogPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         ConfirmFilterDialog(
             change = PendingFilterChange.Nsfw(NsfwFilter.GREY),
             onConfirm = {},
@@ -211,7 +211,7 @@ private fun ConfirmGreyDialogPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun ConfirmNotSafeDialogPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         ConfirmFilterDialog(
             change = PendingFilterChange.Nsfw(NsfwFilter.NOT_SAFE),
             onConfirm = {},
@@ -223,7 +223,7 @@ private fun ConfirmNotSafeDialogPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun AboutDialogPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         AboutDialog(version = "0.1.0-Alpha", onDismiss = {})
     }
 }

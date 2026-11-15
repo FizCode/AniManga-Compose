@@ -1,6 +1,5 @@
 package dev.fizcode.settings.presentation.component
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +16,7 @@ import dev.fizcode.settings.util.Constant
 import dev.fizcode.settings.presentation.model.label
 import dev.fizcode.settings.presentation.model.icon
 import dev.fizcode.settings.presentation.model.description
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.common.settings.TitleStyle
 import dev.fizcode.common.settings.NsfwFilter
@@ -62,7 +61,7 @@ internal fun FilterBlock(
 @Preview(showBackground = true)
 @Composable
 private fun FilterBlockTitlingPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         FilterBlock(
             icon = CustomIcon.FILL_TEXT_FIELDS,
             title = Constant.TITLING_TITLE,
@@ -82,7 +81,7 @@ private fun FilterBlockTitlingPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun FilterBlockNsfwPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         FilterBlock(
             icon = CustomIcon.FILL_NO_ADULT_CONTENT,
             title = Constant.NSFW_TITLE,

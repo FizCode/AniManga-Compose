@@ -18,8 +18,7 @@ import dev.fizcode.designsystem.util.base.shimmer
 import dev.fizcode.mediadetails.presentation.header.util.Constant
 import dev.fizcode.mediadetails.presentation.model.ImageGallery
 import kotlinx.collections.immutable.ImmutableList
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
-import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.collections.immutable.persistentListOf
 
@@ -73,7 +72,7 @@ internal fun SliderLargeImage(
 @Preview(showBackground = true)
 @Composable
 private fun SliderLargeImagePreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SliderLargeImage(
             pictures = persistentListOf("https://example.com/1.jpg", "https://example.com/2.jpg"),
             largePictures = persistentListOf("https://example.com/1l.jpg"),

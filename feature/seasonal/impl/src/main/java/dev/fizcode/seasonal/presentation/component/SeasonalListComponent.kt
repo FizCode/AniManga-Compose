@@ -21,7 +21,7 @@ import dev.fizcode.designsystem.component.shimmer.MovieCardLargeShimmer
 import dev.fizcode.seasonal.presentation.model.SeasonalUiModel
 import dev.fizcode.seasonal.presentation.model.dummySeasonalUiModel
 import dev.fizcode.seasonal.util.Constant
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 @Composable
@@ -77,7 +77,7 @@ private fun SeasonalListPreviewContent(
     result: UiState<List<SeasonalUiModel>>,
     isFiltering: Boolean = false
 ) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SeasonalListComponent(
             result = result,
             isFiltering = isFiltering,

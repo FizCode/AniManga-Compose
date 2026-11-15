@@ -25,13 +25,12 @@ import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.other.SearchTextFieldComponent
 import dev.fizcode.search.presentation.component.SearchResultComponent
 import dev.fizcode.search.presentation.model.SearchIntent
-import dev.fizcode.search.presentation.model.SearchResultUiModel
 import dev.fizcode.search.presentation.model.SearchUiState
 import dev.fizcode.search.presentation.model.dummySearchResultUiModel
 import dev.fizcode.search.util.Constant
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.androidx.compose.koinViewModel
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 
 @Composable
 internal fun SearchScreen(
@@ -98,7 +97,7 @@ private fun SearchScreenContent(
 @Preview(showBackground = true)
 @Composable
 private fun SearchScreenSuccessPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SearchScreenContent(
             queryState = rememberTextFieldState(initialText = "Ble"),
             uiState = SearchUiState(
@@ -118,7 +117,7 @@ private fun SearchScreenSuccessPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun SearchScreenLoadingPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SearchScreenContent(
             queryState = rememberTextFieldState(initialText = "Ble"),
             uiState = SearchUiState(
@@ -133,7 +132,7 @@ private fun SearchScreenLoadingPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun SearchScreenEmptyPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SearchScreenContent(
             queryState = rememberTextFieldState(initialText = "Zzz"),
             uiState = SearchUiState(
@@ -148,7 +147,7 @@ private fun SearchScreenEmptyPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun SearchScreenErrorPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SearchScreenContent(
             queryState = rememberTextFieldState(initialText = "Ble"),
             uiState = SearchUiState(

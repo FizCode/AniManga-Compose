@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.icon.CustomIcon
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.mediadetails.presentation.model.ImageGallery
 import dev.fizcode.mediadetails.presentation.model.MediaDetailsEffect
 import dev.fizcode.mediadetails.presentation.model.MediaDetailsIntent
@@ -324,7 +324,7 @@ private fun FloatingBackButton(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun AnimeDetailsScreenPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         MediaDetailsLayout(
             headerTitle = { MediaDetailsPreviewData.anime.animeDetailsHeaderUiModel.title },
             snackbarHostState = remember { SnackbarHostState() },
@@ -354,7 +354,7 @@ private fun AnimeDetailsScreenPreview() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun MangaDetailsScreenPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         MediaDetailsLayout(
             headerTitle = { MediaDetailsPreviewData.manga.mangaDetailsHeaderUiModel.title },
             snackbarHostState = remember { SnackbarHostState() },
@@ -382,7 +382,7 @@ private fun MangaDetailsScreenPreview() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun AnimeDetailsScreenLoadingPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         MediaDetailsLayout(
             headerTitle = { "" },
             snackbarHostState = remember { SnackbarHostState() },
@@ -412,7 +412,7 @@ private fun AnimeDetailsScreenLoadingPreview() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun MangaDetailsScreenLoadingPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         MediaDetailsLayout(
             headerTitle = { "" },
             snackbarHostState = remember { SnackbarHostState() },
@@ -440,7 +440,7 @@ private fun MangaDetailsScreenLoadingPreview() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun MangaDetailsContentPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         MediaDetailsContent(
             mediaKind = MediaKind.MANGA,
             uiState = MediaDetailsUiState(

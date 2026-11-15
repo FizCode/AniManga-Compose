@@ -21,8 +21,7 @@ import androidx.compose.ui.unit.dp
 import dev.fizcode.designsystem.component.other.FiveStarReview
 import dev.fizcode.designsystem.icon.CustomIcon
 import dev.fizcode.mediadetails.presentation.header.util.Constant
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
-import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
+import dev.fizcode.designsystem.theme.AniMangaTheme
 
 @Composable
 internal fun ScoresAndBookmark(
@@ -96,7 +95,7 @@ internal fun ScoresAndBookmark(
 @Preview(showBackground = true)
 @Composable
 private fun ScoresAndBookmarkPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         ScoresAndBookmark(
             isBookmarked = false,
             score = "5.00",
@@ -110,7 +109,7 @@ private fun ScoresAndBookmarkPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun ScoresAndBookmarkBookmarkedPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         ScoresAndBookmark(
             isBookmarked = true,
             score = "8.75",

@@ -15,8 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.mediadetails.presentation.info.model.AnimeRelatedUiModel
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
-import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
+import dev.fizcode.designsystem.theme.AniMangaTheme
 
 @Composable
 internal fun RelatedAnime(
@@ -59,7 +58,7 @@ internal fun RelatedAnime(
 @Preview(showBackground = true)
 @Composable
 private fun RelatedAnimePreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         RelatedAnime(
             index = 1,
             relatedData = AnimeRelatedUiModel(

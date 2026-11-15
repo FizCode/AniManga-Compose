@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.other.ErrorWithRetry
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.designsystem.util.base.shimmer
 import dev.fizcode.mediadetails.presentation.header.DetailHeaderComponent
 import dev.fizcode.mediadetails.presentation.info.model.AnimeCastUiModel
@@ -264,7 +264,7 @@ private fun AnimeDetailsComponentPreview(
     animeCast: UiState<ImmutableList<AnimeCastUiModel>>,
     animeStaff: UiState<ImmutableList<AnimeStaffUiModel>>
 ) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         AnimeDetailsComponent(
             isBookmarked = false,
             animeDetails = animeDetails,

@@ -35,7 +35,7 @@ import dev.fizcode.common.base.callhandler.UiState
 import dev.fizcode.designsystem.component.other.PillTabs
 import dev.fizcode.designsystem.component.other.PillTabsShimmer
 import dev.fizcode.designsystem.component.other.SearchTextFieldComponent
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.designsystem.util.DashboardTopBarHeight
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -145,7 +145,7 @@ private fun BookmarkScreenPreviewContent(
     bookmarks: UiState<List<BookmarkUiModel>>,
     tab: BookmarkTab = BookmarkTab.ANIME
 ) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         BookmarkScreenContent(
             queryState = rememberTextFieldState(),
             uiState = BookmarkUiState(tab = tab, allBookmarks = bookmarks),

@@ -44,7 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import dev.fizcode.designsystem.icon.CustomIcon
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.designsystem.util.base.shimmer
 import dev.fizcode.mediadetails.presentation.model.ImageGallery
 import dev.fizcode.mediadetails.util.Constant
@@ -111,7 +111,7 @@ private fun DownloadConfirmDialog(
 @Preview(showBackground = true)
 @Composable
 private fun DownloadConfirmDialogPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         DownloadConfirmDialog(onConfirm = {}, onDismiss = {})
     }
 }
@@ -218,7 +218,7 @@ private fun PageDots(
 @Preview(showBackground = true)
 @Composable
 private fun ImagesBottomSheetPreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         Surface(
             shape = BottomSheetDefaults.ExpandedShape,
             color = BottomSheetDefaults.ContainerColor

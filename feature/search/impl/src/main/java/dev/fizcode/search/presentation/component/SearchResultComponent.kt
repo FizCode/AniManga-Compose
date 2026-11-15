@@ -18,7 +18,7 @@ import dev.fizcode.designsystem.component.shimmer.MovieCardSmallShimmer
 import dev.fizcode.search.presentation.model.SearchResultUiModel
 import dev.fizcode.search.presentation.model.dummySearchResultUiModel
 import dev.fizcode.search.util.Constant
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.designsystem.theme.LocalTitleStyle
 
 @Composable
@@ -82,7 +82,7 @@ private fun SearchResultPreviewContent(
     result: UiState<List<SearchResultUiModel>>,
     query: String = "Ble"
 ) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         SearchResultComponent(
             result = result,
             query = query,

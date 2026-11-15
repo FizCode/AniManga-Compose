@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fizcode.common.base.callhandler.UiState
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 import dev.fizcode.mediadetails.presentation.info.component.CastShimmer
 import dev.fizcode.mediadetails.presentation.info.component.CharacterCast
@@ -136,7 +136,7 @@ private fun <T> sample(items: List<T>, repeat: Int = 4) =
 
 @Composable
 private fun PeoplePreview(content: @Composable () -> Unit) {
-    AniMangaAnimeAndMangaInfoTheme { content() }
+    AniMangaTheme { content() }
 }
 
 @Preview(showBackground = true, showSystemUi = true)

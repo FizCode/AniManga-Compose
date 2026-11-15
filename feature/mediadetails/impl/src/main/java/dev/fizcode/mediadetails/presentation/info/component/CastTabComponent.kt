@@ -31,7 +31,7 @@ import dev.fizcode.mediadetails.presentation.info.model.AnimeCastUiModel
 import dev.fizcode.mediadetails.presentation.info.model.AnimeStaffUiModel
 import dev.fizcode.mediadetails.presentation.info.util.Constant
 import kotlinx.collections.immutable.ImmutableList
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 
 @Composable
@@ -175,7 +175,7 @@ private fun CastTabPreviewContent(
     cast: UiState<ImmutableList<AnimeCastUiModel>>,
     staff: UiState<ImmutableList<AnimeStaffUiModel>>
 ) {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         CastTabComponent(
             castUiModel = cast,
             staffUiModel = staff,

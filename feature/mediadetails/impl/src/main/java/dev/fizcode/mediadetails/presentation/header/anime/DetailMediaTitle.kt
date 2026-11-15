@@ -19,8 +19,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import dev.fizcode.designsystem.util.base.shimmer
 import dev.fizcode.mediadetails.presentation.header.util.Constant
-import dev.fizcode.designsystem.theme.AniMangaAnimeAndMangaInfoTheme
-import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
+import dev.fizcode.designsystem.theme.AniMangaTheme
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -68,7 +67,7 @@ internal fun DetailMediaTitle(
 @Preview(showBackground = true)
 @Composable
 private fun DetailMediaTitlePreview() {
-    AniMangaAnimeAndMangaInfoTheme {
+    AniMangaTheme {
         DetailMediaTitle(
             posterPath = "",
             title = "Sample Anime Title",
