@@ -205,10 +205,9 @@ private fun RelatedAnimeList(
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
     ) {
-        relatedAnime.forEachIndexed { index, data ->
+        relatedAnime.forEach { data ->
             key(data.relatedId) {
                 RelatedAnime(
-                    index = index + 1,
                     relatedData = data,
                     onClickRelated = onClickRelated
                 )
