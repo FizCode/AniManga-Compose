@@ -47,7 +47,8 @@ internal fun AnimeDetailsComponent(
     onMoreCastClick: () -> Unit,
     onMoreStaffClick: () -> Unit,
     onClickBookmark: () -> Unit,
-    onClickShare: (String) -> Unit
+    onClickShare: (String) -> Unit,
+    onClickRelated: (Int) -> Unit
 ) = LazyColumn(
     modifier = Modifier
         .fillMaxSize()
@@ -74,7 +75,8 @@ internal fun AnimeDetailsComponent(
                     onRetryCastAndStaff = onRetryCastAndStaff,
                     onMoreCastClick = onMoreCastClick,
                     onMoreStaffClick = onMoreStaffClick,
-                    onClickShare = onClickShare
+                    onClickShare = onClickShare,
+                    onClickRelated = onClickRelated
                 )
             }
         }
@@ -277,7 +279,8 @@ private fun AnimeDetailsComponentPreview(
             onMoreCastClick = {},
             onMoreStaffClick = {},
             onClickBookmark = {},
-            onClickShare = {}
+            onClickShare = {},
+            onClickRelated = {}
         )
     }
 }

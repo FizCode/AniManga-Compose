@@ -32,7 +32,8 @@ internal fun MangaDetailsComponent(
     onRetryCharacters: () -> Unit,
     onMoreCharactersClick: () -> Unit,
     onClickBookmark: () -> Unit,
-    onClickShare: (String) -> Unit
+    onClickShare: (String) -> Unit,
+    onClickRelated: (Int) -> Unit
 ) = LazyColumn(
     modifier = Modifier
         .fillMaxSize()
@@ -57,7 +58,8 @@ internal fun MangaDetailsComponent(
                     characters = characters,
                     onRetryCharacters = onRetryCharacters,
                     onMoreCharactersClick = onMoreCharactersClick,
-                    onClickShare = onClickShare
+                    onClickShare = onClickShare,
+                    onClickRelated = onClickRelated
                 )
             }
         }
@@ -90,7 +92,8 @@ private fun MangaDetailsComponentPreview(
             onRetryCharacters = {},
             onMoreCharactersClick = {},
             onClickBookmark = {},
-            onClickShare = {}
+            onClickShare = {},
+            onClickRelated = {}
         )
     }
 }

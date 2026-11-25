@@ -40,7 +40,8 @@ fun DetailInfoComponent(
     onRetryCastAndStaff: () -> Unit,
     onMoreCastClick: () -> Unit,
     onMoreStaffClick: () -> Unit,
-    onClickShare: (String) -> Unit
+    onClickShare: (String) -> Unit,
+    onClickRelated: (Int) -> Unit
 ) {
     val tabItems = TabContents.entries
     val pagerState = rememberPagerState(
@@ -87,7 +88,8 @@ fun DetailInfoComponent(
 
                     1 -> InformationTabComponent(
                         animeInfo = infoUiModel.animeInfo,
-                        isExtendedInfoAvailable = infoUiModel.isExtendedInfoAvailable
+                        isExtendedInfoAvailable = infoUiModel.isExtendedInfoAvailable,
+                        onClickRelated = onClickRelated
                     )
                     2 -> CastTabComponent(
                         castUiModel = cast,
@@ -117,7 +119,8 @@ private fun DetailComponentPreview() {
             onRetryCastAndStaff = {},
             onMoreCastClick = {},
             onMoreStaffClick = {},
-            onClickShare = {}
+            onClickShare = {},
+            onClickRelated = {}
         )
     }
 }
@@ -133,7 +136,8 @@ private fun DetailComponentLoadingPreview() {
             onRetryCastAndStaff = {},
             onMoreCastClick = {},
             onMoreStaffClick = {},
-            onClickShare = {}
+            onClickShare = {},
+            onClickRelated = {}
         )
     }
 }
