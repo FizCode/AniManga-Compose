@@ -52,6 +52,7 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix = AniMangaBuildType.DEBUG.applicationIdSuffix
+            versionNameSuffix = "-debug"
         }
         release {
             isMinifyEnabled = true
