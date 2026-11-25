@@ -20,7 +20,12 @@ fun EntryProviderScope<NavKey>.mediaDetailsEntry(navigator: Navigator) {
             onBackPressed = navigator::goBack,
             onOpenCast = { navigator.navigate(MediaCastRoute(route.mediaId)) },
             onOpenStaff = { navigator.navigate(MediaStaffRoute(route.mediaId)) },
-            onOpenCharacters = { navigator.navigate(MangaCharactersRoute(route.mediaId)) }
+            onOpenCharacters = { navigator.navigate(MangaCharactersRoute(route.mediaId)) },
+            onOpenRelated = { relatedId ->
+                navigator.navigateOrPopTo(
+                    MediaDetailsRoute(mediaType = route.mediaType, mediaId = relatedId)
+                )
+            }
         )
     }
     entry<MediaCastRoute> { route ->

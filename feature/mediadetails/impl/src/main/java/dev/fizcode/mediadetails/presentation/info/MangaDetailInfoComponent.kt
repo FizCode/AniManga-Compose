@@ -36,7 +36,8 @@ fun MangaDetailInfoComponent(
     characters: UiState<ImmutableList<MangaCharacterUiModel>>,
     onRetryCharacters: () -> Unit,
     onMoreCharactersClick: () -> Unit,
-    onClickShare: (String) -> Unit
+    onClickShare: (String) -> Unit,
+    onClickRelated: (Int) -> Unit
 ) {
     val tabItems = MangaTabContents.entries
     val pagerState = rememberPagerState(
@@ -81,7 +82,8 @@ fun MangaDetailInfoComponent(
 
                     MangaTabContents.INFO -> MangaInformationTabComponent(
                         mangaInfo = infoUiModel.mangaInfo,
-                        isExtendedInfoAvailable = infoUiModel.isExtendedInfoAvailable
+                        isExtendedInfoAvailable = infoUiModel.isExtendedInfoAvailable,
+                        onClickRelated = onClickRelated
                     )
 
                     MangaTabContents.CHARACTERS -> CharactersTabComponent(
@@ -106,7 +108,8 @@ private fun MangaDetailComponentPreview() {
             characters = UiState.Success(MediaDetailsPreviewData.mangaCharacters),
             onRetryCharacters = {},
             onMoreCharactersClick = {},
-            onClickShare = {}
+            onClickShare = {},
+            onClickRelated = {}
         )
     }
 }
@@ -120,7 +123,8 @@ private fun MangaDetailComponentLoadingPreview() {
             characters = UiState.Loading,
             onRetryCharacters = {},
             onMoreCharactersClick = {},
-            onClickShare = {}
+            onClickShare = {},
+            onClickRelated = {}
         )
     }
 }

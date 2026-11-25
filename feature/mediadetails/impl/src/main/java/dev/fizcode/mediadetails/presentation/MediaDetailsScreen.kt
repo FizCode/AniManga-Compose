@@ -65,7 +65,8 @@ internal fun MediaDetailsScreen(
     onBackPressed: () -> Unit,
     onOpenCast: () -> Unit,
     onOpenStaff: () -> Unit,
-    onOpenCharacters: () -> Unit
+    onOpenCharacters: () -> Unit,
+    onOpenRelated: (relatedId: Int) -> Unit
 ) {
     val mediaDetailsViewModel: MediaDetailsViewModel = koinViewModel(key = "$mediaId") {
         parametersOf(mediaId, mediaType)
@@ -153,6 +154,7 @@ internal fun MediaDetailsScreen(
         onOpenCast = onOpenCast,
         onOpenStaff = onOpenStaff,
         onOpenCharacters = onOpenCharacters,
+        onOpenRelated = onOpenRelated,
         onShare = onShare,
         onDownloadImage = onDownloadImage
     )
@@ -169,6 +171,7 @@ private fun MediaDetailsContent(
     onOpenCast: () -> Unit,
     onOpenStaff: () -> Unit,
     onOpenCharacters: () -> Unit,
+    onOpenRelated: (relatedId: Int) -> Unit,
     onShare: (title: String, content: String) -> Unit,
     onDownloadImage: (String) -> Unit
 ) {
@@ -202,6 +205,7 @@ private fun MediaDetailsContent(
                     onMoreCastClick = onOpenCast,
                     onMoreStaffClick = onOpenStaff,
                     onClickShare = onClickShare,
+                    onClickRelated = onOpenRelated,
                     onClickBookmark = { onIntent(MediaDetailsIntent.ToggleBookmark) }
                 )
             }
@@ -218,6 +222,7 @@ private fun MediaDetailsContent(
                     onRetryCharacters = { onIntent(MediaDetailsIntent.RetryMangaCharacters) },
                     onMoreCharactersClick = onOpenCharacters,
                     onClickShare = onClickShare,
+                    onClickRelated = onOpenRelated,
                     onClickBookmark = { onIntent(MediaDetailsIntent.ToggleBookmark) }
                 )
             }
@@ -345,7 +350,8 @@ private fun AnimeDetailsScreenPreview() {
                 onMoreCastClick = {},
                 onMoreStaffClick = {},
                 onClickBookmark = {},
-                onClickShare = {}
+                onClickShare = {},
+                onClickRelated = {}
             )
         }
     }
@@ -373,7 +379,8 @@ private fun MangaDetailsScreenPreview() {
                 onRetryCharacters = {},
                 onMoreCharactersClick = {},
                 onClickBookmark = {},
-                onClickShare = {}
+                onClickShare = {},
+                onClickRelated = {}
             )
         }
     }
@@ -403,7 +410,8 @@ private fun AnimeDetailsScreenLoadingPreview() {
                 onMoreCastClick = {},
                 onMoreStaffClick = {},
                 onClickBookmark = {},
-                onClickShare = {}
+                onClickShare = {},
+                onClickRelated = {}
             )
         }
     }
@@ -431,7 +439,8 @@ private fun MangaDetailsScreenLoadingPreview() {
                 onRetryCharacters = {},
                 onMoreCharactersClick = {},
                 onClickBookmark = {},
-                onClickShare = {}
+                onClickShare = {},
+                onClickRelated = {}
             )
         }
     }
@@ -453,6 +462,7 @@ private fun MangaDetailsContentPreview() {
             onOpenCast = {},
             onOpenStaff = {},
             onOpenCharacters = {},
+            onOpenRelated = {},
             onShare = { _, _ -> },
             onDownloadImage = {}
         )

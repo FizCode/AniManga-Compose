@@ -43,7 +43,8 @@ import dev.fizcode.mediadetails.presentation.MediaDetailsPreviewData
 @Composable
 internal fun InformationTabComponent(
     animeInfo: AnimeInfo,
-    isExtendedInfoAvailable: Boolean = true
+    isExtendedInfoAvailable: Boolean = true,
+    onClickRelated: (Int) -> Unit
 ) {
     val informationList = remember(animeInfo) { buildInformationList(animeInfo) }
     val statisticsList = remember(animeInfo) { buildStatisticsList(animeInfo) }
@@ -53,14 +54,16 @@ internal fun InformationTabComponent(
         statisticsList = statisticsList,
         relatedEntries = animeInfo.relatedAnime,
         unavailableMessage = MediaDetailsConstant.EXTENDED_INFO_UNAVAILABLE
-            .takeUnless { isExtendedInfoAvailable }
+            .takeUnless { isExtendedInfoAvailable },
+        onClickRelated = onClickRelated
     )
 }
 
 @Composable
 internal fun MangaInformationTabComponent(
     mangaInfo: MangaInfo,
-    isExtendedInfoAvailable: Boolean = true
+    isExtendedInfoAvailable: Boolean = true,
+    onClickRelated: (Int) -> Unit
 ) {
     val informationList = remember(mangaInfo) { buildMangaInformationList(mangaInfo) }
     val statisticsList = remember(mangaInfo) { buildMangaStatisticsList(mangaInfo) }
@@ -70,7 +73,8 @@ internal fun MangaInformationTabComponent(
         statisticsList = statisticsList,
         relatedEntries = mangaInfo.relatedManga,
         unavailableMessage = MediaDetailsConstant.MANGA_EXTENDED_INFO_UNAVAILABLE
-            .takeUnless { isExtendedInfoAvailable }
+            .takeUnless { isExtendedInfoAvailable },
+        onClickRelated = onClickRelated
     )
 }
 
@@ -79,7 +83,8 @@ private fun InformationTabContent(
     informationList: List<TextTableData>,
     statisticsList: List<TextTableData>,
     relatedEntries: ImmutableList<AnimeRelatedUiModel>,
-    unavailableMessage: String?
+    unavailableMessage: String?,
+    onClickRelated: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -93,7 +98,7 @@ private fun InformationTabContent(
         if (relatedEntries.isNotEmpty()) {
             RelatedAnimeList(
                 relatedAnime = relatedEntries,
-                onClickRelated = { _ -> }
+                onClickRelated = onClickRelated
             )
         }
         Spacer(Modifier.height(8.dp))
@@ -205,10 +210,9 @@ private fun RelatedAnimeList(
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
     ) {
-        relatedAnime.forEachIndexed { index, data ->
+        relatedAnime.forEach { data ->
             key(data.relatedId) {
                 RelatedAnime(
-                    index = index + 1,
                     relatedData = data,
                     onClickRelated = onClickRelated
                 )
@@ -222,7 +226,8 @@ private fun RelatedAnimeList(
 private fun InformationTabPreview() {
     AniMangaTheme {
         InformationTabComponent(
-            animeInfo = MediaDetailsPreviewData.anime.animeDetailsInfoUiModel.animeInfo
+            animeInfo = MediaDetailsPreviewData.anime.animeDetailsInfoUiModel.animeInfo,
+            onClickRelated = {}
         )
     }
 }
@@ -233,7 +238,8 @@ private fun InformationTabExtendedUnavailablePreview() {
     AniMangaTheme {
         InformationTabComponent(
             animeInfo = MediaDetailsPreviewData.anime.animeDetailsInfoUiModel.animeInfo,
-            isExtendedInfoAvailable = false
+            isExtendedInfoAvailable = false,
+            onClickRelated = {}
         )
     }
 }

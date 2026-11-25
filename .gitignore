@@ -1,12 +1,6 @@
 *.iml
 .gradle
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
 .DS_Store
 /build
 /captures
@@ -22,3 +16,14 @@ keystore.properties
 
 # Kotlin compiler session data
 .kotlin/
+
+# Android Studio: keep only the settings shared across machines
+/.idea/*
+!/.idea/codeStyles/
+!/.idea/inspectionProfiles/
+!/.idea/dictionaries/
+!/.idea/runConfigurations.xml
+
+# Signed builds from Android Studio's Generate Signed App Bundle / APK
+/app/dev/
+/app/prod/

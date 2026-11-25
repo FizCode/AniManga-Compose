@@ -24,8 +24,8 @@ android {
 
     defaultConfig {
         applicationId = "dev.fizcode.animanga"
-        versionCode = 2
-        versionName = "0.2.0" // X.Y.Z; X = Major, Y = minor, Z = Patch level
+        versionCode = 3
+        versionName = "1.0.0" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -52,6 +52,7 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix = AniMangaBuildType.DEBUG.applicationIdSuffix
+            versionNameSuffix = "-debug"
         }
         release {
             isMinifyEnabled = true

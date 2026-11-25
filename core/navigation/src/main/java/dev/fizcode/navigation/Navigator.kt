@@ -16,6 +16,21 @@ class Navigator(val state: NavigationState) {
         }
     }
 
+    /**
+     * Goes back to [route] if it's already in the current stack, closing the screens above it,
+     * otherwise opens it. Stops loops (A → B → A → B …) from piling up screens to back out of.
+     */
+    fun navigateOrPopTo(route: NavKey) {
+        val currentStack = state.backStacks[state.topLevelRoute]
+            ?: error("Stack for ${state.topLevelRoute} not found")
+        val index = currentStack.lastIndexOf(route)
+        if (index == -1) {
+            currentStack.add(route)
+        } else {
+            repeat(currentStack.lastIndex - index) { currentStack.removeLastOrNull() }
+        }
+    }
+
     fun goBack() {
         val currentStack = state.backStacks[state.topLevelRoute]
             ?: error("Stack for ${state.topLevelRoute} not found")

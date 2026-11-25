@@ -15,8 +15,8 @@ study project by FizCode.
 - **Seasonal** anime by season and year, with a title search.
 - **Manga** ranking by type and sort, with a title search.
 - **Top Airing and Top Ranking** full lists with search and highlighted matches.
-- **Details** for anime and manga: synopsis, information, statistics, related entries, songs, and
-  the full cast, staff and characters loaded page by page.
+- **Details** for anime and manga: synopsis, information, statistics, related entries that open
+  their own details, songs, and the full cast, staff and characters loaded page by page.
 - **Bookmarks** saved on the device, grouped by type, with search.
 - **Share** a media with a link that opens it in the app.
 - **Settings**
@@ -73,7 +73,6 @@ Features never import a response class or a Room entity outside their `data` lay
 - Room, and DataStore for preferences
 - Coil for images
 - Chucker for inspecting network calls in debug builds
-- Detekt for static analysis
 - Fastlane and GitHub Actions for builds
 
 Android: `minSdk` 24, `compileSdk` and `targetSdk` 37. JDK 21 is used on CI.
@@ -105,6 +104,9 @@ There are two flavors, `dev` and `prod`, and the usual `debug` and `release` bui
 | `prodDebug` | `dev.fizcode.animanga.debug` |
 | `devRelease` | `dev.fizcode.animanga.development` |
 | `devDebug` | `dev.fizcode.animanga.development.debug` |
+
+Each variant installs as a separate app. Debug builds are named **AniManga (debug)** in the
+launcher and their version ends in `-debug`, for example `1.0.0-debug` in Settings.
 
 ## Tests
 
